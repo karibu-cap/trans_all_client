@@ -1,0 +1,15 @@
+TransAll is a user-friendly and feature-rich mobile application designed to simplify the process of transferring mobile credit and managing transactions effectively. With TransAll, you can conveniently transfer credit to family and friends, ensuring they stay connected when they need it the most.
+
+Key Features:
+
+Credit Transfer: Seamlessly transfer mobile credit to any recipient within seconds, providing them with the means to make calls, send messages, or use mobile data.
+
+Transaction History: Keep track of your credit transfers and view a detailed transaction history, allowing you to monitor your usage and stay informed about your past transfers.
+
+Secure and Reliable: Rest assured that your transactions are conducted in a secure environment, ensuring the confidentiality of your personal and financial information.
+
+User-Friendly Interface: Enjoy a clean and intuitive interface that makes credit transfers and transaction management a breeze, even for users with minimal technical knowledge.
+
+Transtu aims to provide a seamless and convenient experience for users who need to transfer credit to their loved ones or manage their own credit balance effectively. Whether it's helping a family member in need or ensuring you always have enough credit for your communication needs, Transtu is here to simplify the process and enhance your mobile credit management experience.
+
+Please note that Transtu may require certain permissions to access the necessary functionality on your device, such as contacts for selecting recipients and SMS for transaction notifications. We value your privacy and only collect and use data in accordance with our privacy policy.

@@ -1,0 +1,219 @@
+name: app_customer
+description: A new Flutter project.
+
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+version: 0.0.2+1
+
+environment:
+  sdk: "2.18.6"
+  flutter: "3.3.10"
+
+# Dependencies specify other packages that your package needs in order to work.
+# To automatically upgrade your package dependencies to the latest versions
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
+# dependencies can be manually updated by changing the version numbers below to
+# the latest version available on pub.dev. To see which dependencies have newer
+# versions available, run `flutter pub outdated`.
+dependencies:
+  # A flutter package to make navigation v2.
+  beamer: ^1.5.3
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.2
+
+  flutter:
+    sdk: flutter
+
+  # Flutter localization dependency.
+  flutter_localizations:
+    sdk: flutter
+
+  # A flutter package to manage the contact.
+  fluttercontactpicker: ^4.7.0
+
+  # A flutter package to manage the state.
+  get: ^4.6.5
+
+  # A declarative routing package for Flutter that uses the Router API to provide
+  # a convenient, url-based API for navigating between different screens
+  go_router: ^9.0.3
+
+  # A flutter package to make http request.
+  http: ^0.13.5
+
+  # A flutter library launch hypertext links.
+  url_launcher: ^6.0.4
+
+  # A flutter package to save the application data.
+  shared_preferences: ^2.1.0
+
+  # The simple animation component.
+  simple_animations: ^5.0.0+3
+
+  # A flutter package to local store the data.
+  hive: ^2.2.3
+
+  # The local database package.
+  hive_flutter: ^1.1.0
+
+  # Package that helps display tooltips
+  overlay_tooltip: ^0.2.3
+
+  # The dotted line.
+  dotted_line: ^3.2.2
+
+  # Handle the permission on the application.
+  permission_handler: ^10.4.2
+
+  # Retrieve the contact list.
+  contacts_service: ^0.6.3
+
+  # The animation wrapper.
+  animation_wrappers: ^3.0.0
+
+  # The internet connection checker.
+  internet_connection_checker_plus: ^1.0.1
+
+  # The convex bottom bar.
+  convex_bottom_bar: ^3.1.0
+
+  # Share the application
+  share_plus: ^4.5.3
+
+  # The lottie animation.
+  lottie: ^2.3.2
+
+  # The charts package for create stats graphic.
+  syncfusion_flutter_charts: ^21.2.4
+
+  # Enables In App Updates on Android using the official Android APIs.
+  # https://developer.android.com/guide/app-bundle/in-app-updates
+  in_app_update: 4.1.4
+
+  # Package for logging debug and error messages.
+  logging: ^1.0.1
+
+  # Wrapper around InheritedWidget, useful for passing states
+  # down the widget tree.
+  provider: ^6.0.0
+
+  # flutter package for reactive state management
+  rxdart: ^0.27.7
+
+  # Provides an API for querying information about an application package.
+  # Platform: ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS, SERVER
+  package_info_plus: 3.0.3
+
+  # TransAll common internationalization dependencies.
+  trans_all_common_internationalization:
+    path: ../common/internationalization
+
+  trans_all_common_models:
+    path: ../common/models
+
+  trans_all_common_utils:
+    path: ../common/utils
+
+  karibu_capital_core_utils:
+    git:
+      url: https://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@github.com/karibu-cap/flutter_core.git
+      ref: 5b13009
+      path: utils
+
+  karibu_capital_core_static_analysis:
+    git:
+      url: https://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@github.com/karibu-cap/flutter_core.git
+      ref: 5b13009
+      path: static_analysis
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # Libraries necessary to write integration tests.
+  integration_test:
+    sdk: flutter
+
+  # Package useful for executing integration tests.
+  flutter_driver:
+    sdk: flutter
+
+  # Standard package for unit tests in Dart.
+  test: ^1.16.5
+
+  # Package for mocking, stubing, faking in tests.
+  mockito: ^5.0.17
+
+  # Provides a concrete way of generating files using Dart code, outside of tools like pub.
+  # Since Mockito uses a generated file of the mocked class we will need to generate this file
+  # for every mocked class. Visit https://github.com/dart-lang/mockito/blob/master/NULL_SAFETY_README.md
+  # on how to generate the new library.
+  build_runner: ^2.1.7
+
+  # APIs and utilities for UI testing via screenshots diffing.
+  golden_toolkit: ^0.10.0
+
+  # Static analysis tool that also collects various useful metrics.
+  dart_code_metrics: ^4.9.1
+
+  # Command-line tool which simplifies the task of updating your Flutter app's launcher icon.
+  flutter_launcher_icons: "^0.11.0"
+
+  hive_generator: ^1.1.3
+
+  # Configurations for flutter icons generation.
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/transTu_icon.png"
+
+flutter:
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/icons/
+  #   - images/a_dot_ham.jpeg
+
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/assets-and-images/#resolution-aware
+
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/assets-and-images/#from-packages
+
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/custom-fonts/#from-packages

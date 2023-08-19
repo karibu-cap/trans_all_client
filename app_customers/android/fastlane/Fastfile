@@ -1,0 +1,59 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+platform :android do
+
+  desc "Deploy a new version to the Google Play"
+  lane :deploy_play_store do
+    if ENV['UPLOAD_TO_PLAY_STORE'] == 'true'
+      upload_to_play_store(
+      package_name: ENV['TRANSTU_APP_IDENTIFIER'],
+      json_key: ENV['GOOGLE_PLAY_CREDENTIALS_FILE_PATH'],
+      aab: '../build/app/outputs/bundle/release/app-release.aab',
+      release_status: 'completed',
+      )
+    end
+  end
+
+  desc "Deploy to Firebase app distribution"
+  lane :deploy_firebase do
+    begin
+      release_notes = "#{ENV['TRANSTU_APP_NAME']} continues deployment."
+      if ENV['TRANSTU_APP_ENVIRONMENT'] == 'prod'
+        firebase_app_distribution(
+          groups: "testers",
+          release_notes: release_notes,
+          android_artifact_type: 'AAB',
+          android_artifact_path: '../build/app/outputs/bundle/release/app-release.aab',
+          firebase_cli_path: "/usr/local/bin/firebase",
+          firebase_cli_token: ENV['TRANSTU_FIREBASE_CLI_TOKEN'],
+          app: ENV['TRANSTU_ANDROID_APP_ID']
+        )
+      else
+        firebase_app_distribution(
+          groups: "testers",
+          release_notes: release_notes,
+          apk_path: "../build/app/outputs/flutter-apk/app-release.apk",
+          firebase_cli_path: "/usr/local/bin/firebase",
+          firebase_cli_token: ENV['TRANSTU_FIREBASE_CLI_TOKEN'],
+          app: ENV['TRANSTU_ANDROID_APP_ID']
+        )
+      end
+    end
+  end
+
+end

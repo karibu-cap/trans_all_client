@@ -1,0 +1,2 @@
+json_key_file(ENV['GOOGLE_PLAY_CREDENTIALS_FILE_PATH'])
+package_name(ENV['TRANSTU_APP_IDENTIFIER'])

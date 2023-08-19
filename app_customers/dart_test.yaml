@@ -1,0 +1,5 @@
+tags:
+  # Tag used by golden tests.
+  # This allows us to generate the goldens faster with the following command:
+  # flutter test --update-goldens --tags=golden
+  golden:
