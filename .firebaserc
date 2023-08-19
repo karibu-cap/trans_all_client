@@ -1,0 +1,35 @@
+{
+  "projects": {
+    "default": "transtu-dev"
+  },
+  "targets": {
+    "transtu-dev": {
+      "hosting": {
+        "customers": [
+          "transtu-customers-dev"
+        ]
+      }
+    },
+    "transtu-test": {
+      "hosting": {
+        "customers": [
+          "transtu-customers-test"
+        ]
+      }
+    },
+    "transtu-staging": {
+      "hosting": {
+        "customers": [
+          "transtu-customers-staging"
+        ]
+      }
+    }, 
+    "transtu-prod": {
+      "hosting": {
+        "customers": [
+          "transtu-customers-prod"
+        ]
+      }
+    }
+  }
+}

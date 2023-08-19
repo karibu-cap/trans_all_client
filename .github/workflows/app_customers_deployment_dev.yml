@@ -1,0 +1,26 @@
+name: Customer Deployment APP (DEV)
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * 6"
+
+# Ensure that only one dev workflow runs at a time.
+concurrency:
+  group:  app-customer-deployment-dev
+  cancel-in-progress: true
+
+jobs:
+  dev:
+    uses: ./.github/workflows/app_customers_deployment_base.yml
+    with:
+      TRANSTU_APP_ENVIRONMENT: dev
+      TRANSTU_APP_NAME_PLACE_CUSTOMERS: TransAll.DEV
+      UPLOAD_TO_PLAY_STORE_CUSTOMERS: false
+      TRANSTU_ANDROID_APP_ID_CUSTOMERS: 1:812086350186:android:8a6cd4330650fc700a1513
+      TRANSTU_USE_ANDROID_APP_BUNDLE: false
+      TRANSTU_USE_ANDROID_APP_APK: true
+    secrets:
+      TRANSTU_UPLOAD_KEYSTORE_PROPERTIES_BASE64: ${{ secrets.TRANSTU_UPLOAD_KEYSTORE_PROPERTIES_BASE64 }}
+      TRANSTU_UPLOAD_KEYSTORE_JKS_BASE64: ${{ secrets.TRANSTU_UPLOAD_KEYSTORE_JKS_BASE64 }}
+      GOOGLE_PLAY_STORE_CREDENTIALS_BASE64: ${{ secrets.GOOGLE_PLAY_STORE_CREDENTIALS_BASE64 }}
+      TRANSTU_FIREBASE_CLI_TOKEN: ${{ secrets.TRANSTU_FIREBASE_CLI_TOKEN }}

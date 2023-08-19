@@ -1,0 +1,35 @@
+name: trans_all_common_internationalization
+description: Internationalized strings used across Karibu apps.
+version: 0.0.1
+homepage:
+publish_to: none
+
+environment:
+  sdk: "2.18.6"
+  flutter: "3.3.10"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Package for logging debug and error messages.
+  logging: ^1.0.1
+
+  # A flutter package to manage the state.
+  get: ^4.6.5
+
+  karibu_capital_core_internationalization:
+    git:
+      url: https://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@github.com/karibu-cap/flutter_core.git
+      ref: 5b13009
+      path: internationalization
+    
+  karibu_capital_core_static_analysis:
+    git:
+      url: https://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@github.com/karibu-cap/flutter_core.git
+      ref: 5b13009
+      path: static_analysis
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter

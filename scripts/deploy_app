@@ -1,0 +1,21 @@
+#!/usr/bin/python
+import dependencies as deps
+import argparse
+
+argParser = argparse.ArgumentParser(description="deploy android app script")
+argParser.add_argument(
+    '-d', '--directory', 
+    required=True, dest='directory', help='The directory'
+)
+
+directory = argParser.parse_args().directory
+
+deps.chdir(f'./{directory}/android')
+
+# Run the deploy script.
+deployApp = deps.run("echo 'y' | bundle exec fastlane fastlane install_plugins")
+deployApp = deps.run('bundle exec fastlane deploy_play_store')
+deployApp = deps.run('bundle exec fastlane deploy_firebase')
+
+# Returns the exit code returned by the deploy script.
+exit(deployApp.returncode)

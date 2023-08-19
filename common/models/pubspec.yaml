@@ -1,0 +1,23 @@
+name: trans_all_common_models
+description: Representation of TransAll database structures.
+version: 0.0.1
+homepage:
+publish_to: none
+
+environment:
+  sdk: "2.18.6"
+  flutter: "3.3.10"
+
+dependencies:
+  flutter:
+    sdk: flutter
+    
+  # Common static analysis options.
+  karibu_capital_core_static_analysis:
+    git:
+      url: https://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@github.com/karibu-cap/flutter_core.git
+      ref: 5b13009
+      path: static_analysis
+
+  # Static analysis tool that also collects various useful metrics.
+  dart_code_metrics: ^4.9.1
