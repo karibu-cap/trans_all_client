@@ -1,0 +1,102 @@
+name: AppCustomer
+on:
+  schedule:
+    - cron: '0 0 */5 * *'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  FLUTTER_SDK_VERSION: 3.3.10
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      src: ${{ steps.filter.outputs.src }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            src:
+              - 'app_customers/**'
+  unit-tests:
+    needs: changes
+    if: ${{ needs.changes.outputs.src == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      # Install pre-requisites.
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_SDK_VERSION }}
+          cache: true
+
+      - run: chmod +x ./scripts/run_dart_tests && ./scripts/run_dart_tests
+
+      # Store the failures images as artifacts.
+      # This allows us to easily debug failures in pipelines.
+      - uses: actions/upload-artifact@v3
+        with:
+          name: goldens-failures
+          path: "app_customers/**/failures/*.png"
+          if-no-files-found: ignore
+
+  generate-goldens:
+    needs: unit-tests
+    if: ${{ always() && (needs.unit-tests.result=='failure') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_SDK_VERSION }}
+          cache: true
+
+      - run: chmod +x ./scripts/update_goldens && ./scripts/update_goldens
+
+      # Store the golden images as artifacts.
+      # This allows us to update the goldens with the ones
+      # generated on the pipeline.
+      - uses: actions/upload-artifact@v3
+        with:
+          name: goldens
+          path: "app_customers/**/goldens/*.png"
+          if-no-files-found: ignore
+
+  static-analysis:
+    needs: changes
+    if: ${{ needs.changes.outputs.src == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      # Install pre-requisites.
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_SDK_VERSION }}
+          cache: true
+
+      # Run static analysis on all packages.
+      - run: chmod +x ./scripts/run_static_analysis && ./scripts/run_static_analysis
+          
+  dart-format:
+    needs: changes
+    if: ${{ needs.changes.outputs.src == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      # Install pre-requisites.
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_SDK_VERSION }}
+          cache: true
+
+      # Validate that our code has a consistent format.
+      - run: chmod +x ./scripts/run_dart_format && ./scripts/run_dart_format 

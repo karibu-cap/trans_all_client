@@ -1,0 +1,112 @@
+name: Customer Deployment Base APP Workflow
+on:
+  workflow_call:
+    inputs:
+      TRANSTU_APP_ENVIRONMENT:
+        required: true
+        type: string
+        description: "Environment to deploy to (dev, staging or prod)"
+      TRANSTU_APP_NAME_PLACE_CUSTOMERS:
+        required: true
+        type: string
+        description: "Display name of the Customers application"
+      UPLOAD_TO_PLAY_STORE_CUSTOMERS:
+        required: true
+        type: boolean
+        description: "True if the Customers App should be uploaded to play store"
+      TRANSTU_ANDROID_APP_ID_CUSTOMERS:
+        required: true
+        type: string
+        description: "Android app ID for Customers"
+      TRANSTU_USE_ANDROID_APP_BUNDLE:
+        required: true
+        type: boolean
+        description: "True if appbundles should be used instead of apk"
+      TRANSTU_USE_ANDROID_APP_APK:
+          required: true
+          type: boolean
+          description: "True if apk should be used instead of appbundles"
+    secrets:
+      TRANSTU_UPLOAD_KEYSTORE_PROPERTIES_BASE64:
+        required: true
+        description: "Keystore for Android app signing properties"
+      TRANSTU_UPLOAD_KEYSTORE_JKS_BASE64:
+        required: true
+        description: "Keystore for Android app signing"
+      GOOGLE_PLAY_STORE_CREDENTIALS_BASE64:
+        required: true
+        description: "Google Play credentials for Android app deployment"
+      TRANSTU_FIREBASE_CLI_TOKEN:
+        required: true
+        description: "Token to deploy to Firebase (App distribution)"
+
+env:
+  FLUTTER_SDK_VERSION: 3.3.10
+  NODE_VERSION: 16.13.1
+  RUBY_VERSION: 2.7.4
+  GOOGLE_PLAY_CREDENTIALS_FILE_PATH: "/tmp/google-play-credentials.json"
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      src: ${{ steps.filter.outputs.src }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            src:
+              - 'app_customers/**'
+  deploy-android-customers:
+    needs: changes
+    if: ${{ needs.changes.outputs.src == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_SDK_VERSION }}
+          cache: true
+      # Setup Ruby.
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ env.RUBY_VERSION }}
+          bundler-cache: false
+          working-directory: app_customers/android
+
+      # Install Ruby dependencies (Fastlane).
+      - run: bundle install
+        working-directory: app_customers/android
+
+      - name: Set the build number
+        run: echo "TRANSTU_APP_BUILD_NUMBER=${{github.run_number}}" >> "$GITHUB_ENV"
+
+      # Decode and write to file the keys necessary to sign the apps for release.
+      # The content of these files is encoded in base64, and their values stored as environment variables for the pipeline.
+      # This allows us to control access to these variables, which are very sensitive.
+      - run: echo "${{ secrets.GOOGLE_PLAY_STORE_CREDENTIALS_BASE64 }}" | base64 --decode  > "${GOOGLE_PLAY_CREDENTIALS_FILE_PATH}"
+      - run: echo "${{ secrets.TRANSTU_UPLOAD_KEYSTORE_PROPERTIES_BASE64 }}" | base64 --decode > app_customers/android/key.properties
+      - run: echo "${{ secrets.TRANSTU_UPLOAD_KEYSTORE_JKS_BASE64 }}" | base64 --decode > app_customers/android/app/upload-keystore.jks
+
+      # Build the android apps.
+      - name: Build Android Customers
+        run: chmod +x ./scripts/build_android_app && ./scripts/build_android_app -d app_customers -b ${{ inputs.TRANSTU_USE_ANDROID_APP_BUNDLE }} -a ${{ inputs.TRANSTU_USE_ANDROID_APP_APK }}
+        env:
+          TRANSTU_APP_ENVIRONMENT: ${{ inputs.TRANSTU_APP_ENVIRONMENT }}
+          TRANSTU_APP_NAME: ${{ inputs.TRANSTU_APP_NAME_PLACE_CUSTOMERS }}
+          TRANSTU_USE_ANDROID_APP_BUNDLE: ${{ inputs.TRANSTU_USE_ANDROID_APP_BUNDLE }}
+          TRANSTU_APP_BUILD_NUMBER: ${{ env.TRANSTU_APP_BUILD_NUMBER }}
+
+      # Deploy the Android apps.
+      - name: Deploy Android Customers
+        run: chmod +x ./scripts/deploy_app && ./scripts/deploy_app -d app_customers
+        env:
+          TRANSTU_APP_ENVIRONMENT: ${{ inputs.TRANSTU_APP_ENVIRONMENT }}
+          TRANSTU_APP_NAME: ${{ inputs.TRANSTU_APP_NAME_PLACE_CUSTOMERS }}
+          TRANSTU_APP_IDENTIFIER: com.karibu.transtu.${{ inputs.TRANSTU_APP_ENVIRONMENT }}
+          TRANSTU_ANDROID_APP_ID: ${{ inputs.TRANSTU_ANDROID_APP_ID_CUSTOMERS }}
+          TRANSTU_FIREBASE_CLI_TOKEN: ${{ secrets.TRANSTU_FIREBASE_CLI_TOKEN }}
+          UPLOAD_TO_PLAY_STORE: ${{ inputs.UPLOAD_TO_PLAY_STORE_CUSTOMERS }}

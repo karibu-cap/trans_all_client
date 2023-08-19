@@ -1,0 +1,57 @@
+#!/usr/bin/python
+import os
+import dependencies as deps
+import argparse
+import datetime
+import subprocess
+
+argParser = argparse.ArgumentParser(description="build android app script")
+argParser.add_argument(
+    '-d', '--directory', 
+    required=True, dest='directory', help='The directory'
+)
+argParser.add_argument(
+    '-b', '--bundle', 
+    required=True, dest='generateBundle', help='Generate the bundle'
+)
+argParser.add_argument(
+    '-a', '--apk', 
+    required=True, dest='generateAPK', help='Generate the APK'
+)
+
+directory = argParser.parse_args().directory
+generateBundle = argParser.parse_args().generateBundle
+generateAPK = argParser.parse_args().generateAPK
+
+deps.chdir(f'./{directory}')
+
+# Generate the app version (x.y.z) in the format:
+# year-base.month.date
+
+current_month = datetime.datetime.utcnow().strftime('%m')
+current_day = datetime.datetime.utcnow().strftime('%d')
+
+base_year = 2023
+current_year = datetime.datetime.utcnow().strftime('%Y')
+major = int(current_year) - base_year
+
+app_build_name = f"{major}.{current_month}.{current_day}"
+
+# Run the build task
+build = deps.run('sudo flutter pub get')
+
+if generateAPK == 'true':
+    build = deps.run(f"flutter build apk \
+                      --dart-define=TRANSTU_APP_ENVIRONMENT=\"{deps.os.getenv('TRANSTU_APP_ENVIRONMENT')}\" \
+                      --dart-define=TRANSTU_APP_NAME=\"{deps.os.getenv('TRANSTU_APP_NAME')}\" \
+                      --build-number \"{deps.os.getenv('TRANSTU_APP_BUILD_NUMBER')}\" \
+                      --build-name \"{app_build_name}\" ")
+if generateBundle == 'true':
+    build = deps.run(f"flutter build appbundle \
+                      --dart-define=TRANSTU_APP_ENVIRONMENT=\"{deps.os.getenv('TRANSTU_APP_ENVIRONMENT')}\" \
+                      --dart-define=TRANSTU_APP_NAME=\"{deps.os.getenv('TRANSTU_APP_NAME')}\" \
+                      --build-number \"{deps.os.getenv('TRANSTU_APP_BUILD_NUMBER')}\" \
+                      --build-name \"{app_build_name}\" ")
+
+# Returns the exit code returned by build task
+exit(build.returncode)

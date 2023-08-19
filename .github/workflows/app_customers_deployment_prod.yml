@@ -1,0 +1,32 @@
+name: Customer Deployment APP (PROD)
+on:
+  workflow_dispatch:
+    inputs:
+      UPLOAD_TO_PLAY_STORE_CUSTOMERS:
+        type: boolean
+        description: "(Customers) Enable Google Play submission"
+        default: false
+  schedule:
+    # Run every Saturday. 10PM UTC.
+    - cron: "0 0 * * 6"
+
+# Ensure that only one prod workflow runs at a time.
+concurrency:
+  group: app-customer-deployment-prod
+  cancel-in-progress: true
+
+jobs:
+  prod:
+    uses: ./.github/workflows/app_customers_deployment_base.yml
+    with:
+      TRANSTU_APP_ENVIRONMENT: prod
+      TRANSTU_APP_NAME_PLACE_CUSTOMERS: TransAll
+      UPLOAD_TO_PLAY_STORE_CUSTOMERS: ${{ github.event.inputs.UPLOAD_TO_PLAY_STORE_CUSTOMERS == 'true' }}
+      TRANSTU_ANDROID_APP_ID_CUSTOMERS: 1:797230719116:android:e51365e7dc64b2fd15dba9
+      TRANSTU_USE_ANDROID_APP_BUNDLE: true
+      TRANSTU_USE_ANDROID_APP_APK: false
+    secrets:
+      TRANSTU_UPLOAD_KEYSTORE_PROPERTIES_BASE64: ${{ secrets.TRANSTU_UPLOAD_KEYSTORE_PROPERTIES_BASE64 }}
+      TRANSTU_UPLOAD_KEYSTORE_JKS_BASE64: ${{ secrets.TRANSTU_UPLOAD_KEYSTORE_JKS_BASE64 }}
+      GOOGLE_PLAY_STORE_CREDENTIALS_BASE64: ${{ secrets.GOOGLE_PLAY_STORE_CREDENTIALS_BASE64 }}
+      TRANSTU_FIREBASE_CLI_TOKEN: ${{ secrets.TRANSTU_FIREBASE_CLI_TOKEN }}
