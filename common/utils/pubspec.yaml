@@ -12,14 +12,14 @@ dependencies:
   # Core crash reporting.
   karibu_capital_core_crash_reporting:
     git:
-      url: https://nidovic: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@github.com/karibu-cap/flutter_core.git
+      url: https://nidovic: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@github.com/karibu-cap/flutter_core.git
       ref: 272ae8e
       path: crash_reporting
 
   # Common static analysis options.
   karibu_capital_core_static_analysis:
     git:
-      url: https://nidovic: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@github.com/karibu-cap/flutter_core.git
+      url: https://nidovic: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@github.com/karibu-cap/flutter_core.git
       ref: 272ae8e
       path: static_analysis
   
