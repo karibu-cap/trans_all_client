@@ -1,10 +1,12 @@
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:karibu_capital_core_utils/utils.dart';
 import 'package:lottie/lottie.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:trans_all_common_internationalization/internationalization.dart';
+import 'package:trans_all_common_models/models.dart';
 
 import '../../data/repository/contactRepository.dart';
 import '../../data/repository/tranfersRepository.dart';
