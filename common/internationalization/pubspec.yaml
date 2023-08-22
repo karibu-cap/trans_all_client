@@ -20,13 +20,13 @@ dependencies:
 
   karibu_capital_core_internationalization:
     git:
-      url: https://nidovic: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@github.com/karibu-cap/flutter_core.git
+      url: https://nidovic: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@github.com/karibu-cap/flutter_core.git
       ref: 272ae8e
       path: internationalization
     
   karibu_capital_core_static_analysis:
     git:
-      url: https://nidovic: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@github.com/karibu-cap/flutter_core.git
+      url: https://nidovic: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@github.com/karibu-cap/flutter_core.git
       ref: 272ae8e
       path: static_analysis
 
