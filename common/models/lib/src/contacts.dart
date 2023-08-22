@@ -1,3 +1,6 @@
+import 'dart:math';
+import 'dart:ui';
+
 import 'base_model.dart';
 
 /// The contact model.
@@ -14,6 +17,9 @@ class Contact extends BaseModel {
   /// The stored key ref for the [name] property.
   static const keyName = 'name';
 
+  /// The stored key ref for the [color] property.
+  static const keyColor = 'color';
+
   /// The name of contact.
   final String name;
 
@@ -25,6 +31,9 @@ class Contact extends BaseModel {
 
   /// Define the contact as default buyer.
   final bool isBuyerContact;
+
+  /// The contact color.
+  Color? color;
 
   @override
   int get hashCode => name.hashCode ^ phoneNumber.hashCode;
@@ -50,7 +59,16 @@ class Contact extends BaseModel {
         phoneNumber = json[keyPhoneNumber],
         id = json[keyId],
         isBuyerContact = json[keyIsBuyerContact],
-        super.fromJson();
+        super.fromJson() {
+    final random = Random();
+    final randomColor = Color.fromARGB(
+      255,
+      random.nextInt(256),
+      random.nextInt(256),
+      random.nextInt(256),
+    );
+    color = randomColor;
+  }
 
   @override
   Map<String, dynamic> toJson() => <String, dynamic>{

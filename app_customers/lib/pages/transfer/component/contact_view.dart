@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -68,10 +70,14 @@ class ContactWidget extends StatelessWidget {
               topRight: border,
             ),
           ),
-          builder: (context) => _ContactsView(
-            onPressToContact: onPressToContact,
-            contacts: contacts,
-            title: title,
+          builder: (context) => Builder(
+            builder: (context) {
+              return _ContactsView(
+                onPressToContact: onPressToContact,
+                contacts: contacts,
+                title: title,
+              );
+            },
           ),
         ),
         child: Row(
@@ -114,196 +120,242 @@ class _ContactsView extends StatelessWidget {
     final contactPermissionState = UserContactConfig.contactPermissionState;
 
     return StreamBuilder<List<Contact>>(
-        stream: controller.streamOfContact.stream,
-        builder: (context, snapshot) {
-          final contactsList = snapshot.data ?? [];
+      stream: controller.streamOfContact.stream,
+      builder: (context, snapshot) {
+        final contactsList = snapshot.data ?? [];
 
-          return Padding(
-            padding: const EdgeInsets.only(
-              top: 25.0,
-              left: 10,
-              right: 10,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+        return Padding(
+          padding: const EdgeInsets.only(
+            top: 25.0,
+            left: 10,
+            right: 10,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                localization.contact,
+                style: TextStyle(
+                  color: AppColors.darkBlack,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              if (contactsList.isNotEmpty)
                 Text(
-                  localization.contact,
+                  title,
                   style: TextStyle(
-                    color: AppColors.darkBlack,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
+                    color: AppColors.black,
+                    fontSize: 15,
                   ),
                 ),
-                SizedBox(
-                  height: 10,
-                ),
-                if (contactsList.isNotEmpty)
-                  Text(
-                    title,
-                    style: TextStyle(
-                      color: AppColors.black,
-                      fontSize: 15,
-                    ),
-                  ),
-                SizedBox(
-                  height: 10,
-                ),
-                if (contactsList.isNotEmpty) _SearchContact(),
-                SizedBox(
-                  height: 10,
-                ),
-                if (contactsList.isEmpty &&
-                    contactPermissionState == ContactPermissionState.allow)
-                  Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Lottie.asset(
-                          'assets/icons/no_item.json',
-                          width: 100,
-                          height: 100,
-                          fit: BoxFit.cover,
-                        ),
-                        Text(
-                          localization.noContactFound,
-                          style: TextStyle(
-                            color: AppColors.black,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                if (contactsList.isEmpty &&
-                    contactPermissionState != ContactPermissionState.allow)
-                  Column(
+              SizedBox(
+                height: 10,
+              ),
+              if (contactsList.isNotEmpty) _SearchContact(),
+              SizedBox(
+                height: 10,
+              ),
+              if (contactsList.isEmpty &&
+                  contactPermissionState == ContactPermissionState.allow)
+                Center(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      Lottie.asset(
+                        'assets/icons/no_item.json',
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.cover,
+                      ),
                       Text(
-                        localization.contactRequestMessage,
+                        localization.noContactFound,
                         style: TextStyle(
                           color: AppColors.black,
+                          fontWeight: FontWeight.w400,
                           fontSize: 15,
-                          height: 1.5,
                         ),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      TextButton(
-                        onPressed: () async {
-                          controller.updateLoadOfContacts(true);
-                          final request = await UserContactConfig.init(
-                              requestContactPermission: true);
-                          final PermissionStatus permission =
-                              await Permission.contacts.status;
-                          if (!permission.isGranted) {
-                            controller.updateLoadOfContacts(false);
-
-                            return;
-                          }
-                        },
-                        style: TextButton.styleFrom(
-                          backgroundColor: AppColors.darkBlack,
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(9)),
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: Text(
-                            localization.allowAccess,
-                            style: const TextStyle(
-                              color: AppColors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      ValueListenableBuilder<bool>(
-                        valueListenable: controller.loadTheContacts,
-                        builder: (context, value, child) {
-                          return controller.loadTheContacts.value &&
-                                  contactsList.isEmpty
-                              ? Column(
-                                  children: [
-                                    SizedBox(
-                                      height: 80,
-                                      child: Lottie.asset(
-                                        'assets/icons/loading.json',
-                                        width: 100,
-                                        height: 100,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                    SizedBox(height: 10),
-                                    Text(
-                                      localization.waitMessage,
-                                      style: const TextStyle(
-                                        color: AppColors.black,
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              : SizedBox();
-                        },
                       ),
                     ],
                   ),
-                if (controller.contactFilterTextController.text.isNotEmpty &&
-                    controller.filterContactList.value.isEmpty)
-                  Expanded(
-                    child: Center(
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Lottie.asset(
-                              'assets/icons/no_item.json',
-                              width: 100,
-                              height: 100,
-                              fit: BoxFit.cover,
-                            ),
-                            Text(
-                              localization.noResultFound,
-                              style: TextStyle(
-                                color: AppColors.darkBlack,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 15,
-                              ),
-                            ),
-                          ],
+                ),
+              if (contactsList.isEmpty &&
+                  contactPermissionState != ContactPermissionState.allow)
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      localization.contactRequestMessage,
+                      style: TextStyle(
+                        color: AppColors.black,
+                        fontSize: 15,
+                        height: 1.5,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    TextButton(
+                      onPressed: () async {
+                        controller.updateLoadOfContacts(true);
+                        final request = await UserContactConfig.init(
+                            requestContactPermission: true);
+                        final PermissionStatus permission =
+                            await Permission.contacts.status;
+                        if (!permission.isGranted) {
+                          controller.updateLoadOfContacts(false);
+
+                          return;
+                        }
+                      },
+                      style: TextButton.styleFrom(
+                        backgroundColor: AppColors.darkBlack,
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(9)),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Text(
+                          localization.allowAccess,
+                          style: const TextStyle(
+                            color: AppColors.white,
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    ValueListenableBuilder<bool>(
+                      valueListenable: controller.loadTheContacts,
+                      builder: (context, value, child) {
+                        return controller.loadTheContacts.value &&
+                                contactsList.isEmpty
+                            ? Column(
+                                children: [
+                                  SizedBox(
+                                    height: 80,
+                                    child: Lottie.asset(
+                                      'assets/icons/loading.json',
+                                      width: 100,
+                                      height: 100,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    localization.waitMessage,
+                                    style: const TextStyle(
+                                      color: AppColors.black,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : SizedBox();
+                      },
+                    ),
+                  ],
+                ),
+              if (controller.contactFilterTextController.text.isNotEmpty &&
+                  controller.filterContactList.value.isEmpty)
                 Expanded(
-                  child: ContactListWidget(
-                    listOfContact: controller
-                            .contactFilterTextController.text.isEmpty
-                        ? sortContactByName(contactsList)
-                        : sortContactByName(controller.filterContactList.value),
-                    onContactPressed: (contactValue) {
-                      onPressToContact(
-                        contactValue.phoneNumber,
-                      );
-                      Navigator.pop(context);
-                    },
+                  child: Center(
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Lottie.asset(
+                            'assets/icons/no_item.json',
+                            width: 100,
+                            height: 100,
+                            fit: BoxFit.cover,
+                          ),
+                          Text(
+                            localization.noResultFound,
+                            style: TextStyle(
+                              color: AppColors.darkBlack,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-              ],
-            ),
-          );
-        },);
+              Expanded(
+                child: Stack(
+                  children: [
+                    ContactListWidget(
+                      listOfContact:
+                          controller.contactFilterTextController.text.isEmpty
+                              ? sortContactByName(contactsList)
+                              : sortContactByName(
+                                  controller.filterContactList.value,
+                                ),
+                      onContactPressed: (contactValue) {
+                        onPressToContact(
+                          contactValue.phoneNumber,
+                        );
+                        Navigator.pop(context);
+                      },
+                    ),
+                    Positioned(
+                      right: 10,
+                      bottom: 10,
+                      child: FloatingActionButton(
+                        backgroundColor: AppColors.darkBlack,
+                        tooltip: localization.refresh,
+                        onPressed: () async {
+                          unawaited(
+                              controller.animateController.value.repeat());
+                          final request = await UserContactConfig.init(
+                              requestContactPermission: true);
+                          await Future.delayed(
+                            const Duration(seconds: 3),
+                          );
+                          if (request) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                backgroundColor: AppColors.darkBlack,
+                                behavior: SnackBarBehavior.floating,
+                                dismissDirection: DismissDirection.up,
+                                content: Text(
+                                  localization.contactRefreshed,
+                                  style: TextStyle(
+                                    color: AppColors.white,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
+                          controller.animateController.value.stop();
+                        },
+                        child: RotationTransition(
+                          turns: Tween(begin: 0.0, end: 1.0).animate(
+                            controller.animateController.value,
+                          ),
+                          child: Icon(Icons.refresh),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
 

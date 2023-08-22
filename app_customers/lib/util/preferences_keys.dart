@@ -12,4 +12,7 @@ class PreferencesKeys {
 
   /// Can request to contact permission.
   static const String requestContactPermission = 'requestContactPermission';
+
+  /// The content type of client version.
+  static const String clientVersion = 'X-Client-Version';
 }

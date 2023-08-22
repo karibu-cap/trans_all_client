@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:karibu_capital_core_remote_config/remote_config.dart';
 import 'package:logging/logging.dart';
+import 'package:trans_all_common_config/config.dart';
 import 'package:trans_all_common_internationalization/internationalization.dart';
 import 'package:trans_all_common_models/models.dart';
 import 'package:trans_all_common_utils/utils.dart';
@@ -13,6 +15,7 @@ import 'config/config.dart';
 import 'config/environement_conf.dart';
 import 'data/database/hive_service.dart';
 import 'data/repository/contactRepository.dart';
+import 'data/repository/forfeitRepository.dart';
 import 'data/repository/tranfersRepository.dart';
 import 'routes/app_router.dart';
 import 'util/user_contact.dart';
@@ -27,6 +30,11 @@ Future<void> main() async {
   await AppRouter.init(
     AppRouterType.gorouter,
   );
+
+  await RemoteConfig.init(
+    service: getAppConfigDefaults().remoteConfigType,
+    defaults: getRemoteConfigDefaults(),
+  );
   runApp(MyApp());
 }
 
@@ -40,6 +48,7 @@ class MyApp extends StatelessWidget {
     Get.lazyPut(() => _appInternationalization);
     Get.lazyPut(() => TransferRepository(HiveService(HiveServiceType.hive)));
     Get.lazyPut(() => ContactRepository(HiveService(HiveServiceType.hive)));
+    Get.lazyPut(() => ForfeitRepository(HiveService(HiveServiceType.hive)));
 
     return;
   }

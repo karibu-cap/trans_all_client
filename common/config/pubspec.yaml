@@ -1,0 +1,36 @@
+name: trans_all_common_config
+description: Common configuration options among TransAll apps.
+version: 0.0.1
+homepage: none
+publish_to: none
+
+environment:
+  sdk: ^3.0.6
+  flutter: ^3.10.6
+
+dependencies:
+  # Used to add annotations to various functions.
+  meta: ^1.3.0
+
+  karibu_capital_core_remote_config:
+    git:
+      url: https://nidovic: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@github.com/karibu-cap/flutter_core.git
+      ref: 272ae8e
+      path: remote_config
+
+  trans_all_common_utils:
+    path: ../../common/utils
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # Common static analysis options.
+  karibu_capital_core_static_analysis:
+    git:
+      url: https://nidovic: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@github.com/karibu-cap/flutter_core.git
+      ref: 272ae8e
+      path: static_analysis
+
+  # Static analysis tool that also collects various useful metrics.
+  dart_code_metrics: ^4.9.1

@@ -2,8 +2,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:karibu_capital_core_utils/utils.dart';
+import 'package:karibu_capital_core_remote_config/remote_config.dart';
 import 'package:overlay_tooltip/overlay_tooltip.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sms_mms/sms_mms.dart';
+import 'package:trans_all_common_config/config.dart';
 import 'package:trans_all_common_internationalization/internationalization.dart';
 import 'package:trans_all_common_models/models.dart';
 
@@ -12,6 +15,7 @@ import '../../../routes/pages_routes.dart';
 import '../../../themes/app_button_styles.dart';
 import '../../../themes/app_colors.dart';
 import '../../../util/constant.dart';
+import '../../../util/preferences_keys.dart';
 import '../../../widgets/alert_box.dart';
 import '../../../widgets/m_tooltip.dart';
 import '../../../widgets/oparator_icon.dart';
@@ -35,8 +39,76 @@ class FormTransfer extends StatelessWidget {
     final controller = Get.find<TransfersController>();
     final border = Radius.circular(25.0);
 
+    void alertToSentRequestBySms() {
+      final mtnNumberForSMSAirtimeTransaction = RemoteConfig().getString(
+        RemoteConfigKeys.mtnNumberForSmsTransaction,
+      );
+
+      final ValueNotifier<String> defaultReceiverSmsNumber =
+          ValueNotifier(mtnNumberForSMSAirtimeTransaction);
+
+      showAlertBoxView(
+        context: context,
+        icon: Icon(
+          Icons.wifi_tethering_error,
+          color: AppColors.white,
+          size: 30,
+        ),
+        topBackgroundColor: AppColors.orange,
+        negativeBtnText: localization.noThank,
+        positiveBtnText: localization.yes,
+        positiveBtnPressed: () async {
+          Navigator.of(context, rootNavigator: true).pop();
+          final String message =
+              'buyerGatewayId:${controller.currentPaymentMethod.value?.id.key}\n'
+              'amountToPay:${controller.amountToPayTextController.value.text}\n'
+              'buyerPhoneNumber:${controller.paymentTextController.text}\n'
+              'featureReference:${controller.currentOperation.value?.reference.key}\n'
+              'receiverPhoneNumber:${controller.receiverTextController.text}\n'
+              'receiverOperator:${controller.currentOperation.value?.operatorName}';
+          print(message);
+
+          final List<String> recipients = [defaultReceiverSmsNumber.value];
+
+          final result = await SmsMms.send(
+            recipients: recipients,
+            message: message,
+          );
+        },
+        title: localization.noInternetConnection,
+        content: ValueListenableBuilder(
+          valueListenable: defaultReceiverSmsNumber,
+          builder: (context, value, child) => _AlertMessageContent(
+            controller,
+            value,
+            (value) => defaultReceiverSmsNumber.value = value,
+          ),
+        ),
+      );
+    }
+
+    void alertToSentAlertBox() {
+      showAlertBoxView(
+        context: context,
+        icon: Icon(
+          Icons.wifi_tethering_error,
+          color: AppColors.white,
+          size: 30,
+        ),
+        topBackgroundColor: AppColors.orange,
+        positiveBtnText: localization.ok,
+        positiveBtnPressed: () async {
+          Navigator.of(context, rootNavigator: true).pop();
+        },
+        title: localization.noInternetConnection,
+        content: SizedBox(),
+      );
+    }
+
     /// Checks the form.
     Future<void> checksTheForm() async {
+      final pref = await SharedPreferences.getInstance();
+      final isConnected = pref.getBool(PreferencesKeys.isConnected) ?? true;
       final paymentSelected = controller.currentPaymentMethod.value;
       final currentOperation = controller.currentOperation.value;
       final isValidPayerNumber = controller.isValidPayerNumber();
@@ -47,6 +119,16 @@ class FormTransfer extends StatelessWidget {
           !isValidAmount ||
           paymentSelected == null ||
           currentOperation == null) {
+        return;
+      }
+      if (!isConnected) {
+        final enableSmsTransactionAirtime = RemoteConfig().getBool(
+          RemoteConfigKeys.userCanRequestAirtimeBySms,
+        );
+        enableSmsTransactionAirtime
+            ? alertToSentRequestBySms()
+            : alertToSentAlertBox();
+
         return;
       }
 
@@ -260,5 +342,105 @@ class FormTransfer extends StatelessWidget {
             ),
           ],
         ));
+  }
+}
+
+class _AlertMessageContent extends StatelessWidget {
+  final String value;
+  final TransfersController controller;
+  final Function(String value) changeDefaultParams;
+
+  const _AlertMessageContent(
+    this.controller,
+    this.value,
+    this.changeDefaultParams,
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    final mtnNumberForSMSAirtimeTransaction = RemoteConfig().getString(
+      RemoteConfigKeys.mtnNumberForSmsTransaction,
+    );
+    final orangeNumberForSMSAirtimeTransaction = RemoteConfig().getString(
+      RemoteConfigKeys.orangeNumberForSmsTransaction,
+    );
+    final localization = Get.find<AppInternationalization>();
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        FittedBox(
+          child: Text(
+            localization.sentRequestBySmsTitle,
+            style: TextStyle(
+              color: AppColors.black,
+              fontSize: 15,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        Text(
+          '${localization.chooseNumberToSend}: ',
+          style: TextStyle(
+            color: AppColors.black,
+            fontSize: 14,
+          ),
+        ),
+        SizedBox(
+          height: 17,
+        ),
+        Row(
+          children: [
+            Text(
+              mtnNumberForSMSAirtimeTransaction,
+              style: TextStyle(
+                color: AppColors.black,
+                fontSize: 15,
+              ),
+            ),
+            SizedBox(width: 20),
+            InkWell(
+              onTap: () =>
+                  changeDefaultParams(mtnNumberForSMSAirtimeTransaction),
+              child: Icon(
+                value == mtnNumberForSMSAirtimeTransaction
+                    ? Icons.circle
+                    : Icons.circle_outlined,
+                color: AppColors.darkBlack,
+                size: 20,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 10),
+        Row(
+          children: [
+            Text(
+              orangeNumberForSMSAirtimeTransaction,
+              style: TextStyle(
+                color: AppColors.black,
+                fontSize: 15,
+              ),
+            ),
+            SizedBox(width: 20),
+            InkWell(
+              onTap: () =>
+                  changeDefaultParams(orangeNumberForSMSAirtimeTransaction),
+              child: Icon(
+                value == orangeNumberForSMSAirtimeTransaction
+                    ? Icons.circle
+                    : Icons.circle_outlined,
+                color: AppColors.darkBlack,
+                size: 20,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 30),
+      ],
+    );
   }
 }

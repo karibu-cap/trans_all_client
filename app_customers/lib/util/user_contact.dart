@@ -67,12 +67,6 @@ class UserContactConfig {
           contactPermissionState = ContactPermissionState.allow;
           await pref.setBool(PreferencesKeys.requestContactPermission, true);
 
-          final localContact = contactRepository.getAllLocalContact();
-          if (localContact.isNotEmpty) {
-            userContact.add(localContact.toList());
-
-            return true;
-          }
           final contacts = await contactService.ContactsService.getContacts();
           final Map<String, String> setOfContact = {};
           for (final contact in contacts) {

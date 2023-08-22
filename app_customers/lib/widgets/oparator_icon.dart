@@ -77,27 +77,7 @@ class OperatorIcon extends StatelessWidget {
         width: 40,
       );
     }
-    if (operatorType == OperationTransferType.nexttelUnitTransfer.key) {
-      return Container(
-        alignment: Alignment.center,
-        height: 40,
-        width: 40,
-        padding: const EdgeInsets.all(2.0),
-        decoration: BoxDecoration(
-          color: AppColors.red2,
-          borderRadius: BorderRadius.all(Radius.circular(50)),
-        ),
-        child: FittedBox(
-          child: Text(
-            'Nexttel',
-            style: TextStyle(
-              color: AppColors.white,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      );
-    }
+
     if (operatorType == OperationTransferType.yoomeeUnitTransfer.key) {
       return Container(
         alignment: Alignment.center,

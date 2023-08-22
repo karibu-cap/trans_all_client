@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:rxdart/rxdart.dart' hide Rx;
 import 'package:trans_all_common_internationalization/internationalization.dart';
@@ -14,6 +15,13 @@ class TransfersController extends GetxController {
   final TransfersViewModel _transfersViewModel;
   final AppInternationalization _localization;
   final CreditTransactionParams? _localCreditTransaction;
+
+  /// The animation controller.
+  Rx<AnimationController> animateController =
+      Rx<AnimationController>(AnimationController(
+    duration: const Duration(milliseconds: 700),
+    vsync: const _MyTickerProvider(),
+  ));
 
   /// The text form key.
   final formKey = GlobalKey<FormState>();
@@ -246,12 +254,6 @@ class TransfersController extends GetxController {
 
           return;
         }
-        if (operation.reference == OperationTransferType.nexttelUnitTransfer) {
-          currentOperation.value = operation;
-          receiverNumberErrorMessage.value = '';
-
-          return;
-        }
       } else {
         receiverNumberErrorMessage.value =
             receiverTextController.text.length > 2
@@ -439,4 +441,11 @@ class TransfersController extends GetxController {
 
   /// Retry the transfer.
   void retryTransfer() => _transfersViewModel.retryTransfer();
+}
+
+class _MyTickerProvider extends TickerProvider {
+  const _MyTickerProvider();
+
+  @override
+  Ticker createTicker(onTick) => Ticker(onTick);
 }

@@ -52,7 +52,6 @@ class OperationTransferType {
     camtelUnitTransfer.key: camtelUnitTransfer,
     mtnUnitTransfer.key: mtnUnitTransfer,
     yoomeeUnitTransfer.key: yoomeeUnitTransfer,
-    nexttelUnitTransfer.key: nexttelUnitTransfer,
     unknown.key: unknown,
   };
 
@@ -67,13 +66,9 @@ class OperationTransferType {
   /// The mtn unit transfer.
   static const mtnUnitTransfer = OperationTransferType._('mtnUnitTransfer');
 
-  /// The mtn unit transfer.
+  /// The yoomee unit transfer.
   static const yoomeeUnitTransfer =
       OperationTransferType._('yoomeeUnitTransfer');
-
-  /// The mtn unit transfer.
-  static const nexttelUnitTransfer =
-      OperationTransferType._('nexttelUnitTransfer');
 
   /// The unknown operator.
   static const unknown = OperationTransferType._('unknown');

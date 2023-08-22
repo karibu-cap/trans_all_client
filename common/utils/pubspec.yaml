@@ -1,27 +1,26 @@
 name: trans_all_common_utils
 description: Representation of TransAll common utility functions.
 version: 1.0.0
-homepage:
+homepage: none
 publish_to: none
 
 environment:
-  sdk: "2.18.6"
-  flutter: "3.3.10"
+  sdk: ^3.0.6
+  flutter: ^3.10.6
 
 dependencies:
-
   # Core crash reporting.
   karibu_capital_core_crash_reporting:
     git:
-      url: https://nidovic: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@github.com/karibu-cap/flutter_core.git
-      ref: 5b13009
+      url: https://nidovic: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@github.com/karibu-cap/flutter_core.git
+      ref: 272ae8e
       path: crash_reporting
 
   # Common static analysis options.
   karibu_capital_core_static_analysis:
     git:
-      url: https://nidovic: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@github.com/karibu-cap/flutter_core.git
-      ref: 5b13009
+      url: https://nidovic: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@github.com/karibu-cap/flutter_core.git
+      ref: 272ae8e
       path: static_analysis
   
   # Plugin for Firebase Core, enabling connecting to multiple Firebase apps.
@@ -36,7 +35,6 @@ dependencies:
   # such as the Closure JS Logger and java.util.logging.Logger.
   # Platform: ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS, SERVER
   logging: 1.1.1
-
 
 dev_dependencies:
   lints: ^2.0.0

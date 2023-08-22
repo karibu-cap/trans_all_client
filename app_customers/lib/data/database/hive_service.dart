@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:trans_all_common_internationalization/internationalization.dart';
 import 'package:trans_all_common_models/models.dart';
 
@@ -97,6 +98,9 @@ abstract class HiveService {
   /// Synchronizes the local operator and payment.
   void synchronizeLocalRemoteGateways();
 
+  /// Lists all local forfeit.
+  Future<List<Forfeit>?> getAllForfeit();
+
   /// Gets contact list.
   Set<Contact> getAllLocalContact();
 
@@ -129,6 +133,7 @@ class HiveServiceImpl implements HiveService {
       Hive.box<PaymentGateways>(Constant.paymentGatewaysTable);
 
   final _databaseContact = Hive.box<Contact>(Constant.contactTable);
+  final _forfeitRow = Hive.box<Forfeit>(Constant.forfeitTable);
 
   final _databaseDefaultBuyerContacts =
       Hive.box<Contact>(Constant.defaultBuyerContactsTable);
@@ -238,12 +243,20 @@ class HiveServiceImpl implements HiveService {
 
   @override
   Future<ListPaymentGatewaysResponse> listPaymentGateways() async {
+    final packageInfo = await PackageInfo.fromPlatform();
+
+    final headers = {
+      PreferencesKeys.clientVersion: packageInfo.version,
+    };
     final List<PaymentGateways> payments = [];
     final url = Uri.parse(
       '$_appBaseUrl/api/payment/methods/all',
     );
     try {
-      final response = await http.get(url);
+      final response = await http.get(
+        url,
+        headers: headers,
+      );
 
       final List<dynamic> data = jsonDecode(response.body);
       final List<Map<String, dynamic>> convertData =
@@ -268,11 +281,19 @@ class HiveServiceImpl implements HiveService {
   @override
   Future<ListOperationGatewaysResponse> listOperationGateways() async {
     final List<OperationGateways> operations = [];
+    final packageInfo = await PackageInfo.fromPlatform();
+
+    final headers = {
+      PreferencesKeys.clientVersion: packageInfo.version,
+    };
     final url = Uri.parse(
       '$_appBaseUrl/api/transfer/providers/all',
     );
     try {
-      final response = await http.get(url);
+      final response = await http.get(
+        url,
+        headers: headers,
+      );
       final List<dynamic> data = jsonDecode(response.body);
       final List<Map<String, dynamic>> convertData =
           data.map((e) => e as Map<String, dynamic>).toList();
@@ -303,8 +324,13 @@ class HiveServiceImpl implements HiveService {
     required String featureReference,
     required String receiverOperator,
   }) async {
+    final packageInfo = await PackageInfo.fromPlatform();
+
     final intl = Get.find<AppInternationalization>();
-    final headers = {PreferencesKeys.contentType: 'application/json'};
+    final headers = {
+      PreferencesKeys.contentType: 'application/json',
+      PreferencesKeys.clientVersion: packageInfo.version,
+    };
     final body = jsonEncode({
       'buyerGatewayId': buyerGatewayId,
       'amountToPay': amountToPay,
@@ -339,10 +365,15 @@ class HiveServiceImpl implements HiveService {
   Future<TransferInfo?> getTheTransaction({
     required String transactionId,
   }) async {
+    final packageInfo = await PackageInfo.fromPlatform();
+
+    final headers = {
+      PreferencesKeys.clientVersion: packageInfo.version,
+    };
     final url = Uri.parse(
       '$_appBaseUrl/api/transfer/$transactionId',
     );
-    final response = await http.get(url);
+    final response = await http.get(url, headers: headers);
     if (response.statusCode >= 200 && response.statusCode < 300) {
       final dynamic data = jsonDecode(response.body);
       final Map<String, dynamic> convertData = data as Map<String, dynamic>;
@@ -411,6 +442,47 @@ class HiveServiceImpl implements HiveService {
   @override
   List<Contact> getAllContact() {
     return _databaseContact.values.toList();
+  }
+
+  @override
+  Future<List<Forfeit>?> getAllForfeit() async {
+    final List<Forfeit> forfeits = [];
+    final packageInfo = await PackageInfo.fromPlatform();
+
+    final headers = {
+      PreferencesKeys.clientVersion: packageInfo.version,
+    };
+    final url = Uri.parse(
+      '$_appBaseUrl/api/forfeit/providers/all',
+    );
+    try {
+      final response = await http.get(
+        url,
+        headers: headers,
+      );
+      final List<dynamic> data = jsonDecode(response.body);
+      final List<Map<String, dynamic>> convertData =
+          data.map((e) => e as Map<String, dynamic>).toList();
+      forfeits.addAll(
+        convertData.map<Forfeit>(Forfeit.fromJson).toList(),
+      );
+
+      await _forfeitRow.clear();
+      await _forfeitRow.addAll(forfeits);
+
+      return forfeits;
+    } catch (e) {
+      _logger.severe(
+        'Failed to parse the received list of forfeit gateway got at $url. the response body received is $e',
+      );
+
+      /// Retrieves the local forfeit if exist.
+      final local = _forfeitRow.values.toList();
+      if (local.isNotEmpty) {
+        return local;
+      }
+      return null;
+    }
   }
 }
 
@@ -593,6 +665,11 @@ class FakeHiveService implements HiveService {
   @override
   Set<Contact> getAllLocalBuyerContact() {
     return {};
+  }
+
+  @override
+  Future<List<Forfeit>?> getAllForfeit() async {
+    return fakeForfeits;
   }
 }
 

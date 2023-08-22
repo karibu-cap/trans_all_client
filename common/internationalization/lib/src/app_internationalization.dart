@@ -2,7 +2,7 @@
 
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:karibu_core_internationalization/internationalization.dart';
+import 'package:karibu_capital_core_internationalization/internationalization.dart';
 
 /// AppInternalization defines all the 'local' strings displayed to
 /// the user.
@@ -32,25 +32,25 @@ class AppInternationalization extends Translations {
           'transTu': 'TransAll',
           'buildNumber': 'Build Number',
           'version': 'Version',
-          'payMethod': 'Payment method',
-          'selectPayMethod': 'Select a payment method.',
-          'transferDetail': 'Transfer detail',
+          'selectPayMethod': 'Select a method of payment.',
+          'transferDetail': 'Details of transfer',
           'payLabelTextNumber': 'Payer number',
-          'creditedLabelNumber': 'Number to credit',
+          'creditedLabelNumber': 'Beneficiary number',
           'creditedAmount': 'Amount to credit',
           'proceed': 'Proceed',
           'history': 'History',
           'home': 'Home',
           'share': 'Share',
-          'howItWorks': 'How It Works',
+          'howItWorks': 'How does it work?',
           'amount': 'Amount',
           'from': 'From',
           'to': 'To',
           'status': 'Status',
-          'noTransferHistory': 'No History Found',
+          'noTransferHistory': 'No history found',
           'raison': 'Raison',
           'retry': 'Try Again',
           'since': 'Since',
+          'refresh': 'Refresh',
           'days': 'day(s)',
           'reproduce': 'Reproduce',
           'errorEmptyNumberField': 'Please enter a number',
@@ -67,10 +67,10 @@ class AppInternationalization extends Translations {
           'initializationOfTransfer': 'Please wait. We make your transfer.',
           'appName': 'TransAll',
           'welcome':
-              'Gain efficiency and serenity with our transfer management solution.',
+              'Gain efficiency and peace of mind with our transfer management solution.',
           'next': 'Next',
-          'successTransaction': 'Your transaction was successful',
-          'failedTransfer': 'Your transaction was fail',
+          'successTransaction': 'Your transaction  was successful',
+          'failedTransfer': 'Your transaction failed',
           'payer': 'Payer',
           'receiver': 'Receiver',
           'waitingPaymentValidation': 'Waiting for payment validation.',
@@ -83,23 +83,22 @@ class AppInternationalization extends Translations {
           'emptyPaymentGateway': 'No payment method available.',
           'emptyTransfer': 'No transfer operator available.',
           'receiverNumber': 'Receive Number',
-          'availablePayment': 'Payment available',
-          'iniCreditTransfer': 'Init Credit Transfer',
+          'availablePayment': 'Payment method(s)',
+          'iniCreditTransfer': 'Credit transfer initiated',
           'waitingPaymentValidation_1': 'Your transaction has been initiated.',
           'waitingPaymentValidation_2':
-              'Once the payment message has been received, dial the @code to finalize the payment.',
+              'Once you\'ve received the payment message, enter the @code to finalize the payment.',
           'transactionId': 'Transaction Id',
           'noInternetConnection': 'No access to the Internet.',
-          'initPayment': 'Initialisation of payemnt',
+          'initPayment': 'Payment initiation',
           'invalidGatewayNumber': 'Invalid @gateway number.',
-          'availableOperator': 'Available Transfer',
+          'availableOperator': 'Available operator(s)',
           'prev': 'Previous',
           'complete': 'Complete',
           'of': 'Of',
-          'availablePaymentDescription':
-              'The available payment services to which the amount to be paid could be debited.',
+          'availablePaymentDescription': 'Services enabling payment.',
           'availableOperatorDescription':
-              'The available services allow the transfer for airtime or forfait transfers.',
+              'Services enabling airtime transfers.',
           'contact': 'Contacts',
           'contactRequestMessage':
               'Please activate the contact access for a better experience.',
@@ -107,7 +106,7 @@ class AppInternationalization extends Translations {
           'selectBuyerContactMessage':
               "Select the payer's number from your contacts.",
           'selectReceiverContactMessage':
-              'Select the number to be credited from your contacts.',
+              'Select the beneficiary\'s number from your contacts.',
           'pay': 'Pay',
           'saveContactNumber': 'Payment number',
           'emptyBuyerContactsList': 'No payment contact number found.',
@@ -131,49 +130,52 @@ class AppInternationalization extends Translations {
           'allowContactAccess': 'Allow access to your contacts!',
           'setAsDefaultBuyer': 'Set as default buyer',
           'confirmSetAsDefault':
-              'Do you confirm the addition of @number as default payment number?',
+              'Do you confirm the addition of @number as the default payment number?',
           'confirmation': 'Confirmation',
           'contactAccessAdvantage1':
-              'Directly select a payment contact or a contact to be credited.',
-          'contactAccessAdvantage2': 'Autocomplete input fields.',
+              'Directly select a buyer contact or a beneficiary contact.',
+          'contactAccessAdvantage2': 'Auto-complete fields.',
           'signalOnInternetAbsent':
               'Please connect to the Internet before continuing.',
           'airtimeHistory': 'History',
+          'chooseNumberToSend': 'If yes, choose the number who will receive the sms',
           'pendingTransaction': 'Pending transfers',
           'numberSaveSuccessful': 'Number saved successfully.',
           'invalidAmount': 'Invalid amount',
           'today': 'Today',
+          'contactRefreshed': 'Contact refreshed.',
           'anErrorOccurred': 'An error or network error occurred.',
           'buyerPhoneNumber': 'Buyer Number',
-          'paymentOperator': 'Payment operator',
+          'paymentOperator': 'Payment Method',
           'noContactFound': 'No contact found.',
           'selectDefaultBuyerContactMessage':
               'Select the payer number from the registered payment numbers',
           'pendingTransfer': 'Pending transfers',
           'yesterday': 'Yesterday',
+          'sentRequestBySmsTitle': 'Do you want to send your request by sms?',
         },
         'fr': {
-          'iniCreditTransfer': 'Transfert De Credit Initié',
+          'iniCreditTransfer': 'Transfert de crédit initié',
+          'sentRequestBySmsTitle': 'Voulez vous envoyer votre demande par sms?',
           'primaryTitle': 'Flutter Page Principal Demo',
-          'buyAirtime': 'Acheter Du Credit',
+          'buyAirtime': 'Acheter Du Crédit',
           'moneyTransfer': "Transfert D'argent",
           'transTu': 'TransAll',
-          'payMethod': 'Methode de payment',
-          'selectPayMethod': 'Sélectionnez une methode de paiement.',
-          'transferDetail': 'Détail de transfert',
-          'payLabelTextNumber': 'Numéro de payment',
-          'creditedLabelNumber': 'Numéro à créditer',
+          'selectPayMethod': 'Sélectionner un mode de paiement.',
+          'transferDetail': 'Détail du transfert',
+          'payLabelTextNumber': 'Numéro de paiement',
+          'creditedLabelNumber': 'Numéro du bénéficiaire',
           'creditedAmount': 'Montant à créditer',
-          'proceed': 'Procéder',
+          'proceed': 'Poursuivre',
           'history': 'Historique',
           'home': 'Acceuil',
           'share': 'Partager',
-          'howItWorks': 'Comment ça marche',
+          'howItWorks': 'Comment cela fonctionne-t-il ?',
           'amount': 'Montant',
           'from': 'De',
           'to': 'Vers',
           'status': 'Status',
-          'noTransferHistory': 'Aucun historique trouvé',
+          'noTransferHistory': 'Pas d\'historique trouvé',
           'raison': 'Raison',
           'retry': 'Réessayer',
           'since': "Il y'a",
@@ -182,20 +184,20 @@ class AppInternationalization extends Translations {
           'errorEmptyNumberField': 'Veuillez saisir un numéro',
           'errorEmptyAmountField': 'Veuillez saisir un montant',
           'errorSelectedPaymentMode':
-              'Veuillez selectioner une methode de payment',
+              'Veuillez sélectionner un mode de paiement',
           'greaterThan': 'supérieur à',
           'lessThan': 'inférieur à',
           'number': 'numéro',
           'invalid': 'non valide',
-          'unsupportedOperator': 'Operateur non supporté',
-          'unsupportedPaymentMethod': 'Methode de payment non supporté',
+          'unsupportedOperator': 'Opérateur non pris en charge.',
+          'unsupportedPaymentMethod': 'Mode de paiement non prise en charge',
           'invalidNumber': 'Numéro invalid',
           'transferOf': 'Transfert de @amountToPay',
           'initializationOfTransfer':
-              'Veuillez patienter. Nous éffectuons votre transfert.',
+              'Veuillez patienter. Nous effectuons votre transfert.',
           'appName': 'TransAll',
           'welcome':
-              'Gagnez en efficacité et en sérénité grâce à notre solution de gestion de transfert.',
+              'Gagnez en efficacité et en tranquillité d\'esprit grâce à notre solution de gestion des transferts.',
           'next': 'Suivant',
           'successTransaction': 'Votre transaction a été effectuée avec succès',
           'failedTransfer': 'Votre transaction a échoué',
@@ -203,43 +205,44 @@ class AppInternationalization extends Translations {
           'receiver': 'Bénéficiaire',
           'waitingPaymentValidation':
               'En attente de la validation du paiement.',
-          'paymentValidationFailure': 'Échec de validation du payment',
+          'paymentValidationFailure': 'Échec de la validation du paiement.',
           'or': ' ou ',
           'getStart': 'Démarrer',
           'initTransferMessage': 'Nous effectuons votre transfert.',
           'failTransferMessage':
-              'Veuillez patienter quelques instants, nous allons redémarrer votre transfert.',
-          'emptyPaymentGateway': 'Aucun mode de paiement disponible.',
-          'emptyTransfer': 'Aucun operateur de transfert disponible.',
-          'receiverNumber': 'Numero du destinataire',
-          'initPayment': 'Initialisation du payment',
-          'availablePayment': 'Methode De Paiement',
+              'Veuillez patienter quelques instants, nous allons relancer votre transfert.',
+          'emptyPaymentGateway': 'Aucune méthode de paiement disponible.',
+          'emptyTransfer': 'Pas d\'opérateur de transfert disponible.',
+          'receiverNumber': 'Numéro du bénéficiaire',
+          'initPayment': 'Initialisation du paiement',
+          'availablePayment': 'Mode(s) De Paiement',
           'waitingPaymentValidation_1': 'Votre transaction a été initiée.',
           'waitingPaymentValidation_2':
-              'Une fois le message de paiement reçu, composez le @code pour finaliser le paiement.',
+              'Une fois que vous avez reçu le message de paiement, saisissez le @code pour finaliser le paiement.',
           'transactionId': 'Transaction Id',
-          'noInternetConnection': 'Aucun accès à internet.',
-          'invalidGatewayNumber': 'Numéro @gateway invalide.',
-          'availableOperator': 'Transfert Disponible',
+          'noInternetConnection': 'Pas d\'accès à l\'internet.',
+          'invalidGatewayNumber': 'Numéro @gateway non valide.',
+          'availableOperator': 'Opérateur(s) Disponible(s)',
           'prev': 'Précédent',
           'complete': 'Terminer',
           'of': 'Sur',
           'availablePaymentDescription':
-              'Les services de paiement disponible sur lequel le montant à payer pourra etre  débité.',
+              'Services permettant d\'effectuer des paiements.',
           'availableOperatorDescription':
-              'Les services disponibles permettent le transfert de crédits ou de forfait.',
+              'Services permettant d\'effectuer des transferts de credit.',
           'contact': 'Contacts',
           'contactRequestMessage':
-              "Veuillez activer l'accès au contact pour une meilleure expérience.",
+              "Veuillez activer l'accès aux contacts pour une meilleure expérience.",
           'allowAccess': "Autoriser l'accès",
           'selectBuyerContactMessage':
-              'Sélectionnez le numéro du payeur parmis vos contacts.',
+              'Sélectionnez le numéro du payeur dans vos contacts.',
           'selectReceiverContactMessage':
-              'Sélectionnez le numéro à crediter à partir de vos contacts.',
+              'Sélectionnez le numéro du bénéficiaire dans vos contacts.',
           'pay': 'Payer',
           'saveContactNumber': 'Numéros de paiement',
-          'buyerPhoneNumber': 'Numéro du créditeur',
-          'emptyBuyerContactsList': 'Aucun contacts de paiement trouvé.',
+          'buyerPhoneNumber': 'Numéro de paiement',
+          'emptyBuyerContactsList':
+              'Aucun contact de paiement n\'a été trouvé.',
           'noResultFound': 'Aucun résultat trouvé.',
           'airtime': 'Credit',
           'confirmation': 'Confirmation',
@@ -248,11 +251,11 @@ class AppInternationalization extends Translations {
           'transactionType': 'Type de transaction',
           'success': 'Reussit!',
           'numberSaveSuccessful': 'Numéro sauvegardé avec succès.',
-          'setAsDefaultBuyer': 'Definir comme payeur par defaut',
+          'setAsDefaultBuyer': 'Définir en tant que payeur par défaut',
           'search': 'Recherche',
           'ooops': 'Oooops!',
           'newTransaction': 'Nouvelle Transaction',
-          'goToHistory': "Aller Vers L'histoire",
+          'goToHistory': "Aller à l'historique",
           'airtimeHistory': 'Historique',
           'by': 'Via',
           'pending': 'En attente',
@@ -261,24 +264,28 @@ class AppInternationalization extends Translations {
           'allowContactAccess': "Autoriser l'accès aux contacts!",
           'cancelled': 'Annulé',
           'advantages': 'Avantages',
-          'noContactFound': 'Aucun contact trouvé.',
+          'noContactFound': 'Aucun contact n\'a été trouvé.',
           'waitMessage': 'Veuillez patienter.',
           'contactAccessAdvantage1':
-              'Sélectionnez directement un contact de paiement ou un contact à créditer.',
+              'Sélection directe du contact de paiement ou du bénéficiaire.',
           'contactAccessAdvantage2': 'Champs de saisie automatique.',
           'signalOnInternetAbsent':
-              'Veuillez vous connecter enfin de continuer.',
+              'Veuillez activer votre connexion internet pour continuer.',
           'pendingTransfer': 'Transferts en attente',
           'today': "Aujourd'hui",
-          'paymentOperator': 'Operateur de payment',
+          'paymentOperator': 'Mode de paiement',
           'yesterday': 'Hier',
           'buildNumber': 'Numéro de build',
           'version': 'Version',
+          'refresh': 'Rafraîchir',
+          'chooseNumberToSend':
+              'Si oui, sélectionnez le numéro qui recevira votre demande',
           'anErrorOccurred':
               'Une erreur ou une mauvaise connexion a été détectée.',
           'confirmSetAsDefault':
-              "Confirmer vous l'ajout de @number comme numero de payment par default?",
-          'invalidAmount': 'Montant invalide',
+              "Confirmez-vous l'ajout de @number comme numéro de paiement par défaut ?",
+          'contactRefreshed': 'Contact mis à jour',
+          'invalidAmount': 'Montant non valide',
           'selectDefaultBuyerContactMessage':
               'Sélectionnez le numéro du payeur parmi les numéros de paiement enregistrés',
         },
@@ -297,6 +304,34 @@ class AppInternationalization extends Translations {
     String value,
   ) {
     return value.tr;
+  }
+
+  /// Returns the localized value of contactRefreshed.
+  String get contactRefreshed {
+    return _stringOfLocalizedValue(
+      'contactRefreshed',
+    );
+  }
+
+  /// Returns the localized value of refresh.
+  String get refresh {
+      return _stringOfLocalizedValue(
+      'refresh',
+    );
+  }
+
+  /// Returns the localized value of chooseNumberToSend.
+  String get chooseNumberToSend {
+    return _stringOfLocalizedValue(
+      'chooseNumberToSend',
+    );
+  }
+
+  /// Returns the localized value of sentRequestBySmsTitle.
+  String get sentRequestBySmsTitle {
+    return _stringOfLocalizedValue(
+      'sentRequestBySmsTitle',
+    );
   }
 
   /// Returns the localized value of version.
@@ -982,13 +1017,6 @@ class AppInternationalization extends Translations {
   String get by {
     return _stringOfLocalizedValue(
       'by',
-    );
-  }
-
-  /// Returns the localized value of payMethod.
-  String get payMethod {
-    return _stringOfLocalizedValue(
-      'payMethod',
     );
   }
 

@@ -114,7 +114,6 @@ class AutoCompleteTextField extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.zero,
                 child: SizedBox(
-                  height: MediaQuery.of(context).size.height / 2,
                   child: ValueListenableBuilder<List<Contact>>(
                     valueListenable: controller.filterUserContacts,
                     builder: (context, value, child) => ContactListWidget(
