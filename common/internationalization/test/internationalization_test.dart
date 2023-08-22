@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:karibu_core_internationalization/internationalization.dart';
+import 'package:karibu_capital_core_internationalization/internationalization.dart';
 
 void main() {
   group('LocalizedString', () {

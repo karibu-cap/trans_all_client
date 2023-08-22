@@ -4,7 +4,6 @@ import 'package:internet_connection_checker_plus/internet_connection_checker_plu
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:simple_animations/simple_animations.dart';
 
-import '../data/repository/tranfersRepository.dart';
 import '../themes/app_colors.dart';
 import '../util/preferences_keys.dart';
 
@@ -19,7 +18,6 @@ class InternetConnectivityView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(InternetController());
-    final transferRepository = Get.find<TransferRepository>();
 
     return StreamBuilder<InternetConnectionStatus>(
       stream: InternetConnectionCheckerPlus.createInstance().onStatusChange,

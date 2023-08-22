@@ -18,8 +18,8 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 0.0.2+1
 
 environment:
-  sdk: "2.18.6"
-  flutter: "3.3.10"
+  sdk: ^3.0.6
+  flutter: ^3.10.6
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -118,6 +118,8 @@ dependencies:
   # Platform: ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS, SERVER
   package_info_plus: 3.0.3
 
+  sms_mms: ^0.0.2+1
+
   # TransAll common internationalization dependencies.
   trans_all_common_internationalization:
     path: ../common/internationalization
@@ -128,16 +130,25 @@ dependencies:
   trans_all_common_utils:
     path: ../common/utils
 
+  trans_all_common_config:
+    path: ../common/config
+
   karibu_capital_core_utils:
     git:
-      url: https://nidovic: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@github.com/karibu-cap/flutter_core.git
-      ref: 5b13009
+      url: https://nidovic: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@github.com/karibu-cap/flutter_core.git
+      ref: 272ae8e
       path: utils
+
+  karibu_capital_core_remote_config:
+    git:
+      url: https://nidovic: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@github.com/karibu-cap/flutter_core.git
+      ref: 272ae8e
+      path: remote_config
 
   karibu_capital_core_static_analysis:
     git:
-      url: https://nidovic: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@github.com/karibu-cap/flutter_core.git
-      ref: 5b13009
+      url: https://nidovic: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@github.com/karibu-cap/flutter_core.git
+      ref: 272ae8e
       path: static_analysis
 
 dev_dependencies:
@@ -153,10 +164,7 @@ dev_dependencies:
     sdk: flutter
 
   # Standard package for unit tests in Dart.
-  test: ^1.16.5
-
-  # Package for mocking, stubing, faking in tests.
-  mockito: ^5.0.17
+  test: ^1.24.1
 
   # Provides a concrete way of generating files using Dart code, outside of tools like pub.
   # Since Mockito uses a generated file of the mocked class we will need to generate this file
@@ -168,18 +176,19 @@ dev_dependencies:
   golden_toolkit: ^0.10.0
 
   # Static analysis tool that also collects various useful metrics.
-  dart_code_metrics: ^4.9.1
+  dart_code_metrics: ^4.19.2
 
   # Command-line tool which simplifies the task of updating your Flutter app's launcher icon.
   flutter_launcher_icons: "^0.11.0"
 
-  hive_generator: ^1.1.3
+  hive_generator: ^2.0.1
 
   # Configurations for flutter icons generation.
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/icons/transTu_icon.png"
+  remove_alpha_ios: true
+  image_path: "assets/icons/transTu_dark.png"
 
 flutter:
   # The following line ensures that the Material Icons font is

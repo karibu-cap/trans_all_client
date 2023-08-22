@@ -1,18 +1,37 @@
-/// Environment variables and shared app.
-abstract class EnvironmentCommon {
-  /// A static constant string that represents the environment variable.
-  /// If the environment variable is not set, the default value is an
-  /// empty string.
-  static const String environment = String.fromEnvironment(
-    'TRANSTU_APP_ENVIRONMENT',
-    defaultValue: '',
-  );
+/// The common configuration for the app.
+class EnvironmentConfig {
+  /// The env name.
+  static const environmentName =
+      String.fromEnvironment('TRANSTU_APP_ENVIRONMENT');
 
-  /// A static constant string that represents the app name variable.
-  /// If the environment variable is not set, the default value
-  /// is an empty string.
-  static const String appName = String.fromEnvironment(
-    'TRANSTU_APP_NAME',
-    defaultValue: '',
-  );
+  /// The app name.
+  static const appName = String.fromEnvironment('TRANSTU_APP_NAME');
+
+  /// Environment this application is running in.
+  static EnvironmentType get environmentType {
+    if (environmentName == 'prod') {
+      return EnvironmentType.prod;
+    } else if (environmentName == 'staging') {
+      return EnvironmentType.staging;
+    } else {
+      return EnvironmentType.dev;
+    }
+  }
+}
+
+/// The environment type.
+class EnvironmentType {
+  /// The production environment.
+  static const prod = EnvironmentType._('prod');
+
+  /// The staging Environment.
+  static const staging = EnvironmentType._('staging');
+
+  /// The development environment.
+  static const dev = EnvironmentType._('dev');
+
+  /// The unique identifier of this environment.
+  final String key;
+
+  const EnvironmentType._(this.key);
 }

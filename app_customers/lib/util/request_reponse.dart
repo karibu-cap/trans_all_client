@@ -1,5 +1,3 @@
-
-
 import 'package:trans_all_common_models/models.dart';
 
 /// The list of payment gateway response.

@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:karibu_core_crash_reporting/crash_reporting.dart';
+import 'package:karibu_capital_core_crash_reporting/crash_reporting.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -10,9 +10,9 @@ import '../utils.dart';
 /// Initializes the firebase core sdk.
 Future<void> initFirebaseCore() async {
   await Future<void>.microtask(WidgetsFlutterBinding.ensureInitialized);
-  final environment = EnvironmentCommon.environment.isEmpty
+  final environment = EnvironmentConfig.environmentName.isEmpty
       ? 'dev'
-      : EnvironmentCommon.environment;
+      : EnvironmentConfig.environmentName;
   await Future<void>.value(Firebase.initializeApp(
     options: FirebaseOptionsInterface.create(environment).getOptions(),
   ));

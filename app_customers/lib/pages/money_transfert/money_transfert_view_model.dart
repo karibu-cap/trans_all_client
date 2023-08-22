@@ -1,6 +1,5 @@
 import 'dart:async';
 
-
 import 'package:trans_all_common_models/models.dart';
 
 import '../../data/repository/tranfersRepository.dart';

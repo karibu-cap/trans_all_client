@@ -9,9 +9,12 @@ class Constant {
   /// The credit payment gateways table name.
   static const String paymentGatewaysTable = 'payment_gateways';
 
+  /// The forfeit table name.
+  static const String forfeitTable = 'forfeit';
+
   /// The contact table name.
-  static const String contactTable = 'contacts';  
-  
+  static const String contactTable = 'contacts';
+
   /// The default buyer contact table name.
   static const String defaultBuyerContactsTable = 'defaultBuyerContacts';
 

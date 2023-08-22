@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:trans_all_common_models/models.dart';
 
@@ -34,13 +32,7 @@ class ContactListWidget extends StatelessWidget {
       physics: BouncingScrollPhysics(),
       itemBuilder: (context, index) {
         final contact = listOfContact[index];
-        final random = Random();
-        final randomColor = Color.fromARGB(
-          255,
-          random.nextInt(256),
-          random.nextInt(256),
-          random.nextInt(256),
-        );
+
         final firstValue = RegExp(r'[a-zA-Z]').hasMatch(contact.name)
             ? contact.name.length > 1
                 ? contact.name.substring(0, 2).toUpperCase()
@@ -53,13 +45,13 @@ class ContactListWidget extends StatelessWidget {
             child: ListTile(
               leading: firstValue.isEmpty
                   ? CircleAvatar(
-                      backgroundColor: randomColor,
+                      backgroundColor: contact.color,
                       child: Icon(
                         Icons.person,
                       ),
                     )
                   : CircleAvatar(
-                      backgroundColor: randomColor,
+                      backgroundColor: contact.color,
                       child: Text(
                         firstValue,
                         style: TextStyle(
