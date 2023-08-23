@@ -64,7 +64,7 @@ Environments:
 ### DEV environment
 
 ```
-flutter run --dart-define=TRANSTU_APP_ENVIRONMENT=dev --dart-define=TRANSTU_APP_NAME=TransTu.dev
+flutter run --dart-define=TRANSTU_APP_ENVIRONMENT=dev --dart-define=TRANSTU_APP_NAME=TransAll.dev
 ```
 
 ### staging environment
