@@ -15,7 +15,7 @@ dependencies:
   # Common static analysis options.
   karibu_capital_core_static_analysis:
     git:
-      url: https://nidovic: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@github.com/karibu-cap/flutter_core.git
+      url: https://github.com/karibu-cap/flutter_core.git
       ref: 272ae8e
       path: static_analysis
 
