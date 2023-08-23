@@ -70,7 +70,7 @@ flutter run --dart-define=TRANSTU_APP_ENVIRONMENT=dev --dart-define=TRANSTU_APP_
 ### staging environment
 
 ```
-flutter run --dart-define=TRANSTU_APP_ENVIRONMENT=staging --dart-define=TRANSTU_APP_NAME=TransTu.staging
+flutter run --dart-define=TRANSTU_APP_ENVIRONMENT=staging --dart-define=TRANSTU_APP_NAME=TransAll.staging
 ```
 
 ## Goldens
