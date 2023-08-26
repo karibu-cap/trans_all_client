@@ -89,7 +89,7 @@ class AppInternationalization extends Translations {
           'waitingPaymentValidation_2':
               'Once you\'ve received the payment message, enter the @code to finalize the payment.',
           'transactionId': 'Transaction Id',
-          'noInternetConnection': 'No access to the Internet.',
+          'noInternetConnection': 'No connection.',
           'initPayment': 'Payment initiation',
           'invalidGatewayNumber': 'Invalid @gateway number.',
           'availableOperator': 'Available operator(s)',
@@ -138,7 +138,8 @@ class AppInternationalization extends Translations {
           'signalOnInternetAbsent':
               'Please connect to the Internet before continuing.',
           'airtimeHistory': 'History',
-          'chooseNumberToSend': 'If yes, choose the number who will receive the sms',
+          'chooseNumberToSend':
+              'If yes, choose the number who will receive the sms',
           'pendingTransaction': 'Pending transfers',
           'numberSaveSuccessful': 'Number saved successfully.',
           'invalidAmount': 'Invalid amount',
@@ -153,8 +154,28 @@ class AppInternationalization extends Translations {
           'pendingTransfer': 'Pending transfers',
           'yesterday': 'Yesterday',
           'sentRequestBySmsTitle': 'Do you want to send your request by sms?',
+          'connectionRestore': 'Back online',
+          'emptyForfeit': 'No forfeit found',
+          'forfeit': 'Forfeit',
+          'day': 'day',
+          'month': 'month',
+          'week': 'week',
+          'noForfeitFound': 'No forfeit found',
+          'forfeitSelected': 'Forfeit Selected',
+          'call': 'call',
+          'sms': 'sms',
+          'data': 'data',
         },
         'fr': {
+          'call': 'appel',
+          'sms': 'sms',
+          'data': 'internet',
+          'forfeit': 'Forfait',
+          'week': 'semaine',
+          'month': 'mois',
+          'noForfeitFound': 'Aucun forfait trouvé',
+          'emptyForfeit': 'Aucun forfait trouvé',
+          'connectionRestore': 'De nouveau connecté',
           'iniCreditTransfer': 'Transfert de crédit initié',
           'sentRequestBySmsTitle': 'Voulez vous envoyer votre demande par sms?',
           'primaryTitle': 'Flutter Page Principal Demo',
@@ -220,7 +241,7 @@ class AppInternationalization extends Translations {
           'waitingPaymentValidation_2':
               'Une fois que vous avez reçu le message de paiement, saisissez le @code pour finaliser le paiement.',
           'transactionId': 'Transaction Id',
-          'noInternetConnection': 'Pas d\'accès à l\'internet.',
+          'noInternetConnection': 'Aucune connexion',
           'invalidGatewayNumber': 'Numéro @gateway non valide.',
           'availableOperator': 'Opérateur(s) Disponible(s)',
           'prev': 'Précédent',
@@ -286,6 +307,8 @@ class AppInternationalization extends Translations {
               "Confirmez-vous l'ajout de @number comme numéro de paiement par défaut ?",
           'contactRefreshed': 'Contact mis à jour',
           'invalidAmount': 'Montant non valide',
+          'day': 'jour',
+          'forfeitSelected': 'Forfait Selectionné',
           'selectDefaultBuyerContactMessage':
               'Sélectionnez le numéro du payeur parmi les numéros de paiement enregistrés',
         },
@@ -306,6 +329,76 @@ class AppInternationalization extends Translations {
     return value.tr;
   }
 
+  /// Returns the localized value of call.
+  String get call {
+    return _stringOfLocalizedValue(
+      'call',
+    );
+  }
+
+  /// Returns the localized value of data.
+  String get data {
+    return _stringOfLocalizedValue(
+      'data',
+    );
+  }
+
+  /// Returns the localized value of sms.
+  String get sms {
+    return _stringOfLocalizedValue(
+      'sms',
+    );
+  }
+
+  /// Returns the localized value of month.
+  String get month {
+    return _stringOfLocalizedValue(
+      'month',
+    );
+  }
+
+  /// Returns the localized value of week.
+  String get week {
+    return _stringOfLocalizedValue(
+      'week',
+    );
+  }
+
+  /// Returns the localized value of day.
+  String get day {
+    return _stringOfLocalizedValue(
+      'day',
+    );
+  }
+
+  /// Returns the localized value of forfeitSelected.
+  String get forfeitSelected {
+    return _stringOfLocalizedValue(
+      'forfeitSelected',
+    );
+  }
+
+  /// Returns the localized value of forfeit.
+  String get forfeit {
+    return _stringOfLocalizedValue(
+      'forfeit',
+    );
+  }
+
+  /// Returns the localized value of noForfeitFound.
+  String get noForfeitFound {
+    return _stringOfLocalizedValue(
+      'noForfeitFound',
+    );
+  }
+
+  /// Returns the localized value of emptyForfeit.
+  String get emptyForfeit {
+    return _stringOfLocalizedValue(
+      'emptyForfeit',
+    );
+  }
+
   /// Returns the localized value of contactRefreshed.
   String get contactRefreshed {
     return _stringOfLocalizedValue(
@@ -313,9 +406,16 @@ class AppInternationalization extends Translations {
     );
   }
 
+  /// Returns the localized value of connectionRestore.
+  String get connectionRestore {
+    return _stringOfLocalizedValue(
+      'connectionRestore',
+    );
+  }
+
   /// Returns the localized value of refresh.
   String get refresh {
-      return _stringOfLocalizedValue(
+    return _stringOfLocalizedValue(
       'refresh',
     );
   }
