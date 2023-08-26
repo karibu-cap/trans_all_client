@@ -57,7 +57,7 @@ class Forfeit extends BaseModel {
   )   : name = json[keyName],
         id = json[keyId],
         currency = json[keyCurrency],
-        amountInXAF = json[keyId],
+        amountInXAF = json[keyAmountInXAF],
         description = ForfeitDescription.fromJson(json[keyDescription]),
         validity = Validity.fromKey(json[keyValidity]),
         category = Category.fromKey(json[keyCategory]),
