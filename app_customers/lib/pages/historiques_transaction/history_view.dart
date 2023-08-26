@@ -9,6 +9,7 @@ import 'package:trans_all_common_internationalization/internationalization.dart'
 import 'package:trans_all_common_models/models.dart';
 
 import '../../data/repository/contactRepository.dart';
+import '../../data/repository/forfeitRepository.dart';
 import '../../data/repository/tranfersRepository.dart';
 import '../../routes/app_router.dart';
 import '../../routes/pages_routes.dart';
@@ -34,9 +35,11 @@ class HistoryView extends StatelessWidget {
     final localization = Get.find<AppInternationalization>();
     final transferRepository = Get.find<TransferRepository>();
     final contactRepository = Get.find<ContactRepository>();
+    final forfeitRepository = Get.find<ForfeitRepository>();
     Get.put(
       HistoryViewController(
         transferRepository: transferRepository,
+        forfeitRepository: forfeitRepository,
         historyModel: HistoryViewModel(
           transferRepository: transferRepository,
           contactRepository: contactRepository,
@@ -124,7 +127,7 @@ class _HistoricTransaction extends GetView<HistoryViewController> {
       if (allTransaction == null) {
         return Center(
           child: Lottie.asset(
-            'assets/icons/loading.json',
+            AnimationAsset.loading,
             width: 100,
             height: 100,
             fit: BoxFit.cover,
@@ -138,7 +141,7 @@ class _HistoricTransaction extends GetView<HistoryViewController> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Lottie.asset(
-                'assets/icons/no_item.json',
+                AnimationAsset.noItem,
                 width: 100,
                 height: 100,
                 fit: BoxFit.cover,
@@ -187,6 +190,7 @@ class _HistoricTransaction extends GetView<HistoryViewController> {
                   receiverOperator: transaction.receiverOperator,
                   featureReference: transaction.feature.key,
                   transactionId: transaction.id,
+                  forfeitId: transaction.forfeitId,
                 ),
               ),
             ),
@@ -350,6 +354,7 @@ class _HistoryView extends StatelessWidget {
 
     final buyerName = controller.getUserName(transfer.buyerPhoneNumber);
     final receiverName = controller.getUserName(transfer.receiverPhoneNumber);
+    final forfeit = controller.getCurrentForfeit(transfer.forfeitId);
 
     return Card(
       elevation: 0,
@@ -444,6 +449,26 @@ class _HistoryView extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      if (forfeit != null)
+                        SizedBox(
+                          child: Column(
+                            children: [
+                              Text(
+                                '${localization.forfeit}: ',
+                              ),
+                              Text(
+                                forfeit.name,
+                                style: TextStyle(
+                                  color: AppColors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                     ],
                   ),
                 ),
@@ -511,6 +536,7 @@ class _HistoryView extends StatelessWidget {
                               buyerGatewayId: transfer.buyerGateway.key,
                               receiverOperator: transfer.receiverOperator,
                               featureReference: transfer.feature.key,
+                              forfeitId: transfer.forfeitId,
                             ),
                           ),
                         ),

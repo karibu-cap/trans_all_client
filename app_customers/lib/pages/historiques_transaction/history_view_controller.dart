@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:trans_all_common_models/models.dart';
 
+import '../../data/repository/forfeitRepository.dart';
 import '../../data/repository/tranfersRepository.dart';
 import 'history_view_model.dart';
 
@@ -8,6 +9,7 @@ import 'history_view_model.dart';
 class HistoryViewController extends GetxController {
   final HistoryViewModel _historyModel;
   final TransferRepository _transferRepository;
+  final ForfeitRepository _forfeitRepository;
 
   /// Returns the list of transfers.
   Rx<List<TransferInfo>?> get listOfTransfers => _historyModel.listOfTransfers;
@@ -22,7 +24,9 @@ class HistoryViewController extends GetxController {
   HistoryViewController({
     required HistoryViewModel historyModel,
     required TransferRepository transferRepository,
+    required ForfeitRepository forfeitRepository,
   })  : _historyModel = historyModel,
+        _forfeitRepository = forfeitRepository,
         _transferRepository = transferRepository {
     watchTransferHistory();
   }
@@ -103,5 +107,16 @@ class HistoryViewController extends GetxController {
     }
 
     return false;
+  }
+
+  /// Retrieves the current forfeit.
+  Forfeit? getCurrentForfeit(
+    String? forfeitId,
+  ) {
+    if (forfeitId == null || forfeitId.isEmpty) {
+      return null;
+    }
+
+    return _forfeitRepository.getForfeitById(forfeitId);
   }
 }
