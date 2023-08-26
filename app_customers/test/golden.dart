@@ -16,7 +16,7 @@ Future<void> multiScreenMultiLocaleGolden(
   String name,
 ) async {
   final AppInternationalization _appInternationalization =
-      AppInternationalization(Get.deviceLocale ?? Locale('en'));
+      AppInternationalization(Get.deviceLocale ?? Locale('fr'));
 
   Get.lazyPut(() => _appInternationalization);
 
