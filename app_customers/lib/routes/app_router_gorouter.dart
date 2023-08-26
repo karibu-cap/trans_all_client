@@ -166,6 +166,7 @@ class _GoRouterRoutesProvider {
                     return AppPage(
                       requestContactPermission: true,
                       child: TransfersView(
+                        forfeitId: forfeitId,
                         displayInternetMessage: true,
                       ),
                     );
