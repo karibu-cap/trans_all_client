@@ -3,12 +3,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:trans_all_common_internationalization/internationalization.dart';
 import 'package:trans_all_common_models/models.dart';
 
 import '../../config/environement_conf.dart';
@@ -100,6 +98,9 @@ abstract class HiveService {
 
   /// Lists all local forfeit.
   Future<List<Forfeit>?> getAllForfeit();
+
+  /// Lists all local forfeit.
+  Forfeit? getForfeitById(String forfeitId);
 
   /// Gets contact list.
   Set<Contact> getAllLocalContact();
@@ -326,7 +327,6 @@ class HiveServiceImpl implements HiveService {
   }) async {
     final packageInfo = await PackageInfo.fromPlatform();
 
-    final intl = Get.find<AppInternationalization>();
     final headers = {
       PreferencesKeys.contentType: 'application/json',
       PreferencesKeys.clientVersion: packageInfo.version,
@@ -440,11 +440,6 @@ class HiveServiceImpl implements HiveService {
   }
 
   @override
-  List<Contact> getAllContact() {
-    return _databaseContact.values.toList();
-  }
-
-  @override
   Future<List<Forfeit>?> getAllForfeit() async {
     final List<Forfeit> forfeits = [];
     final packageInfo = await PackageInfo.fromPlatform();
@@ -452,6 +447,11 @@ class HiveServiceImpl implements HiveService {
     final headers = {
       PreferencesKeys.clientVersion: packageInfo.version,
     };
+
+    /// TODO: updates the url once the backend is ready.
+    /// TODO: updates the url once the backend is ready.
+    /// TODO: updates the url once the backend is ready.
+    /// TODO: updates the url once the backend is ready.
     final url = Uri.parse(
       '$_appBaseUrl/api/forfeit/providers/all',
     );
@@ -484,6 +484,9 @@ class HiveServiceImpl implements HiveService {
       return null;
     }
   }
+
+  @override
+  Forfeit? getForfeitById(String id) => _forfeitRow.get(id);
 }
 
 /// Fake hive implementation.
@@ -530,16 +533,6 @@ class FakeHiveService implements HiveService {
     TransferInfo localCreditTransaction,
   ) async {
     _database.update(transactionId, (value) => localCreditTransaction);
-
-    return;
-  }
-
-  @override
-  Future<void> updateUserContact(
-    String contactId,
-    Contact contactInfo,
-  ) async {
-    fakeUserContacts.update(contactId, (value) => contactInfo);
 
     return;
   }
@@ -671,6 +664,10 @@ class FakeHiveService implements HiveService {
   Future<List<Forfeit>?> getAllForfeit() async {
     return fakeForfeits;
   }
+
+  @override
+  Forfeit? getForfeitById(String id) =>
+      fakeForfeits.firstWhere((element) => element.id == id);
 }
 
 /// Hive constructor.

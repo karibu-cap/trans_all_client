@@ -9,6 +9,10 @@ class ForfeitRepository {
   /// Constructs a new [ForfeitRepository].
   ForfeitRepository(this._hiveService);
 
-  /// Retrieve all the local forfeit.
+  /// Retrieves all the local forfeit.
   Future<List<Forfeit>?> getAllForfeit() => _hiveService.getAllForfeit();
+
+  /// Retrieves forfeit by id.
+  Forfeit? getForfeitById(String forfeitId) =>
+      _hiveService.getForfeitById(forfeitId);
 }
