@@ -92,7 +92,8 @@ class _GoRouterRoutesProvider {
               amount == null ||
               buyerGatewayId == null ||
               receiverOperator == null ||
-              featureReference == null) {
+              featureReference == null ||
+              featureReference == 'null') {
             return AppPage(child: AppPageNotFound());
           }
 
@@ -105,6 +106,7 @@ class _GoRouterRoutesProvider {
               featureReference: featureReference,
               receiverOperator: receiverOperator,
               transferId: transferId,
+              forfeitId: forfeitId,
             ),
           );
         },
