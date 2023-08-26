@@ -46,7 +46,7 @@ class SingleStackNavigator extends StatelessWidget {
         final receiverNumber = queryParameters[
             CreditTransactionParams.keyParamReceiverPhoneNumber];
         final amount =
-            queryParameters[CreditTransactionParams.keyParamAmountToPay];
+            queryParameters[CreditTransactionParams.keyParamAmountInXaf];
         final buyerGatewayId =
             queryParameters[CreditTransactionParams.keyParamBuyerGatewayId];
         final featureReference =

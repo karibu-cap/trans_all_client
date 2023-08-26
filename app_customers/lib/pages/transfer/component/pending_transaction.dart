@@ -81,7 +81,7 @@ class _ListOfPendingTransfer extends StatelessWidget {
                             CreditTransactionParams(
                               buyerPhoneNumber: transfer.buyerPhoneNumber,
                               receiverPhoneNumber: transfer.receiverPhoneNumber,
-                              amountToPay: transfer.amount.toString(),
+                              amountInXaf: transfer.amount.toString(),
                               buyerGatewayId: transfer.buyerGateway.key,
                               receiverOperator: transfer.receiverOperator,
                               featureReference: transfer.feature.key,

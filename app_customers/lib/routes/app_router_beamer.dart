@@ -42,7 +42,7 @@ class BeamerRoutesProvider {
           final receiverNumber = state.queryParameters[
               CreditTransactionParams.keyParamReceiverPhoneNumber];
           final amount = state
-              .queryParameters[CreditTransactionParams.keyParamAmountToPay];
+              .queryParameters[CreditTransactionParams.keyParamAmountInXaf];
           final buyerGatewayId = state
               .queryParameters[CreditTransactionParams.keyParamBuyerGatewayId];
           final featureReference = state.queryParameters[
@@ -87,7 +87,7 @@ class BeamerRoutesProvider {
           final receiverNumber = state.queryParameters[
               CreditTransactionParams.keyParamReceiverPhoneNumber];
           final amount = state
-              .queryParameters[CreditTransactionParams.keyParamAmountToPay];
+              .queryParameters[CreditTransactionParams.keyParamAmountInXaf];
           final buyerGatewayId = state
               .queryParameters[CreditTransactionParams.keyParamBuyerGatewayId];
           final featureReference = state.queryParameters[

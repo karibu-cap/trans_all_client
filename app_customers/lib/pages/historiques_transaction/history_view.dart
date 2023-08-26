@@ -182,7 +182,7 @@ class _HistoricTransaction extends GetView<HistoryViewController> {
                 CreditTransactionParams(
                   buyerPhoneNumber: transaction.buyerPhoneNumber,
                   receiverPhoneNumber: transaction.receiverPhoneNumber,
-                  amountToPay: transaction.amount.toString(),
+                  amountInXaf: transaction.amount.toString(),
                   buyerGatewayId: transaction.buyerGateway.key,
                   receiverOperator: transaction.receiverOperator,
                   featureReference: transaction.feature.key,
@@ -507,7 +507,7 @@ class _HistoryView extends StatelessWidget {
                             CreditTransactionParams(
                               buyerPhoneNumber: transfer.buyerPhoneNumber,
                               receiverPhoneNumber: transfer.receiverPhoneNumber,
-                              amountToPay: transfer.amount.toString(),
+                              amountInXaf: transfer.amount.toString(),
                               buyerGatewayId: transfer.buyerGateway.key,
                               receiverOperator: transfer.receiverOperator,
                               featureReference: transfer.feature.key,
