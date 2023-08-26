@@ -18,6 +18,9 @@ class InitTransactionController extends GetxController {
   /// Returns false if the request was successful.
   Rx<bool> get internetError => _model.internetError;
 
+  /// The current forfeit to transfers.
+  Forfeit? get forfeit => _model.forfeit;
+
   /// The transaction id.
   Rx<String?> get transactionId => _model.transactionId;
 

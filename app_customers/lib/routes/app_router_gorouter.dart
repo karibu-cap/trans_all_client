@@ -92,8 +92,7 @@ class _GoRouterRoutesProvider {
               amount == null ||
               buyerGatewayId == null ||
               receiverOperator == null ||
-              featureReference == null ||
-              featureReference == 'null') {
+              featureReference == null) {
             return AppPage(child: AppPageNotFound());
           }
 
