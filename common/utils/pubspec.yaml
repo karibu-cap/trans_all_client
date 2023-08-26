@@ -13,17 +13,16 @@ dependencies:
   karibu_capital_core_crash_reporting:
     git:
       url: https://github.com/karibu-cap/flutter_core.git
-      ref: 272ae8e
+      ref: main
       path: crash_reporting
-    
 
   # Common static analysis options.
   karibu_capital_core_static_analysis:
     git:
       url: https://github.com/karibu-cap/flutter_core.git
-      ref: 272ae8e
+      ref: main
       path: static_analysis
-  
+
   # Plugin for Firebase Core, enabling connecting to multiple Firebase apps.
   # Platform: ANDROID, IOS, MACOS, WEB
   firebase_core: 2.13.0
