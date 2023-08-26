@@ -7,6 +7,7 @@ import 'package:rxdart/rxdart.dart' hide Rx;
 import 'package:trans_all_common_internationalization/internationalization.dart';
 import 'package:trans_all_common_models/models.dart';
 
+import '../../data/repository/forfeitRepository.dart';
 import '../../routes/pages_routes.dart';
 import 'transfer_view_model.dart';
 
@@ -28,6 +29,9 @@ class TransfersController extends GetxController {
 
   /// The payer number text controller.
   TextEditingController paymentTextController;
+
+  /// The current forfeit.
+  Forfeit? forfeit;
 
   /// The receiver number text controller.
   TextEditingController receiverTextController;
@@ -91,11 +95,13 @@ class TransfersController extends GetxController {
       _localCreditTransaction;
 
   /// Constructs a new [TransfersController].
-  TransfersController(
-    AppInternationalization localization,
-    this._transfersViewModel, [
+  TransfersController({
+    required AppInternationalization localization,
+    required ForfeitRepository forfeitRepository,
+    required TransfersViewModel transfersViewModel,
     CreditTransactionParams? localCreditTransaction,
-  ])  : paymentTextController = TextEditingController(
+    String? forfeitId,
+  })  : paymentTextController = TextEditingController(
           text: localCreditTransaction?.buyerPhoneNumber,
         ),
         receiverTextController = TextEditingController(
@@ -107,7 +113,12 @@ class TransfersController extends GetxController {
               : localCreditTransaction?.amountInXaf.toString(),
         ),
         _localization = localization,
-        _localCreditTransaction = localCreditTransaction;
+        _transfersViewModel = transfersViewModel,
+        _localCreditTransaction = localCreditTransaction,
+        forfeit = getCurrentForfeit(
+          forfeitId ?? localCreditTransaction?.forfeitId,
+          forfeitRepository,
+        );
 
   @override
   void onClose() {
@@ -224,6 +235,22 @@ class TransfersController extends GetxController {
         receiverTextController.text == '6') {
       receiverNumberErrorMessage.value = '';
       currentOperation.value = null;
+
+      return;
+    }
+
+    if (forfeit != null) {
+      final validOperator = supportedOperation.firstWhere(
+        (element) => element.reference.key == forfeit?.reference.key,
+      );
+      if (RegExp(validOperator.tolerantRegex).hasMatch(number)) {
+        currentOperation.value = validOperator;
+        receiverNumberErrorMessage.value = '';
+
+        return null;
+      }
+      receiverNumberErrorMessage.value = _localization.invalidGatewayNumber
+          .trParams({'gateway': validOperator.operatorName});
 
       return;
     }
@@ -441,6 +468,18 @@ class TransfersController extends GetxController {
 
   /// Retry the transfer.
   void retryTransfer() => _transfersViewModel.retryTransfer();
+
+  /// Retrieves the current forfeit.
+  static Forfeit? getCurrentForfeit(
+    String? forfeitId,
+    ForfeitRepository forfeitRepository,
+  ) {
+    if (forfeitId == null || forfeitId.isEmpty) {
+      return null;
+    }
+
+    return forfeitRepository.getForfeitById(forfeitId);
+  }
 }
 
 class _MyTickerProvider extends TickerProvider {

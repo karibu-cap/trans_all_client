@@ -86,6 +86,7 @@ class _ListOfPendingTransfer extends StatelessWidget {
                               receiverOperator: transfer.receiverOperator,
                               featureReference: transfer.feature.key,
                               transactionId: transfer.id,
+                              forfeitId: transfer.forfeitId,
                             ),
                           ),
                         ),
@@ -117,6 +118,9 @@ class _PendingTransferView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<TransfersController>();
+    final Forfeit? forfeit = controller.forfeit;
+
     return Center(
       child: Container(
         margin: EdgeInsets.only(right: 10),
@@ -170,27 +174,48 @@ class _PendingTransferView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           FittedBox(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '${localization.amount}: ',
-                                  style: TextStyle(
-                                    color: AppColors.black,
+                            child: forfeit == null
+                                ? Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        '${localization.amount}: ',
+                                        style: TextStyle(
+                                          color: AppColors.black,
+                                        ),
+                                      ),
+                                      Text(
+                                        Currency.formatWithCurrency(
+                                          price: transfer.amount,
+                                          locale: localization.locale,
+                                          currencyCodeAlpha3:
+                                              DefaultCurrency.xaf,
+                                        ),
+                                        style: TextStyle(
+                                          color: AppColors.darkBlack,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        '${localization.forfeit}: ',
+                                        style: TextStyle(
+                                          color: AppColors.black,
+                                        ),
+                                      ),
+                                      Text(
+                                        forfeit.name,
+                                        style: TextStyle(
+                                          color: AppColors.darkBlack,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                                Text(
-                                  Currency.formatWithCurrency(
-                                    price: transfer.amount,
-                                    locale: localization.locale,
-                                    currencyCodeAlpha3: DefaultCurrency.xaf,
-                                  ),
-                                  style: TextStyle(
-                                    color: AppColors.darkBlack,
-                                  ),
-                                ),
-                              ],
-                            ),
                           ),
                           SizedBox(
                             height: 5,

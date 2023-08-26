@@ -40,3 +40,30 @@ class DefaultCurrency {
   /// The xaf currency.
   static const xaf = 'XAF';
 }
+
+/// The animation asset .
+class AnimationAsset {
+  /// The loading animation asset.
+  static const loading = 'assets/icons/loading.json';
+
+  /// The failed transaction asset.
+  static const failedTransaction = 'assets/icons/failed_transaction.json';
+
+  /// The success transaction asset.
+  static const successTransaction = 'assets/icons/second_success.json';
+
+  /// The success transaction asset.
+  static const firstSuccess = 'assets/icons/first_success.json';
+
+  /// The noItem asset.
+  static const noItem = 'assets/icons/no_item.json';
+}
+
+/// The language code.
+class LanguageCode {
+  /// The english language.
+  static const en = 'en';
+
+  /// The french language.
+  static const fr = 'fr';
+}
