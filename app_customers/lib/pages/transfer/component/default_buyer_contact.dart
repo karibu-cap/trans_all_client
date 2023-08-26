@@ -35,7 +35,7 @@ class DefaultBuyerContactsView extends StatelessWidget {
               Text(
                 localization.saveContactNumber,
                 style: TextStyle(
-                  color: AppColors.darkBlack,
+                  color: AppColors.darkGray,
                   fontSize: 20,
                 ),
               ),

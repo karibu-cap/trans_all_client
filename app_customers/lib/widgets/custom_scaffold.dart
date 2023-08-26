@@ -1,7 +1,5 @@
 import 'package:animation_wrappers/animations/faded_slide_animation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:trans_all_common_internationalization/internationalization.dart';
 
 import '../routes/app_router.dart';
 import '../themes/app_colors.dart';
@@ -32,7 +30,6 @@ class CustomScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localization = Get.find<AppInternationalization>();
     final canPop = AppRouter.canPop(context);
 
     return Scaffold(
@@ -63,24 +60,22 @@ class CustomScaffold extends StatelessWidget {
           : null,
       body: SafeArea(
         bottom: false,
-        top: true,
         child: Center(
           child: ConstrainedBox(
             constraints: BoxConstraints(maxWidth: 750),
             child: Column(
               children: [
-                FadedSlideAnimation(
-                  beginOffset: Offset(0, -0.3),
-                  endOffset: Offset(0, 0),
-                  slideCurve: Curves.linearToEaseOut,
-                  child: displayInternetMessage
-                      ? InternetConnectivityView(
-                          localization.noInternetConnection,
-                        )
-                      : SizedBox.shrink(),
-                ),
+                if (displayInternetMessage)
+                  FadedSlideAnimation(
+                    beginOffset: Offset(0, -0.3),
+                    endOffset: Offset(0, 0),
+                    slideCurve: Curves.linearToEaseOut,
+                    child: displayInternetMessage
+                        ? InternetConnectivityView()
+                        : SizedBox.shrink(),
+                  ),
                 SizedBox(
-                  height: 20,
+                  height: 7,
                 ),
                 title != null
                     ? Text(
@@ -93,7 +88,7 @@ class CustomScaffold extends StatelessWidget {
                       )
                     : SizedBox(),
                 SizedBox(
-                  height: 10,
+                  height: 7,
                 ),
                 Expanded(
                   child: child,

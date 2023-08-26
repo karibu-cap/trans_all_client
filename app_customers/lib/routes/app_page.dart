@@ -47,7 +47,7 @@ class AppPage extends StatelessWidget {
               color: AppColors.white,
               size: 30,
             ),
-            topBackgroundColor: AppColors.darkBlack,
+            topBackgroundColor: AppColors.darkGray,
             negativeBtnText: intl.noThank,
             positiveBtnText: intl.allowAccess,
             negativeBtnPressed: () {

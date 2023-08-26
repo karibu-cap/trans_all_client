@@ -18,7 +18,7 @@ class WelcomeView extends StatelessWidget {
     final localizations = Get.find<AppInternationalization>();
 
     return Scaffold(
-      backgroundColor: AppColors.darkBlack,
+      backgroundColor: AppColors.darkGray,
       body: Stack(
         children: [
           Container(
@@ -50,7 +50,7 @@ class WelcomeView extends StatelessWidget {
                             Text(
                               localizations.appName,
                               style: AppTextStyles.commonTitleLabel.copyWith(
-                                color: AppColors.darkBlack,
+                                color: AppColors.darkGray,
                                 fontSize: 30,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -61,7 +61,7 @@ class WelcomeView extends StatelessWidget {
                             Text(
                               localizations.welcome,
                               style: AppTextStyles.commonTitleLabel.copyWith(
-                                color: AppColors.darkBlack,
+                                color: AppColors.darkGray,
                                 fontSize: 16,
                                 height: 2,
                               ),
@@ -90,8 +90,8 @@ class WelcomeView extends StatelessWidget {
                     child: ElevatedButton(
                       style: roundedBigButton(
                         context,
-                        AppColors.darkBlack,
-                        AppColors.darkBlack,
+                        AppColors.darkGray,
+                        AppColors.darkGray,
                       ),
                       onPressed: () async {
                         final pref = await SharedPreferences.getInstance();

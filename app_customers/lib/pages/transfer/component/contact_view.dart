@@ -137,7 +137,7 @@ class _ContactsView extends StatelessWidget {
               Text(
                 localization.contact,
                 style: TextStyle(
-                  color: AppColors.darkBlack,
+                  color: AppColors.darkGray,
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
                 ),
@@ -216,7 +216,7 @@ class _ContactsView extends StatelessWidget {
                         }
                       },
                       style: TextButton.styleFrom(
-                        backgroundColor: AppColors.darkBlack,
+                        backgroundColor: AppColors.darkGray,
                         shape: RoundedRectangleBorder(
                           borderRadius:
                               const BorderRadius.all(Radius.circular(9)),
@@ -283,7 +283,7 @@ class _ContactsView extends StatelessWidget {
                           Text(
                             localization.noResultFound,
                             style: TextStyle(
-                              color: AppColors.darkBlack,
+                              color: AppColors.darkGray,
                               fontWeight: FontWeight.w400,
                               fontSize: 15,
                             ),
@@ -314,7 +314,7 @@ class _ContactsView extends StatelessWidget {
                       right: 10,
                       bottom: 10,
                       child: FloatingActionButton(
-                        backgroundColor: AppColors.darkBlack,
+                        backgroundColor: AppColors.darkGray,
                         tooltip: localization.refresh,
                         onPressed: () async {
                           unawaited(
@@ -327,7 +327,7 @@ class _ContactsView extends StatelessWidget {
                           if (request) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                backgroundColor: AppColors.darkBlack,
+                                backgroundColor: AppColors.darkGray,
                                 behavior: SnackBarBehavior.floating,
                                 dismissDirection: DismissDirection.up,
                                 content: Text(
@@ -378,13 +378,13 @@ class _SearchContact extends StatelessWidget {
         ),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: AppColors.darkBlack,
+            color: AppColors.darkGray,
           ),
           borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: AppColors.darkBlack,
+            color: AppColors.darkGray,
           ),
           borderRadius: BorderRadius.all(Radius.circular(12)),
         ),

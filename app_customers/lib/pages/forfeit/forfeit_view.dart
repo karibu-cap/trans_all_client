@@ -170,7 +170,9 @@ class _OperatorView extends StatelessWidget {
                 return StreamBuilder<String>(
                   stream: controller.selectedOperator.stream,
                   builder: (context, snapshot) {
-                    if (snapshot.data == null) {
+                    if (snapshot.data == null ||
+                        snapshot.data == 'All' ||
+                        snapshot.data == 'Tout') {
                       controller.selectedOperator.add(localization.all);
                     }
                     final isSelected = snapshot.data == operator;
@@ -184,9 +186,8 @@ class _OperatorView extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 18.0),
                         margin: const EdgeInsets.symmetric(horizontal: 8),
                         decoration: BoxDecoration(
-                          color: isSelected
-                              ? AppColors.darkBlack
-                              : AppColors.white,
+                          color:
+                              isSelected ? AppColors.darkGray : AppColors.white,
                           borderRadius:
                               const BorderRadius.all(Radius.circular(16.0)),
                           border: const Border.fromBorderSide(BorderSide(
@@ -249,7 +250,7 @@ class _ForfeitCategoryView extends StatelessWidget {
                     margin: const EdgeInsets.symmetric(horizontal: 8),
                     decoration: BoxDecoration(
                       color: forfeitCategory.isSelected
-                          ? AppColors.darkBlack
+                          ? AppColors.darkGray
                           : AppColors.white,
                       borderRadius:
                           const BorderRadius.all(Radius.circular(16.0)),
@@ -309,7 +310,7 @@ class _ValidityView extends StatelessWidget {
                     margin: const EdgeInsets.symmetric(horizontal: 8),
                     decoration: BoxDecoration(
                       color: validity.isSelected
-                          ? AppColors.darkBlack
+                          ? AppColors.darkGray
                           : AppColors.white,
                       borderRadius:
                           const BorderRadius.all(Radius.circular(16.0)),

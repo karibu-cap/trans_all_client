@@ -132,7 +132,7 @@ class _DashboardBody extends StatelessWidget {
         },
         height: 80,
         splashSpeedInMilliseconds: 300,
-        backgroundColor: AppColors.darkBlack,
+        backgroundColor: AppColors.darkGray,
         activeIndex: navigationShell.currentIndex,
         gapLocation: GapLocation.end,
         notchSmoothness: NotchSmoothness.defaultEdge,
@@ -146,7 +146,7 @@ class _DashboardBody extends StatelessWidget {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColors.darkBlack,
+        backgroundColor: AppColors.darkGray,
         child: Icon(
           Icons.share,
           color: AppColors.white,

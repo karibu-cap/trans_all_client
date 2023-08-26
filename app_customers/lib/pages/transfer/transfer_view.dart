@@ -96,7 +96,7 @@ class _BodyTransaction extends StatelessWidget {
               TextButton(
                 onPressed: controller.retryTransfer,
                 style: TextButton.styleFrom(
-                  backgroundColor: AppColors.darkBlack,
+                  backgroundColor: AppColors.darkGray,
                   shape: RoundedRectangleBorder(
                     borderRadius: const BorderRadius.all(Radius.circular(9)),
                   ),
@@ -240,7 +240,7 @@ class _OverlayTooltipView extends StatelessWidget {
         child: Container(
           height: double.infinity,
           width: double.infinity,
-          color: AppColors.darkBlack.withOpacity(0.9),
+          color: AppColors.darkGray.withOpacity(0.9),
         ),
       ),
       builder: (context) => GestureDetector(
@@ -298,7 +298,7 @@ class _SkeletonBodyWidget extends StatelessWidget {
                     ),
                     style: roundedBigButton(
                       context,
-                      AppColors.darkBlack,
+                      AppColors.darkGray,
                       AppColors.white,
                     ),
                     child: Text(
