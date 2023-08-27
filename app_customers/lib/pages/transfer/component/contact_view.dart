@@ -9,6 +9,7 @@ import 'package:trans_all_common_internationalization/internationalization.dart'
 import 'package:trans_all_common_models/models.dart';
 
 import '../../../themes/app_colors.dart';
+import '../../../util/constant.dart';
 import '../../../util/sort_contact.dart';
 import '../../../util/user_contact.dart';
 import '../../../widgets/contact_list_widget.dart';
@@ -167,7 +168,7 @@ class _ContactsView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Lottie.asset(
-                        'assets/icons/no_item.json',
+                        AnimationAsset.noItem,
                         width: 100,
                         height: 100,
                         fit: BoxFit.cover,
@@ -204,7 +205,7 @@ class _ContactsView extends StatelessWidget {
                     TextButton(
                       onPressed: () async {
                         controller.updateLoadOfContacts(true);
-                        final request = await UserContactConfig.init(
+                        await UserContactConfig.init(
                             requestContactPermission: true);
                         final PermissionStatus permission =
                             await Permission.contacts.status;
@@ -244,7 +245,7 @@ class _ContactsView extends StatelessWidget {
                                   SizedBox(
                                     height: 80,
                                     child: Lottie.asset(
-                                      'assets/icons/loading.json',
+                                      AnimationAsset.loading,
                                       width: 100,
                                       height: 100,
                                       fit: BoxFit.cover,
@@ -274,7 +275,7 @@ class _ContactsView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Lottie.asset(
-                            'assets/icons/no_item.json',
+                            AnimationAsset.noItem,
                             width: 100,
                             height: 100,
                             fit: BoxFit.cover,

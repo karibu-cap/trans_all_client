@@ -61,17 +61,11 @@ class FormTransfer extends StatelessWidget {
         positiveBtnPressed: () async {
           Navigator.of(context, rootNavigator: true).pop();
           final String message =
-              'buyerGatewayId:${controller.currentPaymentMethod.value?.id.key}\n'
-              'amountToPay:${controller.amountToPayTextController.value.text}\n'
-              'buyerPhoneNumber:${controller.paymentTextController.text}\n'
-              'featureReference:${controller.currentOperation.value?.reference.key}\n'
-              'receiverPhoneNumber:${controller.receiverTextController.text}\n'
-              'receiverOperator:${controller.currentOperation.value?.operatorName}';
-          print(message);
+              'Send ${controller.amountToPayTextController.text} from ${controller.paymentTextController.text} to ${controller.receiverTextController.text}';
 
           final List<String> recipients = [defaultReceiverSmsNumber.value];
 
-          final result = await SmsMms.send(
+          await SmsMms.send(
             recipients: recipients,
             message: message,
           );
@@ -114,7 +108,8 @@ class FormTransfer extends StatelessWidget {
       final currentOperation = controller.currentOperation.value;
       final isValidPayerNumber = controller.isValidPayerNumber();
       final isValidReceiverNumber = controller.isValidReceiverNumber();
-      final isValidAmount = controller.isValidAmount();
+      final forfeit = controller.forfeit;
+      final isValidAmount = forfeit == null ? controller.isValidAmount() : true;
       if (!isValidPayerNumber ||
           !isValidReceiverNumber ||
           !isValidAmount ||
@@ -136,10 +131,13 @@ class FormTransfer extends StatelessWidget {
       final transactionParam = CreditTransactionParams(
         buyerPhoneNumber: controller.paymentTextController.text,
         receiverPhoneNumber: controller.receiverTextController.text,
-        amountInXaf: controller.amountToPayTextController.value.text,
+        amountInXaf: forfeit != null
+            ? forfeit.amountInXAF.toString()
+            : controller.amountToPayTextController.value.text,
         buyerGatewayId: paymentSelected.id.key,
         receiverOperator: currentOperation.operatorName,
         featureReference: currentOperation.reference.key,
+        forfeitId: forfeit?.id,
       );
       AppRouter.push(
         context,
@@ -158,6 +156,10 @@ class FormTransfer extends StatelessWidget {
         );
       }
     });
+
+    final featureForfeitEnabled = RemoteConfig().getBool(
+      RemoteConfigKeys.featureForfeitEnable,
+    );
 
     return Obx(() => Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -309,17 +311,20 @@ class FormTransfer extends StatelessWidget {
               ),
             ),
             SizedBox(height: 10),
-            SimpleTextField(
-              inputFormatters: [
-                FilteringTextInputFormatter.deny(RegExp(r'[^0-9]')),
-              ],
-              textController: controller.amountToPayTextController,
-              isValidField: controller.amountErrorMessage.isEmpty &&
-                  controller.amountToPayTextController.value.text.isNotEmpty,
-              errorMessage: controller.amountErrorMessage.value,
-              labelText: localization.creditedAmount,
-              onChanged: controller.updateAmount,
-            ),
+            if (controller.forfeit != null && featureForfeitEnabled)
+              _ForfeitView(),
+            if (controller.forfeit == null)
+              SimpleTextField(
+                inputFormatters: [
+                  FilteringTextInputFormatter.deny(RegExp(r'[^0-9]')),
+                ],
+                textController: controller.amountToPayTextController,
+                isValidField: controller.amountErrorMessage.isEmpty &&
+                    controller.amountToPayTextController.value.text.isNotEmpty,
+                errorMessage: controller.amountErrorMessage.value,
+                labelText: localization.creditedAmount,
+                onChanged: controller.updateAmount,
+              ),
             SizedBox(height: 10),
             ElevatedButton(
               style: roundedBigButton(
@@ -441,6 +446,95 @@ class _AlertMessageContent extends StatelessWidget {
           ],
         ),
         SizedBox(height: 30),
+      ],
+    );
+  }
+}
+
+class _ForfeitView extends StatelessWidget {
+  const _ForfeitView();
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = Get.find<TransfersController>();
+    final Forfeit? forfeit = controller.forfeit;
+    final localization = Get.find<AppInternationalization>();
+
+    if (forfeit == null) {
+      return SizedBox();
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          localization.forfeitSelected,
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: OperatorIcon(
+                operatorType: forfeit.reference.key,
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    forfeit.name,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Text(
+                    localization.locale.languageCode == LanguageCode.en
+                        ? forfeit.description.en
+                        : forfeit.description.fr,
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Text(
+                Currency.formatWithCurrency(
+                  price: num.parse(forfeit.amountInXAF.toString()),
+                  locale: localization.locale,
+                  currencyCodeAlpha3: DefaultCurrency.xaf,
+                ),
+                style: TextStyle(color: AppColors.black),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        SizedBox(
+          height: 35,
+          width: 100,
+          child: TextButton(
+            style: roundedBigButton(
+              context,
+              AppColors.darkBlack,
+              AppColors.white,
+            ),
+            onPressed: () => AppRouter.go(
+              context,
+              PagesRoutes.creditTransaction.pattern,
+            ),
+            child: Text(
+              localization.cancelled,
+              style: TextStyle(color: AppColors.white),
+            ),
+          ),
+        ),
+        SizedBox(height: 10),
       ],
     );
   }

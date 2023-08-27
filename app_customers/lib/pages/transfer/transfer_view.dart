@@ -1,15 +1,21 @@
-import 'package:flutter/material.dart' hide Local;
-import 'package:get/get.dart' hide Local;
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:karibu_capital_core_remote_config/remote_config.dart';
 import 'package:lottie/lottie.dart';
 import 'package:overlay_tooltip/overlay_tooltip.dart';
 import 'package:simple_animations/simple_animations.dart';
+import 'package:trans_all_common_config/config.dart';
 import 'package:trans_all_common_internationalization/internationalization.dart';
 import 'package:trans_all_common_models/models.dart';
 
 import '../../data/repository/contactRepository.dart';
+import '../../data/repository/forfeitRepository.dart';
 import '../../data/repository/tranfersRepository.dart';
+import '../../routes/app_router.dart';
 import '../../routes/pages_routes.dart';
+import '../../themes/app_button_styles.dart';
 import '../../themes/app_colors.dart';
+import '../../util/constant.dart';
 import '../../widgets/custom_scaffold.dart';
 import 'component/form_transfert.dart';
 import 'component/operator_method.dart';
@@ -23,6 +29,9 @@ class TransfersView extends StatelessWidget {
   /// Local transaction param.
   final CreditTransactionParams? localCreditTransaction;
 
+  /// The forfeit id.
+  final String? forfeitId;
+
   /// Check if we can display internet message of the app bar.
   final bool? displayInternetMessage;
 
@@ -30,12 +39,14 @@ class TransfersView extends StatelessWidget {
   const TransfersView({
     this.localCreditTransaction,
     this.displayInternetMessage,
+    this.forfeitId,
   });
 
   @override
   Widget build(BuildContext context) {
     final localization = Get.find<AppInternationalization>();
     final transferRepository = Get.find<TransferRepository>();
+    final forfeitRepository = Get.find<ForfeitRepository>();
     final contactRepository = Get.find<ContactRepository>();
     final transfersViewModel = TransfersViewModel(
       transferRepository: transferRepository,
@@ -45,9 +56,11 @@ class TransfersView extends StatelessWidget {
     Get.put<TransfersController>(
       permanent: false,
       TransfersController(
-        localization,
-        transfersViewModel,
-        localCreditTransaction,
+        localization: localization,
+        forfeitRepository: forfeitRepository,
+        transfersViewModel: transfersViewModel,
+        localCreditTransaction: localCreditTransaction,
+        forfeitId: forfeitId,
       ),
     );
 
@@ -105,7 +118,7 @@ class _BodyTransaction extends StatelessWidget {
       if (supportedTransfer == null || supportedPayment == null) {
         return Center(
           child: Lottie.asset(
-            'assets/icons/loading.json',
+            AnimationAsset.loading,
             width: 100,
             height: 100,
             fit: BoxFit.cover,
@@ -185,16 +198,18 @@ class _BodyTransaction extends StatelessWidget {
                   height: 25,
                 ),
                 StreamBuilder<List<Contact>>(
-                    stream: controller.streamOfContact.stream,
-                    builder: (context, snapshot) {
-                      final contacts = snapshot.data;
+                  stream: controller.streamOfContact.stream,
+                  builder: (context, snapshot) {
+                    final contacts = snapshot.data;
 
-                      return StreamBuilder<List<Contact>>(
-                          stream: controller.streamOfBuyerContact.stream,
-                          builder: (context, snapshot) {
-                            return FormTransfer(contacts ?? []);
-                          });
-                    }),
+                    return StreamBuilder<List<Contact>>(
+                      stream: controller.streamOfBuyerContact.stream,
+                      builder: (context, snapshot) {
+                        return FormTransfer(contacts ?? []);
+                      },
+                    );
+                  },
+                ),
               ],
             ),
           );
@@ -239,7 +254,7 @@ class _OverlayTooltipView extends StatelessWidget {
           displayInternetMessage: displayInternetMessage ?? true,
           title: localization.buyAirtime,
           child: Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: _BodyTransaction(),
           ),
         ),
@@ -257,6 +272,11 @@ class _SkeletonBodyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localization = Get.find<AppInternationalization>();
+    final featureForfeitEnabled = RemoteConfig().getBool(
+      RemoteConfigKeys.featureForfeitEnable,
+    );
+
     return LayoutBuilder(builder: (context, constraints) {
       return Container(
         height: MediaQuery.of(context).size.height,
@@ -265,6 +285,31 @@ class _SkeletonBodyWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            if (featureForfeitEnabled)
+              Align(
+                alignment: Alignment.centerRight,
+                child: SizedBox(
+                  height: 35,
+                  width: 100,
+                  child: ElevatedButton(
+                    onPressed: () => AppRouter.push(
+                      context,
+                      PagesRoutes.forfeit.pattern,
+                    ),
+                    style: roundedBigButton(
+                      context,
+                      AppColors.darkBlack,
+                      AppColors.white,
+                    ),
+                    child: Text(
+                      localization.forfeit,
+                      style: TextStyle(
+                        color: AppColors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             Expanded(
               child: SingleChildScrollView(
                 physics: BouncingScrollPhysics(),

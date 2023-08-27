@@ -5,6 +5,7 @@ import 'package:trans_all_common_internationalization/internationalization.dart'
 import 'package:trans_all_common_models/models.dart';
 
 import '../../../themes/app_colors.dart';
+import '../../../util/constant.dart';
 import '../../../widgets/contact_list_widget.dart';
 import '../transfer_controller_view.dart';
 
@@ -49,7 +50,7 @@ class DefaultBuyerContactsView extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Lottie.asset(
-                          'assets/icons/no_item.json',
+                          AnimationAsset.noItem,
                           width: 100,
                           height: 100,
                           fit: BoxFit.cover,
