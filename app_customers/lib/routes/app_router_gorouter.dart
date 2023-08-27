@@ -105,6 +105,7 @@ class _GoRouterRoutesProvider {
               featureReference: featureReference,
               receiverOperator: receiverOperator,
               transferId: transferId,
+              forfeitId: forfeitId,
             ),
           );
         },
