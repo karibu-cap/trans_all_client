@@ -154,6 +154,7 @@ class AppInternationalization extends Translations {
           'pendingTransfer': 'Pending transfers',
           'yesterday': 'Yesterday',
           'sentRequestBySmsTitle': 'Do you want to send your request by sms?',
+          'emptyForfeit': 'No forfeit found',
           'connectionRestore': 'Connection restored',
           'forfeit': 'Forfeit',
           'day': 'day',
