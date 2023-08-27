@@ -50,24 +50,10 @@ class OperatorIcon extends StatelessWidget {
       );
     }
     if (operatorType == OperationTransferType.orangeUnitTransfer.key) {
-      return Container(
-        alignment: Alignment.center,
+      return Image.asset(
+        'assets/icons/orange_operator.png',
         height: 40,
         width: 40,
-        padding: const EdgeInsets.all(2.0),
-        decoration: BoxDecoration(
-          color: AppColors.orange,
-          borderRadius: BorderRadius.all(Radius.circular(50)),
-        ),
-        child: FittedBox(
-          child: Text(
-            'orange',
-            style: TextStyle(
-              color: AppColors.white,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
       );
     }
     if (operatorType == OperationTransferType.camtelUnitTransfer.key) {

@@ -163,6 +163,7 @@ class AppInternationalization extends Translations {
           'forfeitSelected': 'Forfeit Selected',
           'call': 'call',
           'sms': 'sms',
+          'all': 'All',
           'data': 'data',
           'shareTransAllLinkMessage': 'Hello 👋,'
               'I use Transall to buy or renew data bundle. It\'s fast, secure and user-friendly '
@@ -173,6 +174,7 @@ class AppInternationalization extends Translations {
               'J\'utilise Transall pour acheter ou renouveler mes forfait et données internet. C\'est rapide, sûr et facile à utiliser '
               'fait comme moi en suivant ce lien pour télécharger 👉 ',
           'call': 'appel',
+          'all': 'Tout',
           'sms': 'sms',
           'data': 'internet',
           'forfeit': 'Forfait',
@@ -331,6 +333,13 @@ class AppInternationalization extends Translations {
     String value,
   ) {
     return value.tr;
+  }
+
+  /// Returns the localized value of all.
+  String get all {
+    return _stringOfLocalizedValue(
+      'all',
+    );
   }
 
   /// Returns the localized value of shareTransAllLinkMessage.
