@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:trans_all_common_models/models.dart';
 
@@ -80,7 +79,7 @@ class AutoCompleteTextField extends StatelessWidget {
         : isValidField
             ? AppColors.lightGreen
             : AppColors.gray;
-    final controlle = Get.put(
+    Get.put(
       AutoCompleteTextFieldController(
         textController,
         onPressToSuggestion,
@@ -241,10 +240,10 @@ class AutoCompleteTextField extends StatelessWidget {
                         keyboardType: TextInputType.number,
                         controller: textController,
                         style: TextStyle(
-                          color: AppColors.darkBlack,
+                          color: AppColors.darkGray,
                           fontWeight: FontWeight.w500,
                         ),
-                        cursorColor: AppColors.darkBlack,
+                        cursorColor: AppColors.darkGray,
                         decoration: InputDecoration(
                           filled: false,
                           fillColor: AppColors.purple.withOpacity(0.03),
@@ -314,39 +313,6 @@ class AutoCompleteTextField extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _PhoneNumberTextInputFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue,
-    TextEditingValue newValue,
-  ) {
-    final int newTextLength = newValue.text.length;
-    int selectionIndex = newValue.selection.end;
-    int usedSubstringIndex = 0;
-    final StringBuffer newText = StringBuffer();
-    if (newTextLength >= 5) {
-      newText.write('${newValue.text.substring(0, usedSubstringIndex = 4)}-');
-      if (newValue.selection.end >= 5) selectionIndex += 3;
-    }
-    if (newTextLength >= 7) {
-      newText.write(newValue.text.substring(4, usedSubstringIndex = 7));
-      if (newValue.selection.end >= 7) selectionIndex++;
-    }
-    if (newTextLength >= 8) {
-      newText.write('-${newValue.text.substring(7, usedSubstringIndex = 8)}');
-      if (newValue.selection.end >= 11) selectionIndex++;
-    }
-    if (newTextLength >= usedSubstringIndex) {
-      newText.write(newValue.text.substring(usedSubstringIndex));
-    }
-
-    return TextEditingValue(
-      text: newText.toString(),
-      selection: TextSelection.collapsed(offset: newText.length),
     );
   }
 }

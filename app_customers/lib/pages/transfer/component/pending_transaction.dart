@@ -193,7 +193,7 @@ class _PendingTransferView extends StatelessWidget {
                                               DefaultCurrency.xaf,
                                         ),
                                         style: TextStyle(
-                                          color: AppColors.darkBlack,
+                                          color: AppColors.darkGray,
                                         ),
                                       ),
                                     ],
@@ -211,7 +211,7 @@ class _PendingTransferView extends StatelessWidget {
                                       Text(
                                         forfeit.name,
                                         style: TextStyle(
-                                          color: AppColors.darkBlack,
+                                          color: AppColors.darkGray,
                                         ),
                                       ),
                                     ],
@@ -233,7 +233,7 @@ class _PendingTransferView extends StatelessWidget {
                                 Text(
                                   transfer.buyerPhoneNumber,
                                   style: TextStyle(
-                                    color: AppColors.darkBlack,
+                                    color: AppColors.darkGray,
                                   ),
                                 ),
                               ],
@@ -255,7 +255,7 @@ class _PendingTransferView extends StatelessWidget {
                                 Text(
                                   transfer.receiverPhoneNumber,
                                   style: TextStyle(
-                                    color: AppColors.darkBlack,
+                                    color: AppColors.darkGray,
                                   ),
                                 ),
                               ],
@@ -279,7 +279,7 @@ class _PendingTransferView extends StatelessWidget {
                                 Text(
                                   transferBuyerGateway,
                                   style: TextStyle(
-                                    color: AppColors.darkBlack,
+                                    color: AppColors.darkGray,
                                   ),
                                 ),
                               ],

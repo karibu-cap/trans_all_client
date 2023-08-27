@@ -509,7 +509,7 @@ class _HistoryView extends StatelessWidget {
                       height: 30,
                       child: TextButton(
                         style: TextButton.styleFrom(
-                          backgroundColor: AppColors.darkBlack,
+                          backgroundColor: AppColors.darkGray,
                           shape: RoundedRectangleBorder(
                             borderRadius: const BorderRadius.all(
                               Radius.circular(9),

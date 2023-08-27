@@ -119,7 +119,7 @@ class AlertBoxView extends StatelessWidget {
                           ),
                           onPressed: positiveBtnPressed,
                           style: TextButton.styleFrom(
-                            backgroundColor: AppColors.darkBlack,
+                            backgroundColor: AppColors.darkGray,
                             shape: RoundedRectangleBorder(
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(9)),
@@ -134,7 +134,7 @@ class AlertBoxView extends StatelessWidget {
           ),
           CircleAvatar(
             maxRadius: topSize ?? 40.0,
-            backgroundColor: topBackgroundColor ?? AppColors.darkBlack,
+            backgroundColor: topBackgroundColor ?? AppColors.darkGray,
             child: icon ?? Icon(Icons.message),
           ),
         ],
@@ -159,7 +159,7 @@ void showAlertBoxView({
     showGeneralDialog(
       barrierDismissible: false,
       context: context,
-      barrierColor: AppColors.darkBlack.withOpacity(0.6),
+      barrierColor: AppColors.darkGray.withOpacity(0.6),
       transitionDuration: Duration(milliseconds: 700),
       transitionBuilder: (context, a1, a2, child) {
         return ScaleTransition(

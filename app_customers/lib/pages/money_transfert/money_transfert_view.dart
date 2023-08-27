@@ -9,6 +9,7 @@ import '../../data/repository/tranfersRepository.dart';
 import '../../themes/app_button_styles.dart';
 import '../../themes/app_colors.dart';
 import '../../themes/app_text_styles.dart';
+import '../../util/constant.dart';
 import '../../widgets/custom_scaffold.dart';
 import '../../widgets/oparator_icon.dart';
 import 'money_transfert_controller.dart';
@@ -61,7 +62,7 @@ class _BodyTransaction extends StatelessWidget {
           return Container(
             height: MediaQuery.of(context).size.height / 1.8,
             child: Lottie.asset(
-              'assets/icons/loading.json',
+              AnimationAsset.loading,
               width: 100,
               height: 100,
               fit: BoxFit.cover,

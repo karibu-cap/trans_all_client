@@ -16,7 +16,7 @@ Future<void> multiScreenMultiLocaleGolden(
   String name,
 ) async {
   final AppInternationalization _appInternationalization =
-      AppInternationalization(Get.deviceLocale ?? Locale('fr'));
+      AppInternationalization(Get.deviceLocale ?? Locale('en'));
 
   Get.lazyPut(() => _appInternationalization);
 
@@ -55,7 +55,7 @@ Future<void> multiScreenMultiLocaleGolden(
   // // Screenshot the widget in each supported locale.
   for (final locale in AppInternationalization.supportedLocales) {
     _appInternationalization.setLocale(locale);
-    await tester.pumpAndSettle();
+    await tester.pumpAndSettle(Duration(seconds: 2));
     await multiScreenGolden(tester, '$name.${locale.languageCode}');
   }
 }

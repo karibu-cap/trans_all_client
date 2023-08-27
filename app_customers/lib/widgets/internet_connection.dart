@@ -2,81 +2,109 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:simple_animations/simple_animations.dart';
+import 'package:trans_all_common_internationalization/internationalization.dart';
 
 import '../themes/app_colors.dart';
 import '../util/preferences_keys.dart';
 
 /// Displays a message indicating the internet connection status.
 class InternetConnectivityView extends StatelessWidget {
-  /// Label of the message.
-  final String noInternetConnectionLabel;
-
   /// Constructs an [InternetConnectivityView].
-  InternetConnectivityView(this.noInternetConnectionLabel);
+  InternetConnectivityView();
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(InternetController());
+    final localization = Get.find<AppInternationalization>();
+    final Widget defaultWidget = SizedBox();
+
+    final ValueNotifier<Widget> _widgetSwitcher = ValueNotifier(defaultWidget);
 
     return StreamBuilder<InternetConnectionStatus>(
       stream: InternetConnectionCheckerPlus.createInstance().onStatusChange,
       builder: (context, snapshot) {
         final connectionStatus = snapshot.data;
-        if (connectionStatus == null ||
-            connectionStatus == InternetConnectionStatus.connected) {
-          WidgetsBinding.instance.addPostFrameCallback((_) async {
-            final pref = await SharedPreferences.getInstance();
-            await pref.setBool(PreferencesKeys.isConnected, true);
-            controller.displayAnimation.value = false;
-          });
+        final Widget noConnection = Container(
+          color: AppColors.darkGray,
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  localization.noInternetConnection,
+                  style: TextStyle(
+                    color: AppColors.white,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
 
+        final Widget connectionRestored = Container(
+          color: AppColors.lightGreen,
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  localization.connectionRestore,
+                  style: TextStyle(
+                    color: AppColors.white,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+
+        if (connectionStatus == null) {
           return SizedBox.shrink();
         }
 
-        WidgetsBinding.instance.addPostFrameCallback((_) async {
-          final pref = await SharedPreferences.getInstance();
-          await pref.setBool(PreferencesKeys.isConnected, false);
-          Future.delayed(Duration(seconds: 5), () {
-            controller.displayAnimation.value = true;
-          });
-        });
+        if (connectionStatus == InternetConnectionStatus.connected) {
+          WidgetsBinding.instance.addPostFrameCallback((_) async {
+            _widgetSwitcher.value = connectionRestored;
 
-        return GetX<InternetController>(
-          builder: (control) => !control.displayAnimation.value
-              ? SizedBox.shrink()
-              : MirrorAnimationBuilder<double>(
-                  tween: Tween(begin: 0.2, end: 1.0),
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.easeInOutSine,
-                  builder: (context, value, _) {
-                    return Container(
-                      color: AppColors.red.withOpacity(value * 0.8),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(vertical: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              noInternetConnectionLabel,
-                              style: TextStyle(
-                                  color: AppColors.white, fontSize: 11),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
+            final pref = await SharedPreferences.getInstance();
+            await pref.setBool(PreferencesKeys.isConnected, true);
+            Future.delayed(Duration(seconds: 5), () {
+              _widgetSwitcher.value = defaultWidget;
+            });
+          });
+        }
+        if (connectionStatus == InternetConnectionStatus.disconnected) {
+          WidgetsBinding.instance.addPostFrameCallback((_) async {
+            final pref = await SharedPreferences.getInstance();
+            await pref.setBool(PreferencesKeys.isConnected, false);
+            Future.delayed(Duration(seconds: 5), () {
+              _widgetSwitcher.value = noConnection;
+            });
+          });
+        }
+
+        return ValueListenableBuilder(
+          valueListenable: _widgetSwitcher,
+          builder: (context, value, child) {
+            return AnimatedSwitcher(
+              duration: Duration(milliseconds: 200),
+              transitionBuilder: (child, animation) => SlideTransition(
+                position: Tween<Offset>(
+                  begin: Offset(0, -1),
+                  end: Offset.zero,
+                ).animate(animation),
+                child: child,
+              ),
+              child: value,
+            );
+          },
         );
       },
     );
   }
-}
-
-/// The internet controller.
-class InternetController extends GetxController {
-  /// Checks if we can display the animation.
-  Rx<bool> displayAnimation = false.obs;
 }

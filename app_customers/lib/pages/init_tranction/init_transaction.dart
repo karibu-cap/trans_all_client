@@ -364,7 +364,7 @@ class _CurrentWidget extends GetView<InitTransactionController> {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w800,
-              color: AppColors.darkBlack,
+              color: AppColors.darkGray,
             ),
           ),
           SizedBox(
@@ -398,7 +398,7 @@ class _CurrentWidget extends GetView<InitTransactionController> {
                 height: 50,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.darkBlack,
+                    backgroundColor: AppColors.darkGray,
                     shape: RoundedRectangleBorder(
                       borderRadius: const BorderRadius.all(Radius.circular(9)),
                     ),
@@ -468,7 +468,7 @@ class _CurrentWidget extends GetView<InitTransactionController> {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w800,
-              color: AppColors.darkBlack,
+              color: AppColors.darkGray,
             ),
           ),
           SizedBox(
@@ -492,7 +492,7 @@ class _CurrentWidget extends GetView<InitTransactionController> {
                 height: 50,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.darkBlack,
+                    backgroundColor: AppColors.darkGray,
                     shape: RoundedRectangleBorder(
                       borderRadius: const BorderRadius.all(Radius.circular(9)),
                     ),

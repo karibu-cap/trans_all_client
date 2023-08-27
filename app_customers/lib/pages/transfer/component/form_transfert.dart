@@ -329,7 +329,7 @@ class FormTransfer extends StatelessWidget {
             ElevatedButton(
               style: roundedBigButton(
                 context,
-                AppColors.darkBlack,
+                AppColors.darkGray,
                 AppColors.white,
               ),
               onPressed: checksTheForm,
@@ -415,7 +415,7 @@ class _AlertMessageContent extends StatelessWidget {
                 value == mtnNumberForSMSAirtimeTransaction
                     ? Icons.circle
                     : Icons.circle_outlined,
-                color: AppColors.darkBlack,
+                color: AppColors.darkGray,
                 size: 20,
               ),
             ),
@@ -439,7 +439,7 @@ class _AlertMessageContent extends StatelessWidget {
                 value == orangeNumberForSMSAirtimeTransaction
                     ? Icons.circle
                     : Icons.circle_outlined,
-                color: AppColors.darkBlack,
+                color: AppColors.darkGray,
                 size: 20,
               ),
             ),
@@ -521,7 +521,7 @@ class _ForfeitView extends StatelessWidget {
           child: TextButton(
             style: roundedBigButton(
               context,
-              AppColors.darkBlack,
+              AppColors.darkGray,
               AppColors.white,
             ),
             onPressed: () => AppRouter.go(

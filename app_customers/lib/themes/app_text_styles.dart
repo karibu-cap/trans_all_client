@@ -68,6 +68,6 @@ class AppTextStyles {
   static const headerH4Label = TextStyle(
     fontSize: AppFontSizes.caption,
     fontWeight: AppFontWeights.medium,
-    color: AppColors.darkBlack,
+    color: AppColors.darkGray,
   );
 }
