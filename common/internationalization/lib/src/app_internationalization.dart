@@ -154,8 +154,8 @@ class AppInternationalization extends Translations {
           'pendingTransfer': 'Pending transfers',
           'yesterday': 'Yesterday',
           'sentRequestBySmsTitle': 'Do you want to send your request by sms?',
-          'connectionRestore': 'Back online',
           'emptyForfeit': 'No forfeit found',
+          'connectionRestore': 'Connection restored',
           'forfeit': 'Forfeit',
           'day': 'day',
           'month': 'month',
@@ -174,7 +174,6 @@ class AppInternationalization extends Translations {
           'week': 'semaine',
           'month': 'mois',
           'noForfeitFound': 'Aucun forfait trouvé',
-          'emptyForfeit': 'Aucun forfait trouvé',
           'connectionRestore': 'De nouveau connecté',
           'iniCreditTransfer': 'Transfert de crédit initié',
           'sentRequestBySmsTitle': 'Voulez vous envoyer votre demande par sms?',
@@ -389,13 +388,6 @@ class AppInternationalization extends Translations {
   String get noForfeitFound {
     return _stringOfLocalizedValue(
       'noForfeitFound',
-    );
-  }
-
-  /// Returns the localized value of emptyForfeit.
-  String get emptyForfeit {
-    return _stringOfLocalizedValue(
-      'emptyForfeit',
     );
   }
 
