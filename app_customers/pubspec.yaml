@@ -37,7 +37,6 @@ dependencies:
 
   flutter:
     sdk: flutter
-  karibu_core_utils: ^1.0.0
 
   # Flutter localization dependency.
   flutter_localizations:
