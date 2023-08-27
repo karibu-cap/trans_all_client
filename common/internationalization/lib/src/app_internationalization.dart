@@ -154,7 +154,6 @@ class AppInternationalization extends Translations {
           'pendingTransfer': 'Pending transfers',
           'yesterday': 'Yesterday',
           'sentRequestBySmsTitle': 'Do you want to send your request by sms?',
-          'emptyForfeit': 'No forfeit found',
           'connectionRestore': 'Connection restored',
           'forfeit': 'Forfeit',
           'day': 'day',
@@ -165,8 +164,14 @@ class AppInternationalization extends Translations {
           'call': 'call',
           'sms': 'sms',
           'data': 'data',
+          'shareTransAllLinkMessage': 'Hello 👋,'
+              'I use Transall to buy or renew data bundle. It\'s fast, secure and user-friendly '
+              'do as I do by following this link to download 👉 ',
         },
         'fr': {
+          'shareTransAllLinkMessage': 'Salut 👋,'
+              'J\'utilise Transall pour acheter ou renouveler mes forfait et données internet. C\'est rapide, sûr et facile à utiliser '
+              'fait comme moi en suivant ce lien pour télécharger 👉 ',
           'call': 'appel',
           'sms': 'sms',
           'data': 'internet',
@@ -326,6 +331,13 @@ class AppInternationalization extends Translations {
     String value,
   ) {
     return value.tr;
+  }
+
+  /// Returns the localized value of shareTransAllLinkMessage.
+  String get shareTransAllLinkMessage {
+    return _stringOfLocalizedValue(
+      'shareTransAllLinkMessage',
+    );
   }
 
   /// Returns the localized value of call.
