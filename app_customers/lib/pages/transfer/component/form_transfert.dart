@@ -136,7 +136,7 @@ class FormTransfer extends StatelessWidget {
       final transactionParam = CreditTransactionParams(
         buyerPhoneNumber: controller.paymentTextController.text,
         receiverPhoneNumber: controller.receiverTextController.text,
-        amountToPay: controller.amountToPayTextController.value.text,
+        amountInXaf: controller.amountToPayTextController.value.text,
         buyerGatewayId: paymentSelected.id.key,
         receiverOperator: currentOperation.operatorName,
         featureReference: currentOperation.reference.key,

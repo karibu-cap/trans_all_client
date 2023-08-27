@@ -102,9 +102,9 @@ class TransfersController extends GetxController {
           text: localCreditTransaction?.receiverPhoneNumber,
         ),
         amountToPayTextController = TextEditingController(
-          text: localCreditTransaction?.amountToPay == null
+          text: localCreditTransaction?.amountInXaf == null
               ? ''
-              : localCreditTransaction?.amountToPay.toString(),
+              : localCreditTransaction?.amountInXaf.toString(),
         ),
         _localization = localization,
         _localCreditTransaction = localCreditTransaction;

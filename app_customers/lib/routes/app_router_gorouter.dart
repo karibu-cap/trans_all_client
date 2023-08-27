@@ -41,28 +41,51 @@ class _GoRouterRoutesProvider {
         ),
       ),
       GoRoute(
+        path: PagesRoutes.forfeit.pattern,
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => AppPage(
+          child: SizedBox(),
+        ),
+      ),
+      GoRoute(
         parentNavigatorKey: _rootNavigatorKey,
         path: PagesRoutes.initTransaction.pattern,
         builder: (context, state) {
           if (Get.isRegistered<InitTransactionController>()) {
             Get.delete<InitTransactionController>();
           }
-
-          final paymentNumber = state.queryParameters[
-              CreditTransactionParams.keyParamBuyerPhoneNumber];
-          final transferId = state
-              .queryParameters[CreditTransactionParams.keyParamTransactionId];
-          final receiverNumber = state.queryParameters[
-              CreditTransactionParams.keyParamReceiverPhoneNumber];
-          final amount = state
-              .queryParameters[CreditTransactionParams.keyParamAmountToPay];
-
-          final buyerGatewayId = state
-              .queryParameters[CreditTransactionParams.keyParamBuyerGatewayId];
-          final featureReference = state.queryParameters[
-              CreditTransactionParams.keyParamFeatureReference];
-          final receiverOperator = state.queryParameters[
-              CreditTransactionParams.keyParamReceiverOperator];
+          final paymentNumber = getQueryParameter(
+            state.queryParameters,
+            CreditTransactionParams.keyParamBuyerPhoneNumber,
+          );
+          final receiverNumber = getQueryParameter(
+            state.queryParameters,
+            CreditTransactionParams.keyParamReceiverPhoneNumber,
+          );
+          final amount = getQueryParameter(
+            state.queryParameters,
+            CreditTransactionParams.keyParamAmountInXaf,
+          );
+          final buyerGatewayId = getQueryParameter(
+            state.queryParameters,
+            CreditTransactionParams.keyParamBuyerGatewayId,
+          );
+          final featureReference = getQueryParameter(
+            state.queryParameters,
+            CreditTransactionParams.keyParamFeatureReference,
+          );
+          final receiverOperator = getQueryParameter(
+            state.queryParameters,
+            CreditTransactionParams.keyParamReceiverOperator,
+          );
+          final transferId = getQueryParameter(
+            state.queryParameters,
+            CreditTransactionParams.keyParamTransactionId,
+          );
+          final forfeitId = getQueryParameter(
+            state.queryParameters,
+            CreditTransactionParams.keyParamForfeitId,
+          );
 
           if (paymentNumber == null ||
               receiverNumber == null ||
@@ -72,6 +95,7 @@ class _GoRouterRoutesProvider {
               featureReference == null) {
             return AppPage(child: AppPageNotFound());
           }
+
           return AppPage(
             child: InitTransaction(
               amountToPay: num.parse(amount),
@@ -80,7 +104,7 @@ class _GoRouterRoutesProvider {
               buyerGatewayId: buyerGatewayId,
               featureReference: featureReference,
               receiverOperator: receiverOperator,
-              transferId: transferId == 'null' ? null : transferId,
+              transferId: transferId,
             ),
           );
         },
@@ -101,20 +125,38 @@ class _GoRouterRoutesProvider {
                   if (Get.isRegistered<TransfersController>()) {
                     Get.delete<TransfersController>();
                   }
-                  final paymentNumber = state.queryParameters[
-                      CreditTransactionParams.keyParamBuyerPhoneNumber];
-                  final receiverNumber = state.queryParameters[
-                      CreditTransactionParams.keyParamReceiverPhoneNumber];
-                  final amount = state.queryParameters[
-                      CreditTransactionParams.keyParamAmountToPay];
-                  final buyerGatewayId = state.queryParameters[
-                      CreditTransactionParams.keyParamBuyerGatewayId];
-                  final featureReference = state.queryParameters[
-                      CreditTransactionParams.keyParamFeatureReference];
-                  final receiverOperator = state.queryParameters[
-                      CreditTransactionParams.keyParamReceiverOperator];
-                  final transferId = state.queryParameters[
-                      CreditTransactionParams.keyParamTransactionId];
+                  final paymentNumber = getQueryParameter(
+                    state.queryParameters,
+                    CreditTransactionParams.keyParamBuyerPhoneNumber,
+                  );
+                  final receiverNumber = getQueryParameter(
+                    state.queryParameters,
+                    CreditTransactionParams.keyParamReceiverPhoneNumber,
+                  );
+                  final amount = getQueryParameter(
+                    state.queryParameters,
+                    CreditTransactionParams.keyParamAmountInXaf,
+                  );
+                  final buyerGatewayId = getQueryParameter(
+                    state.queryParameters,
+                    CreditTransactionParams.keyParamBuyerGatewayId,
+                  );
+                  final featureReference = getQueryParameter(
+                    state.queryParameters,
+                    CreditTransactionParams.keyParamFeatureReference,
+                  );
+                  final receiverOperator = getQueryParameter(
+                    state.queryParameters,
+                    CreditTransactionParams.keyParamReceiverOperator,
+                  );
+                  final transferId = getQueryParameter(
+                    state.queryParameters,
+                    CreditTransactionParams.keyParamTransactionId,
+                  );
+                  final forfeitId = getQueryParameter(
+                    state.queryParameters,
+                    CreditTransactionParams.keyParamForfeitId,
+                  );
                   if (paymentNumber == null ||
                       receiverNumber == null ||
                       amount == null ||
@@ -134,13 +176,14 @@ class _GoRouterRoutesProvider {
                     child: TransfersView(
                       displayInternetMessage: true,
                       localCreditTransaction: CreditTransactionParams(
-                        amountToPay: amount,
+                        amountInXaf: amount,
                         receiverOperator: receiverOperator,
                         buyerGatewayId: buyerGatewayId,
                         receiverPhoneNumber: receiverNumber,
                         buyerPhoneNumber: paymentNumber,
                         featureReference: featureReference,
                         transactionId: transferId,
+                        forfeitId: forfeitId,
                       ),
                     ),
                   );
@@ -171,6 +214,17 @@ class _GoRouterRoutesProvider {
     _isFirstOpen = (await SharedPreferences.getInstance())
             .getBool(PreferencesKeys.isFirstOpenWelcomeScreen) ??
         true;
+  }
+
+  /// Retrieves the value of key.
+  static String? getQueryParameter(
+    Map<String, String> queryParameters,
+    String key,
+  ) {
+    final value = queryParameters[key];
+    if (value == 'null' || value == null || value.isEmpty) return null;
+
+    return value;
   }
 }
 
