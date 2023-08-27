@@ -15,7 +15,7 @@ dependencies:
   karibu_capital_core_remote_config:
     git:
       url: https://github.com/karibu-cap/flutter_core.git
-      ref: 272ae8e
+      ref: main
       path: remote_config
 
   trans_all_common_utils:
@@ -29,7 +29,7 @@ dev_dependencies:
   karibu_capital_core_static_analysis:
     git:
       url: https://github.com/karibu-cap/flutter_core.git
-      ref: 272ae8e
+      ref: main
       path: static_analysis
 
   # Static analysis tool that also collects various useful metrics.
