@@ -1,14 +1,21 @@
 name: AppCustomer
 on:
-  schedule:
-    - cron: '0 0 */5 * *'
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+  push:
+    branches:
+      - main
+
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 env:
-  FLUTTER_SDK_VERSION: 3.3.10
+  FLUTTER_SDK_VERSION: 3.10.6
 
 jobs:
   changes:
