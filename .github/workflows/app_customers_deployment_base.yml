@@ -45,6 +45,7 @@ env:
   NODE_VERSION: 16.13.1
   RUBY_VERSION: 2.7.4
   GOOGLE_PLAY_CREDENTIALS_FILE_PATH: "/tmp/google-play-credentials.json"
+  BASE_BUILD_NUMBER: 20
 
 jobs:
   changes:
@@ -82,7 +83,7 @@ jobs:
         working-directory: app_customers/android
 
       - name: Set the build number
-        run: echo "TRANSTU_APP_BUILD_NUMBER=${{github.run_number}}" >> "$GITHUB_ENV"
+        run: echo "TRANSTU_APP_BUILD_NUMBER=$(( ${{env.BASE_BUILD_NUMBER}} + ${{github.run_number}} ))" >> "$GITHUB_ENV"
 
       # Decode and write to file the keys necessary to sign the apps for release.
       # The content of these files is encoded in base64, and their values stored as environment variables for the pipeline.
