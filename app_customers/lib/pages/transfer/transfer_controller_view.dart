@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
@@ -454,7 +455,7 @@ class TransfersController extends GetxController {
             .replaceAll('+', '')
             .replaceAll('237', '')
             .replaceAll(' ', '')));
-    final contactId = DateTime.now().hashCode.toString();
+    final contactId = clock.now().hashCode.toString();
     if (contact == null) {
       return _transfersViewModel.addBuyerContact(
         contactId,

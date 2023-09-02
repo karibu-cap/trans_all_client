@@ -29,8 +29,10 @@ class HistoryViewWidget extends StatelessWidget {
 void main() {
   group('Goldens', () {
     testGoldens('history us view', (tester) async {
+      final fakeClock = Clock.fixed(DateTime(2023, 1, 1, 12, 0, 0));
+
       return withClock(
-        Clock.fixed(DateTime.parse('2022-10-13 15:30:00Z').toUtc()),
+        fakeClock,
         () async {
           await multiScreenMultiLocaleGolden(
             tester,

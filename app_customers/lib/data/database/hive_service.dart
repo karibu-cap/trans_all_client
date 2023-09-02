@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:clock/clock.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
@@ -599,7 +600,7 @@ class FakeHiveService implements HiveService {
       TransferInfo.keyBuyerGateway: buyerGatewayId,
       TransferInfo.keyBuyerPhoneNumber: buyerPhoneNumber,
       TransferInfo.keyId: id,
-      TransferInfo.keyCreatedAt: DateTime.now().toString(),
+      TransferInfo.keyCreatedAt: clock.now().toString(),
       TransferInfo.keyFeature: featureReference,
       TransferInfo.keyReason: null,
       TransferInfo.keyReceiverOperator: receiverOperator,

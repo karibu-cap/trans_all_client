@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:clock/clock.dart';
 import 'package:get/get.dart';
 import 'package:trans_all_common_models/models.dart';
 
@@ -129,7 +130,7 @@ class InitTransactionViewModel {
       TransferInfo.keyBuyerGateway: buyerGatewayId,
       TransferInfo.keyBuyerPhoneNumber: buyerPhoneNumber,
       TransferInfo.keyId: transactionId.value,
-      TransferInfo.keyCreatedAt: DateTime.now().toString(),
+      TransferInfo.keyCreatedAt: clock.now().toString(),
       TransferInfo.keyFeature: featureReference,
       TransferInfo.keyReason: null,
       TransferInfo.keyReceiverOperator: receiverOperator,
