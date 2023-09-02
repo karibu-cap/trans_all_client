@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
@@ -116,7 +117,7 @@ void _streamPendingTransaction() {
         );
 
         /// Set to failed if the transaction status is pending since 1 week.
-        final DateTime now = DateTime.now();
+        final DateTime now = clock.now();
         final DateTime oneWeekAgo = now.subtract(Duration(days: 7));
         if (transaction.createdAt.isBefore(oneWeekAgo)) {
           _logger.info(

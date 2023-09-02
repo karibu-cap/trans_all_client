@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:clock/clock.dart';
 import 'package:hive/hive.dart';
 import 'package:trans_all_common_models/models.dart';
 
@@ -61,7 +62,7 @@ class TransferRepository {
         transactionId,
         TransferInfo.fromJson(json: {
           ...localTransaction.toJson(),
-          TransferInfo.keyUpdateAt: DateTime.now().toString(),
+          TransferInfo.keyUpdateAt: clock.now().toString(),
           TransferInfo.keyCreatedAt: localTransaction.createdAt.toString(),
           TransferInfo.keyPayments: [
             {
@@ -77,7 +78,7 @@ class TransferRepository {
       transactionId,
       TransferInfo.fromJson(json: {
         ...localTransaction.toJson(),
-        TransferInfo.keyUpdateAt: DateTime.now().toString(),
+        TransferInfo.keyUpdateAt: clock.now().toString(),
         TransferInfo.keyCreatedAt: localTransaction.createdAt.toString(),
         TransferInfo.keyStatus: status,
       }),
