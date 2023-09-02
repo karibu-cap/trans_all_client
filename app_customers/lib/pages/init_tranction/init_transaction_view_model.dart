@@ -6,7 +6,7 @@ import 'package:trans_all_common_models/models.dart';
 
 import '../../data/repository/forfeitRepository.dart';
 import '../../data/repository/tranfersRepository.dart';
-import '../../util/request_reponse.dart';
+import '../../util/request_response.dart';
 
 enum LoadingState {
   loading,

@@ -4,7 +4,7 @@ import 'package:clock/clock.dart';
 import 'package:hive/hive.dart';
 import 'package:trans_all_common_models/models.dart';
 
-import '../../util/request_reponse.dart';
+import '../../util/request_response.dart';
 import '../database/hive_service.dart';
 
 /// The transfer repository.
