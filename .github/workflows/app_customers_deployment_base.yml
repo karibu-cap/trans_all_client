@@ -27,16 +27,16 @@ on:
         type: boolean
         description: "True if apk should be used instead of appbundles"
     secrets:
-      TRANSTU_UPLOAD_KEYSTORE_PROPERTIES_BASE64:
+      TRANSALL_UPLOAD_KEYSTORE_PROPERTIES_BASE64:
         required: true
         description: "Keystore for Android app signing properties"
-      TRANSTU_UPLOAD_KEYSTORE_JKS_BASE64:
+      TRANSALL_UPLOAD_KEYSTORE_JKS_BASE64:
         required: true
         description: "Keystore for Android app signing"
       GOOGLE_PLAY_STORE_CREDENTIALS_BASE64:
         required: true
         description: "Google Play credentials for Android app deployment"
-      TRANSTU_FIREBASE_CLI_TOKEN:
+      TRANSALL_FIREBASE_CLI_TOKEN:
         required: true
         description: "Token to deploy to Firebase (App distribution)"
 
@@ -89,8 +89,8 @@ jobs:
       # The content of these files is encoded in base64, and their values stored as environment variables for the pipeline.
       # This allows us to control access to these variables, which are very sensitive.
       - run: echo "${{ secrets.GOOGLE_PLAY_STORE_CREDENTIALS_BASE64 }}" | base64 --decode  > "${GOOGLE_PLAY_CREDENTIALS_FILE_PATH}"
-      - run: echo "${{ secrets.TRANSTU_UPLOAD_KEYSTORE_PROPERTIES_BASE64 }}" | base64 --decode > app_customers/android/key.properties
-      - run: echo "${{ secrets.TRANSTU_UPLOAD_KEYSTORE_JKS_BASE64 }}" | base64 --decode > app_customers/android/app/upload-keystore.jks
+      - run: echo "${{ secrets.TRANSALL_UPLOAD_KEYSTORE_PROPERTIES_BASE64 }}" | base64 --decode > app_customers/android/key.properties
+      - run: echo "${{ secrets.TRANSALL_UPLOAD_KEYSTORE_JKS_BASE64 }}" | base64 --decode > app_customers/android/app/upload-keystore.jks
 
       # Build the android apps.
       - name: Build Android Customers
@@ -109,5 +109,5 @@ jobs:
           TRANSTU_APP_NAME: ${{ inputs.TRANSTU_APP_NAME_PLACE_CUSTOMERS }}
           TRANSTU_APP_IDENTIFIER: com.karibu.transtu.${{ inputs.TRANSTU_APP_ENVIRONMENT }}
           TRANSTU_ANDROID_APP_ID: ${{ inputs.TRANSTU_ANDROID_APP_ID_CUSTOMERS }}
-          TRANSTU_FIREBASE_CLI_TOKEN: ${{ secrets.TRANSTU_FIREBASE_CLI_TOKEN }}
+          TRANSALL_FIREBASE_CLI_TOKEN: ${{ secrets.TRANSALL_FIREBASE_CLI_TOKEN }}
           UPLOAD_TO_PLAY_STORE: ${{ inputs.UPLOAD_TO_PLAY_STORE_CUSTOMERS }}
