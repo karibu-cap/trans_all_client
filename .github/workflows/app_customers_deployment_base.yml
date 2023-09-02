@@ -91,6 +91,7 @@ jobs:
       - run: echo "${{ secrets.GOOGLE_PLAY_STORE_CREDENTIALS_BASE64 }}" | base64 --decode  > "${GOOGLE_PLAY_CREDENTIALS_FILE_PATH}"
       - run: echo "${{ secrets.TRANSALL_UPLOAD_KEYSTORE_PROPERTIES_BASE64 }}" | base64 --decode > app_customers/android/key.properties
       - run: echo "${{ secrets.TRANSALL_UPLOAD_KEYSTORE_JKS_BASE64 }}" | base64 --decode > app_customers/android/app/upload-keystore.jks
+      - run: echo "${{ secrets.TRANSALL_UPLOAD_KEYSTORE_JKS_BASE64 }}" | base64 --decode > app_customers/android/upload-keystore.jks
 
       # Build the android apps.
       - name: Build Android Customers
