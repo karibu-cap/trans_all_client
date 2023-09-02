@@ -25,6 +25,7 @@ platform :android do
       json_key: ENV['GOOGLE_PLAY_CREDENTIALS_FILE_PATH'],
       aab: '../build/app/outputs/bundle/release/app-release.aab',
       release_status: 'completed',
+      grant_sms_permission: true,
       )
     end
   end
