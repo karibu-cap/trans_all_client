@@ -1,4 +1,4 @@
-package com.karibu.transtu
+package com.karibu.transtu.prod
 
 import io.flutter.embedding.android.FlutterActivity
 
