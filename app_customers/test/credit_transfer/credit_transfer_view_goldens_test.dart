@@ -27,7 +27,6 @@ class CreditTransferViewWidget extends StatelessWidget {
 
     return TransfersView(
       displayInternetMessage: false,
-      forfeitId: forfeitId,
     );
   }
 }
