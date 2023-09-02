@@ -109,7 +109,8 @@ class FormTransfer extends StatelessWidget {
       final isValidPayerNumber = controller.isValidPayerNumber();
       final isValidReceiverNumber = controller.isValidReceiverNumber();
       final forfeit = controller.forfeit;
-      final isValidAmount = forfeit == null ? controller.isValidAmount() : true;
+      final isValidAmount =
+          forfeit.value == null ? controller.isValidAmount() : true;
       if (!isValidPayerNumber ||
           !isValidReceiverNumber ||
           !isValidAmount ||
@@ -131,13 +132,13 @@ class FormTransfer extends StatelessWidget {
       final transactionParam = CreditTransactionParams(
         buyerPhoneNumber: controller.paymentTextController.text,
         receiverPhoneNumber: controller.receiverTextController.text,
-        amountInXaf: forfeit != null
-            ? forfeit.amountInXAF.toString()
+        amountInXaf: forfeit.value != null
+            ? forfeit.value?.amountInXAF.toString()
             : controller.amountToPayTextController.value.text,
         buyerGatewayId: paymentSelected.id.key,
         receiverOperator: currentOperation.operatorName,
         featureReference: currentOperation.reference.key,
-        forfeitId: forfeit?.id,
+        forfeitId: forfeit.value?.id,
       );
       AppRouter.push(
         context,
@@ -311,9 +312,9 @@ class FormTransfer extends StatelessWidget {
               ),
             ),
             SizedBox(height: 10),
-            if (controller.forfeit != null && featureForfeitEnabled)
+            if (featureForfeitEnabled && controller.forfeit.value != null)
               _ForfeitView(),
-            if (controller.forfeit == null)
+            if (controller.forfeit.value == null)
               SimpleTextField(
                 inputFormatters: [
                   FilteringTextInputFormatter.deny(RegExp(r'[^0-9]')),
@@ -457,7 +458,7 @@ class _ForfeitView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<TransfersController>();
-    final Forfeit? forfeit = controller.forfeit;
+    final Forfeit? forfeit = controller.forfeit.value;
     final localization = Get.find<AppInternationalization>();
 
     if (forfeit == null) {
@@ -524,12 +525,9 @@ class _ForfeitView extends StatelessWidget {
               AppColors.darkGray,
               AppColors.white,
             ),
-            onPressed: () => AppRouter.go(
-              context,
-              PagesRoutes.creditTransaction.pattern,
-            ),
+            onPressed: () => controller.setActiveForfeit(null),
             child: Text(
-              localization.cancelled,
+              localization.cancel,
               style: TextStyle(color: AppColors.white),
             ),
           ),

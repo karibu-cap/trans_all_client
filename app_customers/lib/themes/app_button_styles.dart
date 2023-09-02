@@ -23,9 +23,7 @@ ButtonStyle roundedBigButton(
       shape: MaterialStateProperty.all(
         RoundedRectangleBorder(
           borderRadius: const BorderRadius.all(Radius.circular(15.0)),
-          side: BorderSide(
-            color: borderColor,
-          ),
+          side: BorderSide(color: borderColor, width: 2),
         ),
       ),
     );
