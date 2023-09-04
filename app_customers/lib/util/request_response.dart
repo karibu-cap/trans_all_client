@@ -1,5 +1,7 @@
 import 'package:trans_all_common_models/models.dart';
 
+import '../data/database/hive_service.dart';
+
 /// The list of payment gateway response.
 class ListPaymentGatewaysResponse {
   /// The list of payment gateway.
@@ -43,29 +45,4 @@ class ListOperationGatewaysResponse {
     this.listOperationGateways,
     this.error,
   });
-}
-
-/// The request error.
-class RequestError {
-  /// The available RequestError.
-  static final _data = <String, RequestError>{
-    internetError.key: internetError,
-    unknown.key: unknown,
-  };
-
-  /// The orange payment id.
-  static const internetError = RequestError._('Internet error');
-
-  /// The unknown payment.
-  static const unknown = RequestError._('unknown');
-
-  /// The operator key.
-  final String key;
-
-  const RequestError._(this.key);
-
-  /// Constructs a new [RequestError] form [key].
-  factory RequestError.fromKey(String key) {
-    return _data[key] ?? unknown;
-  }
 }

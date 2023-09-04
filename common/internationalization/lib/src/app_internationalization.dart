@@ -81,6 +81,8 @@ class AppInternationalization extends Translations {
           'failTransferMessage':
               'Please be patient while we restart your transfer.',
           'emptyPaymentGateway': 'No payment method available.',
+          'emptyPaymentGatewayOrOperation':
+              'No payment method or operator available.',
           'emptyTransfer': 'No transfer operator available.',
           'receiverNumber': 'Receiver Number',
           'availablePayment': 'Payment method(s)',
@@ -145,7 +147,8 @@ class AppInternationalization extends Translations {
           'invalidAmount': 'Invalid amount',
           'today': 'Today',
           'contactRefreshed': 'Contact refreshed.',
-          'anErrorOccurred': 'An error or network error occurred.',
+          'anErrorOccurred':
+              'An error occurred, please try again. If the problem persist, contact support.',
           'buyerPhoneNumber': 'Buyer Number',
           'paymentOperator': 'Payment Method',
           'noContactFound': 'No contact found.',
@@ -162,21 +165,47 @@ class AppInternationalization extends Translations {
           'noForfeitFound': 'No forfeit found',
           'forfeitSelected': 'Forfeit Selected',
           'call': 'call',
+          'troubleInternetConnection': 'Trouble with internet connection.',
           'sms': 'sms',
           'all': 'All',
           'data': 'data',
+          'insufficientFund':
+              'The buyer account @number is unsuficient for the current operation.',
           'cancel': 'Cancel',
+          'transactionCancelled': 'Transaction cancelled',
           'shareTransAllLinkMessage': 'Hello 👋,'
               'I use Transall to buy or renew data bundle. It\'s fast, secure and user-friendly '
               'do as I do by following this link to download 👉 ',
+          'userNumberNotFound': 'The buyer phone number @number is not found.',
+          'clientWithMultiplePendingTransfer':
+              ' @receiverNumber already have ongoing transfer request. Please wait until it\'s finished 🙏.',
+          'troubleWithProvider':
+              'Unable to initialize the payment. Please try another payment method.',
+          'unsupportedProvider':
+              'The payment gateway is not longer supported. Please try another payment method.',
+          'invalidFeatureProvider':
+              'The operator choosen is not longer supported. Please try another operator.',
         },
         'fr': {
+          'invalidFeatureProvider':
+              'L\' operateur choisi n\'est plus supporté. Veuillez essayer un autre operateur.',
+          'unsupportedProvider':
+              'La methode paiement choisie n\'est plus supporté. Veuillez essayer un autre moyen de paiement.',
+          'troubleWithProvider':
+              'Impossible d\'initialiser le paiement. Veuillez essayer un autre mode de paiement.',
+          'clientWithMultiplePendingTransfer':
+              '@receiverNumber a déjà un transfert en cours. Veuillez attendre qu\'il soit fini 🙏.',
+          'userNumberNotFound': 'Le numero du payer @number est introuvable.',
           'shareTransAllLinkMessage': 'Salut 👋,'
               'J\'utilise Transall pour acheter ou renouveler mes forfait et données internet. C\'est rapide, sûr et facile à utiliser '
               'fait comme moi en suivant ce lien pour télécharger 👉 ',
+          'insufficientFund':
+              'Le compte de @number est insuffisant pour effectuer cette opération.',
+          'transactionCancelled': 'La transaction a été annulée.',
           'call': 'appel',
           'cancel': 'Annuler',
           'all': 'Tout',
+          'troubleInternetConnection': 'Problème de connexion internet.',
           'sms': 'sms',
           'data': 'internet',
           'forfeit': 'Forfait',
@@ -240,6 +269,8 @@ class AppInternationalization extends Translations {
           'failTransferMessage':
               'Veuillez patienter quelques instants, nous allons relancer votre transfert.',
           'emptyPaymentGateway': 'Aucune méthode de paiement disponible.',
+          'emptyPaymentGatewayOrOperation':
+              'Aucune méthode de paiement ou operateur disponible.',
           'emptyTransfer': 'Pas d\'opérateur de transfert disponible.',
           'receiverNumber': 'Numéro du bénéficiaire',
           'initPayment': 'Initialisation du paiement',
@@ -309,7 +340,7 @@ class AppInternationalization extends Translations {
           'chooseNumberToSend':
               'Si oui, sélectionnez le numéro qui recevira votre demande',
           'anErrorOccurred':
-              'Une erreur ou une mauvaise connexion a été détectée.',
+              'Une erreur survenue veillez réessayer. Si cle probleme persiste veuillez nous contacter.',
           'confirmSetAsDefault':
               "Confirmez-vous l'ajout de @number comme numéro de paiement par défaut ?",
           'contactRefreshed': 'Contact mis à jour',
@@ -336,10 +367,59 @@ class AppInternationalization extends Translations {
     return value.tr;
   }
 
+  /// Returns the localized value of invalidFeatureProvider.
+  String get invalidFeatureProvider {
+    return _stringOfLocalizedValue(
+      'invalidFeatureProvider',
+    );
+  }
+
+  /// Returns the localized value of unsupportedProvider.
+  String get unsupportedProvider {
+    return _stringOfLocalizedValue(
+      'unsupportedProvider',
+    );
+  }
+
+  /// Returns the localized value of troubleWithProvider.
+  String get troubleWithProvider {
+    return _stringOfLocalizedValue(
+      'troubleWithProvider',
+    );
+  }
+
   /// Returns the localized value of all.
   String get all {
     return _stringOfLocalizedValue(
       'all',
+    );
+  }
+
+  /// Returns the localized value of clientWithMultiplePendingTransfer.
+  String get clientWithMultiplePendingTransfer {
+    return _stringOfLocalizedValue(
+      'clientWithMultiplePendingTransfer',
+    );
+  }
+
+  /// Returns the localized value of transactionCancelled.
+  String get transactionCancelled {
+    return _stringOfLocalizedValue(
+      'transactionCancelled',
+    );
+  }
+
+  /// Returns the localized value of userNumberNotFound.
+  String get userNumberNotFound {
+    return _stringOfLocalizedValue(
+      'userNumberNotFound',
+    );
+  }
+
+  /// Returns the localized value of insufficientFund.
+  String get insufficientFund {
+    return _stringOfLocalizedValue(
+      'insufficientFund',
     );
   }
 
@@ -368,6 +448,13 @@ class AppInternationalization extends Translations {
   String get data {
     return _stringOfLocalizedValue(
       'data',
+    );
+  }
+
+  /// Returns the localized value of emptyPaymentGatewayOrOperation.
+  String get emptyPaymentGatewayOrOperation {
+    return _stringOfLocalizedValue(
+      'emptyPaymentGatewayOrOperation',
     );
   }
 
@@ -788,6 +875,13 @@ class AppInternationalization extends Translations {
   String get noInternetConnection {
     return _stringOfLocalizedValue(
       'noInternetConnection',
+    );
+  }
+
+  /// Returns the localized value of troubleInternetConnection.
+  String get troubleInternetConnection {
+    return _stringOfLocalizedValue(
+      'troubleInternetConnection',
     );
   }
 

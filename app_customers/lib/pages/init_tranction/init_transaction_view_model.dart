@@ -6,7 +6,7 @@ import 'package:trans_all_common_models/models.dart';
 
 import '../../data/repository/forfeitRepository.dart';
 import '../../data/repository/tranfersRepository.dart';
-import '../../util/request_response.dart';
+import '../../util/key_internationalization.dart';
 
 enum LoadingState {
   loading,
@@ -23,8 +23,8 @@ class InitTransactionViewModel {
   /// The current forfeit to transfers.
   Forfeit? forfeit;
 
-  /// Returns false if the request was successful.
-  Rx<bool> internetError = Rx<bool>(false);
+  /// Returns the error message.
+  Rx<String?> errorMessage = Rx<String?>(null);
 
   /// The transaction id.
   Rx<String?> transactionId = Rx<String?>(null);
@@ -106,24 +106,21 @@ class InitTransactionViewModel {
       receiverOperator: receiverOperator,
       receiverPhoneNumber: receiverPhoneNumber,
     );
-
-    if (transactionIdResult.error != null) {
-      internetError.value =
-          transactionIdResult.error == RequestError.internetError;
+    final error = transactionIdResult.error;
+    if (transactionIdResult.transactionId == null && error != null) {
+      errorMessage.value = requestErrorTranslate(
+        requestError: error,
+        buyerPhoneNumber: buyerPhoneNumber,
+        receiverNumber: receiverPhoneNumber,
+      );
       loadingState.value = LoadingState.failed;
 
       return null;
     }
 
-    if (transactionIdResult.transactionId == null) {
-      loadingState.value = LoadingState.failed;
-      internetError.value = false;
-
-      return null;
-    }
     loadingState.value = LoadingState.initiate;
     transactionId.value ??= transactionIdResult.transactionId;
-    internetError.value = false;
+    errorMessage.value = null;
 
     final transfers = TransferInfo.fromJson(json: {
       TransferInfo.keyAmountXAF: amountToPay,

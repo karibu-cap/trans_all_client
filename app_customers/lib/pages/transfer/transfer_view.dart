@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:karibu_capital_core_remote_config/remote_config.dart';
+import 'package:lottie/lottie.dart';
 import 'package:overlay_tooltip/overlay_tooltip.dart';
 import 'package:simple_animations/simple_animations.dart';
 import 'package:trans_all_common_config/config.dart';
@@ -12,6 +13,7 @@ import '../../data/repository/forfeitRepository.dart';
 import '../../data/repository/tranfersRepository.dart';
 import '../../routes/pages_routes.dart';
 import '../../themes/app_colors.dart';
+import '../../util/constant.dart';
 import '../../widgets/custom_scaffold.dart';
 import 'component/forfeit/forfeit_view.dart';
 import 'component/form_transfert.dart';
@@ -79,65 +81,62 @@ class _TransferBodyTransaction extends StatelessWidget {
       final supportedTransfer =
           controller.supportedTransferOperationGateway.value;
 
-      if (controller.internetError.value) {
+      if (supportedTransfer == null || supportedPayment == null) {
         return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                localization.anErrorOccurred,
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              TextButton(
-                onPressed: controller.retryTransfer,
-                style: TextButton.styleFrom(
-                  backgroundColor: AppColors.darkGray,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: const BorderRadius.all(Radius.circular(9)),
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Text(
-                    localization.retry,
-                    style: const TextStyle(
-                      color: AppColors.white,
-                    ),
-                  ),
-                ),
-              ),
-            ],
+          child: Lottie.asset(
+            AnimationAsset.loading,
+            width: 100,
+            height: 100,
+            fit: BoxFit.cover,
           ),
         );
       }
-      if (supportedTransfer == null || supportedPayment == null) {
-        return Center(
-            // child: Lottie.asset(
-            //   AnimationAsset.loading,
-            //   width: 100,
-            //   height: 100,
-            //   fit: BoxFit.cover,
-            // ),
-            );
-      }
-      if (supportedPayment.isEmpty) {
+      if (supportedPayment.isEmpty || supportedTransfer.isEmpty) {
         return Center(
           child: PlayAnimationBuilder<double>(
             tween: Tween<double>(begin: 0.0, end: 1.0),
             duration: Duration(seconds: 1),
             curve: Curves.easeOut,
             builder: (context, value, child) {
-              return Transform.translate(
-                offset: Offset(0, -100 + value * 100),
-                child: Opacity(
-                  opacity: value,
-                  child: Text(
-                    localization.emptyPaymentGateway,
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Transform.translate(
+                    offset: Offset(0, -100 + value * 100),
+                    child: Opacity(
+                      opacity: value,
+                      child: Text(
+                        controller.internetError.value
+                            ? localization.troubleInternetConnection
+                            : localization.emptyPaymentGatewayOrOperation,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                   ),
-                ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TextButton(
+                    onPressed: controller.retryTransfer,
+                    style: TextButton.styleFrom(
+                      backgroundColor: AppColors.darkGray,
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(9)),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        localization.retry,
+                        style: const TextStyle(
+                          color: AppColors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               );
             },
           ),
@@ -229,8 +228,6 @@ class _OverlayTooltipView extends StatelessWidget {
     final featureForfeitEnabled = RemoteConfig().getBool(
       RemoteConfigKeys.featureForfeitEnable,
     );
-
-    final controller = Get.find<TransfersController>();
 
     return OverlayTooltipScaffold(
       overlayColor: AppColors.red.withOpacity(0.4),

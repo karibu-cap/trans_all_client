@@ -370,22 +370,13 @@ class _CurrentWidget extends GetView<InitTransactionController> {
           SizedBox(
             height: 10,
           ),
-          if (controller.internetError.value)
+          if (controller.errorMessage.value != null)
             Text(
-              localization.noInternetConnection,
+              controller.errorMessage.value ?? localization.anErrorOccurred,
               style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w300,
                 color: AppColors.red2,
-              ),
-            ),
-          if (!controller.internetError.value)
-            Text(
-              localization.failedTransfer,
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w300,
-                color: AppColors.black,
               ),
             ),
           SizedBox(
