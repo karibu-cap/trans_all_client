@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,10 +8,10 @@ import 'package:karibu_capital_core_remote_config/remote_config.dart';
 import 'package:karibu_capital_core_utils/utils.dart';
 import 'package:overlay_tooltip/overlay_tooltip.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sms_mms/sms_mms.dart';
 import 'package:trans_all_common_config/config.dart';
 import 'package:trans_all_common_internationalization/internationalization.dart';
 import 'package:trans_all_common_models/models.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../routes/app_router.dart';
 import '../../../routes/pages_routes.dart';
@@ -63,12 +65,18 @@ class FormTransfer extends StatelessWidget {
           final String message =
               'Send ${controller.amountToPayTextController.text} from ${controller.paymentTextController.text} to ${controller.receiverTextController.text}';
 
-          final List<String> recipients = [defaultReceiverSmsNumber.value];
+          final uri = Platform.isAndroid
+              ? 'sms:${defaultReceiverSmsNumber.value}?body=$message'
+              : Platform.isIOS
+                  ? 'sms:${defaultReceiverSmsNumber.value}&body=$message'
+                  : null;
 
-          await SmsMms.send(
-            recipients: recipients,
-            message: message,
-          );
+          if (uri != null) {
+            await launchUrl(
+              Uri.parse(uri),
+              mode: LaunchMode.externalApplication,
+            );
+          }
         },
         title: localization.noInternetConnection,
         content: ValueListenableBuilder(
