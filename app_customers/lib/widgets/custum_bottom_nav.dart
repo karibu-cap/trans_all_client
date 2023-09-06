@@ -71,14 +71,14 @@ class CustomAnimatedBottomBar extends StatelessWidget {
           if (showElevation)
             BoxShadow(
               spreadRadius: 3,
-              color: AppColors.darkBlack.withOpacity(0.5),
+              color: AppColors.darkGray.withOpacity(0.5),
               blurRadius: 5,
             ),
         ],
         gradient: LinearGradient(
           colors: [
-            AppColors.darkBlack,
-            AppColors.darkBlack,
+            AppColors.darkGray,
+            AppColors.darkGray,
           ],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,10 +8,10 @@ import 'package:karibu_capital_core_remote_config/remote_config.dart';
 import 'package:karibu_capital_core_utils/utils.dart';
 import 'package:overlay_tooltip/overlay_tooltip.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sms_mms/sms_mms.dart';
 import 'package:trans_all_common_config/config.dart';
 import 'package:trans_all_common_internationalization/internationalization.dart';
 import 'package:trans_all_common_models/models.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../routes/app_router.dart';
 import '../../../routes/pages_routes.dart';
@@ -61,20 +63,20 @@ class FormTransfer extends StatelessWidget {
         positiveBtnPressed: () async {
           Navigator.of(context, rootNavigator: true).pop();
           final String message =
-              'buyerGatewayId:${controller.currentPaymentMethod.value?.id.key}\n'
-              'amountToPay:${controller.amountToPayTextController.value.text}\n'
-              'buyerPhoneNumber:${controller.paymentTextController.text}\n'
-              'featureReference:${controller.currentOperation.value?.reference.key}\n'
-              'receiverPhoneNumber:${controller.receiverTextController.text}\n'
-              'receiverOperator:${controller.currentOperation.value?.operatorName}';
-          print(message);
+              'Send ${controller.amountToPayTextController.text} from ${controller.paymentTextController.text} to ${controller.receiverTextController.text}';
 
-          final List<String> recipients = [defaultReceiverSmsNumber.value];
+          final uri = Platform.isAndroid
+              ? 'sms:${defaultReceiverSmsNumber.value}?body=$message'
+              : Platform.isIOS
+                  ? 'sms:${defaultReceiverSmsNumber.value}&body=$message'
+                  : null;
 
-          final result = await SmsMms.send(
-            recipients: recipients,
-            message: message,
-          );
+          if (uri != null) {
+            await launchUrl(
+              Uri.parse(uri),
+              mode: LaunchMode.externalApplication,
+            );
+          }
         },
         title: localization.noInternetConnection,
         content: ValueListenableBuilder(
@@ -114,7 +116,9 @@ class FormTransfer extends StatelessWidget {
       final currentOperation = controller.currentOperation.value;
       final isValidPayerNumber = controller.isValidPayerNumber();
       final isValidReceiverNumber = controller.isValidReceiverNumber();
-      final isValidAmount = controller.isValidAmount();
+      final forfeit = controller.forfeit;
+      final isValidAmount =
+          forfeit.value == null ? controller.isValidAmount() : true;
       if (!isValidPayerNumber ||
           !isValidReceiverNumber ||
           !isValidAmount ||
@@ -136,10 +140,13 @@ class FormTransfer extends StatelessWidget {
       final transactionParam = CreditTransactionParams(
         buyerPhoneNumber: controller.paymentTextController.text,
         receiverPhoneNumber: controller.receiverTextController.text,
-        amountToPay: controller.amountToPayTextController.value.text,
+        amountInXaf: forfeit.value != null
+            ? forfeit.value?.amountInXAF.toString()
+            : controller.amountToPayTextController.value.text,
         buyerGatewayId: paymentSelected.id.key,
         receiverOperator: currentOperation.operatorName,
         featureReference: currentOperation.reference.key,
+        forfeitId: forfeit.value?.id,
       );
       AppRouter.push(
         context,
@@ -158,6 +165,10 @@ class FormTransfer extends StatelessWidget {
         );
       }
     });
+
+    final featureForfeitEnabled = RemoteConfig().getBool(
+      RemoteConfigKeys.featureForfeitEnable,
+    );
 
     return Obx(() => Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -309,22 +320,25 @@ class FormTransfer extends StatelessWidget {
               ),
             ),
             SizedBox(height: 10),
-            SimpleTextField(
-              inputFormatters: [
-                FilteringTextInputFormatter.deny(RegExp(r'[^0-9]')),
-              ],
-              textController: controller.amountToPayTextController,
-              isValidField: controller.amountErrorMessage.isEmpty &&
-                  controller.amountToPayTextController.value.text.isNotEmpty,
-              errorMessage: controller.amountErrorMessage.value,
-              labelText: localization.creditedAmount,
-              onChanged: controller.updateAmount,
-            ),
+            if (featureForfeitEnabled && controller.forfeit.value != null)
+              _ForfeitView(),
+            if (controller.forfeit.value == null)
+              SimpleTextField(
+                inputFormatters: [
+                  FilteringTextInputFormatter.deny(RegExp(r'[^0-9]')),
+                ],
+                textController: controller.amountToPayTextController,
+                isValidField: controller.amountErrorMessage.isEmpty &&
+                    controller.amountToPayTextController.value.text.isNotEmpty,
+                errorMessage: controller.amountErrorMessage.value,
+                labelText: localization.creditedAmount,
+                onChanged: controller.updateAmount,
+              ),
             SizedBox(height: 10),
             ElevatedButton(
               style: roundedBigButton(
                 context,
-                AppColors.darkBlack,
+                AppColors.darkGray,
                 AppColors.white,
               ),
               onPressed: checksTheForm,
@@ -410,7 +424,7 @@ class _AlertMessageContent extends StatelessWidget {
                 value == mtnNumberForSMSAirtimeTransaction
                     ? Icons.circle
                     : Icons.circle_outlined,
-                color: AppColors.darkBlack,
+                color: AppColors.darkGray,
                 size: 20,
               ),
             ),
@@ -434,13 +448,99 @@ class _AlertMessageContent extends StatelessWidget {
                 value == orangeNumberForSMSAirtimeTransaction
                     ? Icons.circle
                     : Icons.circle_outlined,
-                color: AppColors.darkBlack,
+                color: AppColors.darkGray,
                 size: 20,
               ),
             ),
           ],
         ),
         SizedBox(height: 30),
+      ],
+    );
+  }
+}
+
+class _ForfeitView extends StatelessWidget {
+  const _ForfeitView();
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = Get.find<TransfersController>();
+    final Forfeit? forfeit = controller.forfeit.value;
+    final localization = Get.find<AppInternationalization>();
+
+    if (forfeit == null) {
+      return SizedBox();
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          localization.forfeitSelected,
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: OperatorIcon(
+                operatorType: forfeit.reference.key,
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    forfeit.name,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Text(
+                    localization.locale.languageCode == LanguageCode.en
+                        ? forfeit.description.en
+                        : forfeit.description.fr,
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Text(
+                Currency.formatWithCurrency(
+                  price: num.parse(forfeit.amountInXAF.toString()),
+                  locale: localization.locale,
+                  currencyCodeAlpha3: DefaultCurrency.xaf,
+                ),
+                style: TextStyle(color: AppColors.black),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        SizedBox(
+          height: 35,
+          width: 100,
+          child: TextButton(
+            style: roundedBigButton(
+              context,
+              AppColors.darkGray,
+              AppColors.white,
+            ),
+            onPressed: () => controller.setActiveForfeit(null),
+            child: Text(
+              localization.cancel,
+              style: TextStyle(color: AppColors.white),
+            ),
+          ),
+        ),
+        SizedBox(height: 10),
       ],
     );
   }

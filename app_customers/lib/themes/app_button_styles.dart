@@ -23,9 +23,7 @@ ButtonStyle roundedBigButton(
       shape: MaterialStateProperty.all(
         RoundedRectangleBorder(
           borderRadius: const BorderRadius.all(Radius.circular(15.0)),
-          side: BorderSide(
-            color: borderColor,
-          ),
+          side: BorderSide(color: borderColor, width: 2),
         ),
       ),
     );
@@ -33,7 +31,7 @@ ButtonStyle roundedBigButton(
 /// The small rounded button used to add items to the cart.
 final roundedSmallButton = ButtonStyle(
   elevation: MaterialStateProperty.all(5.0),
-  backgroundColor: MaterialStateProperty.all(AppColors.blue),
+  backgroundColor: MaterialStateProperty.all(AppColors.darkGray),
   padding: MaterialStateProperty.all(
     EdgeInsets.symmetric(vertical: 5, horizontal: 30),
   ),

@@ -18,7 +18,7 @@ class AppColors {
   static const Color lightBlack = Color.fromARGB(255, 114, 114, 114);
 
   /// Black Color.
-  static const Color darkBlack = Color.fromARGB(255, 17, 17, 17);
+  static const Color darkGray = Color.fromARGB(255, 17, 17, 17);
 
   /// Teal Color.
   static const Color teal = Color(0xff00d4a2);
@@ -49,9 +49,6 @@ class AppColors {
 
   /// Gray Color.
   static const Color lightGray = Color.fromRGBO(0, 0, 0, 0.231);
-
-  /// Dark Gray Color.
-  static const Color darkGray = Color(0xff202020);
 
   /// White Color.
   static const Color white = Color(0xffffffff);

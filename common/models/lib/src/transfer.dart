@@ -42,6 +42,9 @@ class TransferInfo extends BaseModel {
   /// The stored key ref for the [reason] property.
   static const keyReason = 'reason';
 
+  /// The stored key ref for the [forfeitId] property.
+  static const keyForfeitId = 'forfeitId';
+
   /// The id of transaction.
   final String id;
 
@@ -81,6 +84,9 @@ class TransferInfo extends BaseModel {
   /// The transfer payment.
   final List<TransTuPayment> payments;
 
+  /// The forfeit id to transfers.
+  final String? forfeitId;
+
   /// Constructs a new [TransferInfo] from [Map] object.
   TransferInfo.fromJson({
     required Map<String, dynamic> json,
@@ -97,6 +103,7 @@ class TransferInfo extends BaseModel {
         amount = json[keyAmountXAF],
         status = TransferStatus.fromKey(json[keyStatus]),
         type = json[keyType],
+        forfeitId = json[keyForfeitId],
         reason = json[keyReason],
         payments = _getPayment(json[keyPayments]),
         super.fromJson();
@@ -109,6 +116,7 @@ class TransferInfo extends BaseModel {
   @override
   Map<String, dynamic> toJson() => <String, dynamic>{
         keyId: id,
+        keyForfeitId: forfeitId,
         keyCreatedAt: createdAt,
         keyUpdateAt: updateAt,
         keyAmountXAF: amount,

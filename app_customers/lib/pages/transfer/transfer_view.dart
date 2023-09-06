@@ -1,17 +1,21 @@
-import 'package:flutter/material.dart' hide Local;
-import 'package:get/get.dart' hide Local;
-import 'package:lottie/lottie.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:karibu_capital_core_remote_config/remote_config.dart';
 import 'package:overlay_tooltip/overlay_tooltip.dart';
 import 'package:simple_animations/simple_animations.dart';
+import 'package:trans_all_common_config/config.dart';
 import 'package:trans_all_common_internationalization/internationalization.dart';
 import 'package:trans_all_common_models/models.dart';
 
 import '../../data/repository/contactRepository.dart';
+import '../../data/repository/forfeitRepository.dart';
 import '../../data/repository/tranfersRepository.dart';
 import '../../routes/pages_routes.dart';
 import '../../themes/app_colors.dart';
 import '../../widgets/custom_scaffold.dart';
+import 'component/forfeit/forfeit_view.dart';
 import 'component/form_transfert.dart';
+import 'component/header_tabs.dart';
 import 'component/operator_method.dart';
 import 'component/payment_method.dart';
 import 'component/pending_transaction.dart';
@@ -23,6 +27,9 @@ class TransfersView extends StatelessWidget {
   /// Local transaction param.
   final CreditTransactionParams? localCreditTransaction;
 
+  /// The forfeit id.
+  final String? forfeitId;
+
   /// Check if we can display internet message of the app bar.
   final bool? displayInternetMessage;
 
@@ -30,12 +37,14 @@ class TransfersView extends StatelessWidget {
   const TransfersView({
     this.localCreditTransaction,
     this.displayInternetMessage,
+    this.forfeitId,
   });
 
   @override
   Widget build(BuildContext context) {
     final localization = Get.find<AppInternationalization>();
     final transferRepository = Get.find<TransferRepository>();
+    final forfeitRepository = Get.find<ForfeitRepository>();
     final contactRepository = Get.find<ContactRepository>();
     final transfersViewModel = TransfersViewModel(
       transferRepository: transferRepository,
@@ -45,9 +54,11 @@ class TransfersView extends StatelessWidget {
     Get.put<TransfersController>(
       permanent: false,
       TransfersController(
-        localization,
-        transfersViewModel,
-        localCreditTransaction,
+        localization: localization,
+        forfeitRepository: forfeitRepository,
+        transfersViewModel: transfersViewModel,
+        localCreditTransaction: localCreditTransaction,
+        forfeitId: forfeitId,
       ),
     );
 
@@ -55,8 +66,8 @@ class TransfersView extends StatelessWidget {
   }
 }
 
-class _BodyTransaction extends StatelessWidget {
-  const _BodyTransaction();
+class _TransferBodyTransaction extends StatelessWidget {
+  const _TransferBodyTransaction();
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +94,7 @@ class _BodyTransaction extends StatelessWidget {
               TextButton(
                 onPressed: controller.retryTransfer,
                 style: TextButton.styleFrom(
-                  backgroundColor: AppColors.darkBlack,
+                  backgroundColor: AppColors.darkGray,
                   shape: RoundedRectangleBorder(
                     borderRadius: const BorderRadius.all(Radius.circular(9)),
                   ),
@@ -104,13 +115,13 @@ class _BodyTransaction extends StatelessWidget {
       }
       if (supportedTransfer == null || supportedPayment == null) {
         return Center(
-          child: Lottie.asset(
-            'assets/icons/loading.json',
-            width: 100,
-            height: 100,
-            fit: BoxFit.cover,
-          ),
-        );
+            // child: Lottie.asset(
+            //   AnimationAsset.loading,
+            //   width: 100,
+            //   height: 100,
+            //   fit: BoxFit.cover,
+            // ),
+            );
       }
       if (supportedPayment.isEmpty) {
         return Center(
@@ -185,16 +196,18 @@ class _BodyTransaction extends StatelessWidget {
                   height: 25,
                 ),
                 StreamBuilder<List<Contact>>(
-                    stream: controller.streamOfContact.stream,
-                    builder: (context, snapshot) {
-                      final contacts = snapshot.data;
+                  stream: controller.streamOfContact.stream,
+                  builder: (context, snapshot) {
+                    final contacts = snapshot.data;
 
-                      return StreamBuilder<List<Contact>>(
-                          stream: controller.streamOfBuyerContact.stream,
-                          builder: (context, snapshot) {
-                            return FormTransfer(contacts ?? []);
-                          });
-                    }),
+                    return StreamBuilder<List<Contact>>(
+                      stream: controller.streamOfBuyerContact.stream,
+                      builder: (context, snapshot) {
+                        return FormTransfer(contacts ?? []);
+                      },
+                    );
+                  },
+                ),
               ],
             ),
           );
@@ -213,7 +226,11 @@ class _OverlayTooltipView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TooltipController _controller = TooltipController();
-    final localization = Get.find<AppInternationalization>();
+    final featureForfeitEnabled = RemoteConfig().getBool(
+      RemoteConfigKeys.featureForfeitEnable,
+    );
+
+    final controller = Get.find<TransfersController>();
 
     return OverlayTooltipScaffold(
       overlayColor: AppColors.red.withOpacity(0.4),
@@ -225,7 +242,7 @@ class _OverlayTooltipView extends StatelessWidget {
         child: Container(
           height: double.infinity,
           width: double.infinity,
-          color: AppColors.darkBlack.withOpacity(0.9),
+          color: AppColors.darkGray.withOpacity(0.9),
         ),
       ),
       builder: (context) => GestureDetector(
@@ -237,10 +254,25 @@ class _OverlayTooltipView extends StatelessWidget {
         },
         child: CustomScaffold(
           displayInternetMessage: displayInternetMessage ?? true,
-          title: localization.buyAirtime,
           child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: _BodyTransaction(),
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Column(
+              children: [
+                if (featureForfeitEnabled)
+                  Expanded(
+                    child: Column(
+                      children: [
+                        _Header(),
+                        Expanded(
+                          child: _PageView(),
+                        ),
+                      ],
+                    ),
+                  ),
+                if (!featureForfeitEnabled)
+                  Expanded(child: _TransferBodyTransaction()),
+              ],
+            ),
           ),
         ),
       ),
@@ -292,5 +324,58 @@ class _SkeletonBodyWidget extends StatelessWidget {
         ),
       );
     });
+  }
+}
+
+class _Header extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final localizations = Get.find<AppInternationalization>();
+    final transfersController = Get.find<TransfersController>();
+
+    return Obx(() => Center(
+          child: HeaderTabs(
+            firstLabel: localizations.airtime,
+            secondLabel: localizations.forfeit,
+            onChange: transfersController.setActivePage,
+            activeIndex: transfersController.activePageIndex.value,
+          ),
+        ));
+  }
+}
+
+class _PageView extends StatelessWidget {
+  _PageView();
+
+  @override
+  Widget build(BuildContext context) {
+    final transfersController = Get.find<TransfersController>();
+
+    return PageView.builder(
+      allowImplicitScrolling: true,
+      controller: transfersController.pageController,
+      onPageChanged: transfersController.setActivePage,
+      itemCount: transfersController.pageCount,
+      itemBuilder: (context, index) {
+        return _CurrentPageWidget(index);
+      },
+    );
+  }
+}
+
+class _CurrentPageWidget extends StatelessWidget {
+  final int index;
+
+  const _CurrentPageWidget(
+    this.index,
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    if (index == 1) {
+      return ForfeitView();
+    }
+
+    return _TransferBodyTransaction();
   }
 }

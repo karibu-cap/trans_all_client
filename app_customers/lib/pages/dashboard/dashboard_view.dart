@@ -1,4 +1,5 @@
-import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
@@ -22,9 +23,13 @@ enum DashboardPageType {
 
 class _DashboardPage {
   final BottomNavyBarItem navigationBarItem;
+  final IconData iconData;
+  final String title;
 
   _DashboardPage(
     this.navigationBarItem,
+    this.iconData,
+    this.title,
   );
 }
 
@@ -44,18 +49,18 @@ class DashboardView extends StatelessWidget {
   ) {
     final List<_DashboardPage> pages = [];
 
-    pages.add(_DashboardPage(
-      _createCreditTransferPageNavigationBarItem(localizations),
-    ));
-    // pages.add(_DashboardPage(
-    //   DashboardPageType.moneyTransaction,
-    //   _createMoneyTransferPageNavigationBarItem(localizations),
-    //   PagesRoutes.moneyTransaction.pattern,
-    //   MoneyTransferView(),
-    // ));
+    pages.add(
+      _DashboardPage(
+        _createCreditTransferPageNavigationBarItem(localizations),
+        Icons.swap_horiz,
+        localizations.airtime,
+      ),
+    );
 
     pages.add(_DashboardPage(
       _createHistoricPageNavigationBarItem(localizations),
+      Icons.history,
+      localizations.history,
     ));
 
     return pages;
@@ -74,6 +79,7 @@ class DashboardView extends StatelessWidget {
 }
 
 class _DashboardBody extends StatelessWidget {
+  final autoSizeGroup = AutoSizeGroup();
   final List<_DashboardPage> pages;
   final StatefulNavigationShell navigationShell;
 
@@ -84,10 +90,7 @@ class _DashboardBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // SchedulerBinding.instance.addPostFrameCallback((_) {
-    //   controller.updateActiveIndex(currentIndex);
-    // });
-
+    final localizations = Get.find<AppInternationalization>();
     void handlePress(
       int index,
     ) {
@@ -100,40 +103,59 @@ class _DashboardBody extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       extendBody: true,
-      bottomNavigationBar: CustomAnimatedBottomBar(
-        containerHeight: 70,
-        selectedIndex: navigationShell.currentIndex,
-        showElevation: true,
-        itemCornerRadius: 40,
-        curve: Curves.easeIn,
-        onItemSelected: handlePress,
-        items: pages.map((e) => e.navigationBarItem).toList(),
+      bottomNavigationBar: AnimatedBottomNavigationBar.builder(
+        itemCount: pages.length,
+        tabBuilder: (index, isActive) {
+          final color = isActive ? AppColors.white : AppColors.gray;
+
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                pages[index].iconData,
+                size: 24,
+                color: color,
+              ),
+              const SizedBox(height: 4),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: AutoSizeText(
+                  pages[index].title,
+                  maxLines: 1,
+                  style: TextStyle(color: color),
+                  group: autoSizeGroup,
+                ),
+              ),
+            ],
+          );
+        },
+        height: 80,
+        splashSpeedInMilliseconds: 300,
+        backgroundColor: AppColors.darkGray,
+        activeIndex: navigationShell.currentIndex,
+        gapLocation: GapLocation.end,
+        notchSmoothness: NotchSmoothness.defaultEdge,
+        onTap: handlePress,
+        shadow: BoxShadow(
+          offset: Offset(0, 1),
+          blurRadius: 12,
+          spreadRadius: 0.5,
+          color: AppColors.black,
+        ),
       ),
-      floatingActionButton: Stack(children: [
-        Container(
-          height: 70,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColors.darkGray,
+        child: Icon(
+          Icons.share,
+          color: AppColors.white,
         ),
-        Positioned(
-          top: 0,
-          width: MediaQuery.of(context).size.width,
-          child: ConvexButton.fab(
-            onTap: () => Share.share(
-              'https://play.google.com/store/apps/details?id=com.karibu.transtu.prod',
-            ),
-            backgroundColor: AppColors.darkBlack,
-            icon: Icons.share,
-            color: AppColors.white,
-            border: 0,
-            thickness: 0,
-            sigma: 0,
-            top: 45,
-            size: 52,
-            iconSize: 35,
-          ),
+        onPressed: () => Share.share(
+          '${localizations.shareTransAllLinkMessage} https://play.google.com/store/apps/details?id=com.karibu.transtu.prod',
         ),
-      ]),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      body: navigationShell,
+      ),
+      body: SafeArea(bottom: false, child: navigationShell),
     );
   }
 }
@@ -169,15 +191,5 @@ BottomNavyBarItem _createHistoricPageNavigationBarItem(
     Icon(Icons.history),
     localizations.history,
     AppColors.white,
-  );
-}
-
-BottomNavyBarItem _createMoneyTransferPageNavigationBarItem(
-  AppInternationalization localizations,
-) {
-  return _createNavigationBarItem(
-    Icon(Icons.attach_money),
-    localizations.moneyTransfer,
-    AppColors.green,
   );
 }

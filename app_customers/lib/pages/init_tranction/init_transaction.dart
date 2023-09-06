@@ -7,6 +7,7 @@ import 'package:trans_all_common_internationalization/internationalization.dart'
 import 'package:trans_all_common_models/models.dart';
 
 import '../../data/repository/contactRepository.dart';
+import '../../data/repository/forfeitRepository.dart';
 import '../../data/repository/tranfersRepository.dart';
 import '../../routes/app_router.dart';
 import '../../routes/pages_routes.dart';
@@ -17,7 +18,7 @@ import 'init_transaction_controller.dart';
 import 'init_transaction_view_model.dart';
 
 /// The Initialize transaction view.
-class InitTransaction extends GetView<InitTransactionController> {
+class InitTransaction extends StatelessWidget {
   /// The id of transfer.
   final String? transferId;
 
@@ -39,6 +40,9 @@ class InitTransaction extends GetView<InitTransactionController> {
   /// The amount of transaction.
   final num amountToPay;
 
+  /// The id of forfeit to transfers.
+  final String? forfeitId;
+
   /// Constructs a new [InitTransaction] view.
   const InitTransaction({
     super.key,
@@ -49,6 +53,7 @@ class InitTransaction extends GetView<InitTransactionController> {
     required this.featureReference,
     required this.receiverOperator,
     this.transferId,
+    this.forfeitId,
   });
 
   @override
@@ -56,6 +61,7 @@ class InitTransaction extends GetView<InitTransactionController> {
     final localization = Get.find<AppInternationalization>();
     final transferRepository = Get.find<TransferRepository>();
     final contactRepository = Get.find<ContactRepository>();
+    final forfeitRepository = Get.find<ForfeitRepository>();
 
     final initTransactionModel = InitTransactionViewModel(
       buyerPhoneNumber: buyerPhoneNumber,
@@ -66,6 +72,8 @@ class InitTransaction extends GetView<InitTransactionController> {
       receiverOperator: receiverOperator,
       transferRepository: transferRepository,
       existedTransactionId: transferId,
+      forfeitId: forfeitId,
+      forfeitRepository: forfeitRepository,
     );
 
     Get.put(
@@ -76,135 +84,172 @@ class InitTransaction extends GetView<InitTransactionController> {
       ),
     );
 
-    final initController = Get.find<InitTransactionController>();
-
     return CustomScaffold(
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ListView(
-            physics: BouncingScrollPhysics(),
-            children: [
-              Text(
-                localization.transferOf.trParams(
-                  {
-                    Constant.amountToPay: Currency.formatWithCurrency(
-                      price: amountToPay,
-                      locale: localization.locale,
-                      currencyCodeAlpha3: DefaultCurrency.xaf,
+      child: Builder(builder: (context) {
+        final controller = Get.find<InitTransactionController>();
+        final forfeit = controller.forfeit;
+
+        return Center(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ListView(
+              physics: BouncingScrollPhysics(),
+              children: [
+                Text(
+                  localization.transferOf.trParams(
+                    {
+                      Constant.amountToPay: forfeit != null
+                          ? localization.forfeit
+                          : Currency.formatWithCurrency(
+                              price: amountToPay,
+                              locale: localization.locale,
+                              currencyCodeAlpha3: DefaultCurrency.xaf,
+                            ),
+                    },
+                  ),
+                  style: TextStyle(
+                    color: AppColors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 30,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                if (forfeit != null)
+                  SizedBox(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          forfeit.name,
+                          style: TextStyle(
+                            color: AppColors.black,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 17,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          localization.locale.languageCode == 'en'
+                              ? forfeit.description.en
+                              : forfeit.description.fr,
+                          style: TextStyle(
+                            color: AppColors.black,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
                     ),
-                  },
+                  ),
+                SizedBox(
+                  height: 30,
                 ),
-                style: TextStyle(
-                  color: AppColors.black,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 30,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(
-                height: 40,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: Card(
-                      child: Container(
-                        height: 80,
-                        child: Center(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: Card(
+                        child: Container(
+                          height: 80,
+                          child: Center(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  localization.payer,
+                                  style: TextStyle(
+                                    color: AppColors.black,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                Text(
+                                  controller.getUserName(buyerPhoneNumber),
+                                  style: TextStyle(
+                                    color: AppColors.black,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: SizedBox(
+                        child: FittedBox(
+                          child: Row(
                             children: [
-                              Text(
-                                localization.payer,
-                                style: TextStyle(
-                                  color: AppColors.black,
-                                  fontSize: 15,
-                                ),
+                              Icon(
+                                Icons.forward,
+                                color: AppColors.black,
                               ),
-                              Text(
-                                controller.getUserName(buyerPhoneNumber),
-                                style: TextStyle(
-                                  color: AppColors.black,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 15,
-                                ),
+                              Icon(
+                                color: AppColors.black,
+                                Icons.phone_android_outlined,
+                                size: 50,
+                              ),
+                              Icon(
+                                Icons.forward,
+                                color: AppColors.black,
                               ),
                             ],
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: SizedBox(
-                      child: FittedBox(
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.forward,
-                              color: AppColors.black,
-                            ),
-                            Icon(
-                              color: AppColors.black,
-                              Icons.phone_android_outlined,
-                              size: 50,
-                            ),
-                            Icon(
-                              Icons.forward,
-                              color: AppColors.black,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Card(
-                      child: Container(
-                        height: 80,
-                        child: Center(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                localization.receiver,
-                                style: TextStyle(
-                                  color: AppColors.black,
-                                  fontSize: 15,
+                    Expanded(
+                      flex: 2,
+                      child: Card(
+                        child: Container(
+                          height: 80,
+                          child: Center(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  localization.receiver,
+                                  style: TextStyle(
+                                    color: AppColors.black,
+                                    fontSize: 15,
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                controller.getUserName(receiverPhoneNumber),
-                                style: TextStyle(
-                                  color: AppColors.black,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 15,
+                                Text(
+                                  controller.getUserName(receiverPhoneNumber),
+                                  style: TextStyle(
+                                    color: AppColors.black,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 15,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              _BodyTransaction(
-                buyerGatewayId: buyerGatewayId,
-              ),
-            ],
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                _BodyTransaction(
+                  buyerGatewayId: buyerGatewayId,
+                ),
+              ],
+            ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 }
@@ -270,13 +315,13 @@ class _ImageStatus extends GetView<InitTransactionController> {
                   fit: StackFit.loose,
                   children: [
                     Lottie.asset(
-                      'assets/icons/second_success.json',
+                      AnimationAsset.successTransaction,
                       width: 200,
                       height: 200,
                       fit: BoxFit.cover,
                     ),
                     Lottie.asset(
-                      'assets/icons/first_success.json',
+                      AnimationAsset.firstSuccess,
                       width: 200,
                       height: 200,
                       fit: BoxFit.cover,
@@ -285,13 +330,13 @@ class _ImageStatus extends GetView<InitTransactionController> {
                 )
               : loadingState == LoadingState.failed
                   ? Lottie.asset(
-                      'assets/icons/failed_transaction.json',
+                      AnimationAsset.failedTransaction,
                       width: 150,
                       height: 150,
                       fit: BoxFit.cover,
                     )
                   : Lottie.asset(
-                      'assets/icons/loading.json',
+                      AnimationAsset.loading,
                       width: 220,
                       height: 220,
                       fit: BoxFit.cover,
@@ -319,7 +364,7 @@ class _CurrentWidget extends GetView<InitTransactionController> {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w800,
-              color: AppColors.darkBlack,
+              color: AppColors.darkGray,
             ),
           ),
           SizedBox(
@@ -353,7 +398,7 @@ class _CurrentWidget extends GetView<InitTransactionController> {
                 height: 50,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.darkBlack,
+                    backgroundColor: AppColors.darkGray,
                     shape: RoundedRectangleBorder(
                       borderRadius: const BorderRadius.all(Radius.circular(9)),
                     ),
@@ -423,7 +468,7 @@ class _CurrentWidget extends GetView<InitTransactionController> {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w800,
-              color: AppColors.darkBlack,
+              color: AppColors.darkGray,
             ),
           ),
           SizedBox(
@@ -447,7 +492,7 @@ class _CurrentWidget extends GetView<InitTransactionController> {
                 height: 50,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.darkBlack,
+                    backgroundColor: AppColors.darkGray,
                     shape: RoundedRectangleBorder(
                       borderRadius: const BorderRadius.all(Radius.circular(9)),
                     ),

@@ -95,15 +95,20 @@ class TransfersViewModel {
 
   /// Updates the pending transaction.
   void updatePendingTransaction() {
-    final pendingTransfers = _transferRepository
-        .getAllLocalTransaction()
-        .where((element) =>
-            (element.status.key == TransferStatus.requestSend.key &&
-                element.payments.last.status.key ==
-                    PaymentStatus.succeeded.key) ||
-            element.payments.last.status.key == PaymentStatus.pending.key ||
-            element.payments.last.status.key == PaymentStatus.succeeded.key)
-        .toList();
+    final pendingTransfers =
+        _transferRepository.getAllLocalTransaction().where((element) {
+      if (element.status.key == TransferStatus.completed.key) {
+        return false;
+      }
+      if (element.status.key == TransferStatus.succeeded.key) {
+        return false;
+      }
+      if (element.payments.last.status.key == PaymentStatus.failed.key) {
+        return false;
+      }
+
+      return true;
+    }).toList();
     streamPendingTransferInfo.add(pendingTransfers);
   }
 

@@ -14,4 +14,7 @@ class RemoteConfigKeys {
 
   /// The MTN sim number for that receives message in cas of sms transaction.
   static const mtnNumberForSmsTransaction = 'mtn_number_for_sms_transaction';
+
+  /// Boolean to active or disable the forfeit feature.
+  static const featureForfeitEnable = 'feature_forfeit_enable';
 }

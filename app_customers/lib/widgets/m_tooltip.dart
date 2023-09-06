@@ -62,7 +62,7 @@ class MTooltip extends StatelessWidget {
                   height: 20,
                   width: 20,
                   child: CircleAvatar(
-                    backgroundColor: AppColors.darkBlack,
+                    backgroundColor: AppColors.darkGray,
                     child: Icon(
                       Icons.close,
                       color: AppColors.white,

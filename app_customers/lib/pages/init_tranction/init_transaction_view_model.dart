@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:clock/clock.dart';
 import 'package:get/get.dart';
 import 'package:trans_all_common_models/models.dart';
 
+import '../../data/repository/forfeitRepository.dart';
 import '../../data/repository/tranfersRepository.dart';
-import '../../util/request_reponse.dart';
+import '../../util/request_response.dart';
 
 enum LoadingState {
   loading,
@@ -17,6 +19,9 @@ enum LoadingState {
 /// The InitTransaction view model.
 class InitTransactionViewModel {
   final TransferRepository _transferRepository;
+
+  /// The current forfeit to transfers.
+  Forfeit? forfeit;
 
   /// Returns false if the request was successful.
   Rx<bool> internetError = Rx<bool>(false);
@@ -54,13 +59,31 @@ class InitTransactionViewModel {
     required this.featureReference,
     required this.receiverOperator,
     required TransferRepository transferRepository,
+    required ForfeitRepository forfeitRepository,
     String? existedTransactionId,
-  }) : _transferRepository = transferRepository {
+    String? forfeitId,
+  })  : _transferRepository = transferRepository,
+        forfeit = getCurrentForfeit(
+          forfeitId,
+          forfeitRepository,
+        ) {
     if (existedTransactionId != null) {
       retrieveTransaction(existedTransactionId);
     } else {
       init();
     }
+  }
+
+  /// Retrieves the current forfeit.
+  static Forfeit? getCurrentForfeit(
+    String? forfeitId,
+    ForfeitRepository forfeitRepository,
+  ) {
+    if (forfeitId == null || forfeitId.isEmpty) {
+      return null;
+    }
+
+    return forfeitRepository.getForfeitById(forfeitId);
   }
 
   /// Retrieves transaction.
@@ -107,7 +130,7 @@ class InitTransactionViewModel {
       TransferInfo.keyBuyerGateway: buyerGatewayId,
       TransferInfo.keyBuyerPhoneNumber: buyerPhoneNumber,
       TransferInfo.keyId: transactionId.value,
-      TransferInfo.keyCreatedAt: DateTime.now().toString(),
+      TransferInfo.keyCreatedAt: clock.now().toString(),
       TransferInfo.keyFeature: featureReference,
       TransferInfo.keyReason: null,
       TransferInfo.keyReceiverOperator: receiverOperator,

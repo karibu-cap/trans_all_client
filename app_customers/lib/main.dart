@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
@@ -44,19 +45,21 @@ class MyApp extends StatelessWidget {
   final AppInternationalization _appInternationalization =
       AppInternationalization(Get.deviceLocale ?? Locale('en'));
 
-  void _initGetProviders() {
-    UserContactConfig.init();
-    Get.lazyPut(() => _appInternationalization);
-    Get.lazyPut(() => TransferRepository(HiveService(HiveServiceType.hive)));
-    Get.lazyPut(() => ContactRepository(HiveService(HiveServiceType.hive)));
-    Get.lazyPut(() => ForfeitRepository(HiveService(HiveServiceType.hive)));
-
-    return;
-  }
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final hiveService = HiveService(HiveServiceType.hive);
+
+    void _initGetProviders() {
+      UserContactConfig.init();
+      Get.lazyPut(() => _appInternationalization);
+      Get.lazyPut(() => TransferRepository(hiveService));
+      Get.lazyPut(() => ContactRepository(hiveService));
+      Get.lazyPut(() => ForfeitRepository(hiveService));
+
+      return;
+    }
+
     _initGetProviders();
     _streamPendingTransaction();
 
@@ -91,7 +94,7 @@ class _BuildApp extends StatelessWidget {
             preferredSize: Size.fromHeight(50),
             child: AppBar(
               title: Text(localization.transAll),
-              backgroundColor: AppColors.darkBlack,
+              backgroundColor: AppColors.darkGray,
             ),
           ),
           body: child,
@@ -129,7 +132,7 @@ void _streamPendingTransaction() {
         );
 
         /// Set to failed if the transaction status is pending since 1 week.
-        final DateTime now = DateTime.now();
+        final DateTime now = clock.now();
         final DateTime oneWeekAgo = now.subtract(Duration(days: 7));
         if (transaction.createdAt.isBefore(oneWeekAgo)) {
           _logger.info(

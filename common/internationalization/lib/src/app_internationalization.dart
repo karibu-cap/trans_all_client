@@ -55,7 +55,7 @@ class AppInternationalization extends Translations {
           'reproduce': 'Reproduce',
           'errorEmptyNumberField': 'Please enter a number',
           'errorEmptyAmountField': 'Please enter an amount',
-          'errorSelectedPaymentMode': 'Please select a payment methode',
+          'errorSelectedPaymentMode': 'Please select a payment method',
           'greaterThan': 'greater than',
           'lessThan': 'less than',
           'number': 'number',
@@ -64,7 +64,8 @@ class AppInternationalization extends Translations {
           'unsupportedPaymentMethod': 'Unsupported payment method',
           'invalidNumber': 'Invalid number',
           'transferOf': 'Transfer of @amountToPay',
-          'initializationOfTransfer': 'Please wait. We make your transfer.',
+          'initializationOfTransfer':
+              'Please be patient while we conduct your transfer.',
           'appName': 'TransAll',
           'welcome':
               'Gain efficiency and peace of mind with our transfer management solution.',
@@ -77,19 +78,18 @@ class AppInternationalization extends Translations {
           'paymentValidationFailure': 'Payment validation failure.',
           'or': ' or ',
           'getStart': 'Get Started',
-          'initTransferMessage': 'We make your transfer.',
           'failTransferMessage':
-              'Please wait a few moments, we will restart your transfer.',
+              'Please be patient while we restart your transfer.',
           'emptyPaymentGateway': 'No payment method available.',
           'emptyTransfer': 'No transfer operator available.',
-          'receiverNumber': 'Receive Number',
+          'receiverNumber': 'Receiver Number',
           'availablePayment': 'Payment method(s)',
           'iniCreditTransfer': 'Credit transfer initiated',
           'waitingPaymentValidation_1': 'Your transaction has been initiated.',
           'waitingPaymentValidation_2':
               'Once you\'ve received the payment message, enter the @code to finalize the payment.',
-          'transactionId': 'Transaction Id',
-          'noInternetConnection': 'No access to the Internet.',
+          'transactionId': 'Transaction ID',
+          'noInternetConnection': 'No connection.',
           'initPayment': 'Payment initiation',
           'invalidGatewayNumber': 'Invalid @gateway number.',
           'availableOperator': 'Available operator(s)',
@@ -139,7 +139,7 @@ class AppInternationalization extends Translations {
               'Please connect to the Internet before continuing.',
           'airtimeHistory': 'History',
           'chooseNumberToSend':
-              'If yes, choose the number who will receive the sms',
+              'If yes, choose the number that will receive the sms',
           'pendingTransaction': 'Pending transfers',
           'numberSaveSuccessful': 'Number saved successfully.',
           'invalidAmount': 'Invalid amount',
@@ -155,8 +155,36 @@ class AppInternationalization extends Translations {
           'yesterday': 'Yesterday',
           'sentRequestBySmsTitle': 'Do you want to send your request by sms?',
           'TransAll': 'TransAll',
+          'connectionRestore': 'Connection restored',
+          'forfeit': 'Forfeit',
+          'day': 'day',
+          'month': 'month',
+          'week': 'week',
+          'noForfeitFound': 'No forfeit found',
+          'forfeitSelected': 'Forfeit Selected',
+          'call': 'call',
+          'sms': 'sms',
+          'all': 'All',
+          'data': 'data',
+          'cancel': 'Cancel',
+          'shareTransAllLinkMessage': 'Hello 👋,'
+              'I use Transall to buy or renew data bundle. It\'s fast, secure and user-friendly '
+              'do as I do by following this link to download 👉 ',
         },
         'fr': {
+          'shareTransAllLinkMessage': 'Salut 👋,'
+              'J\'utilise Transall pour acheter ou renouveler mes forfait et données internet. C\'est rapide, sûr et facile à utiliser '
+              'fait comme moi en suivant ce lien pour télécharger 👉 ',
+          'call': 'appel',
+          'cancel': 'Annuler',
+          'all': 'Tout',
+          'sms': 'sms',
+          'data': 'internet',
+          'forfeit': 'Forfait',
+          'week': 'semaine',
+          'month': 'mois',
+          'noForfeitFound': 'Aucun forfait trouvé',
+          'connectionRestore': 'De nouveau connecté',
           'iniCreditTransfer': 'Transfert de crédit initié',
           'sentRequestBySmsTitle': 'Voulez vous envoyer votre demande par sms?',
           'primaryTitle': 'Flutter Page Principal Demo',
@@ -196,7 +224,7 @@ class AppInternationalization extends Translations {
           'invalidNumber': 'Numéro invalid',
           'transferOf': 'Transfert de @amountToPay',
           'initializationOfTransfer':
-              'Veuillez patienter. Nous effectuons votre transfert.',
+              'Veuillez patienter, Nous éffectuons votre transfert.',
           'appName': 'TransAll',
           'welcome':
               'Gagnez en efficacité et en tranquillité d\'esprit grâce à notre solution de gestion des transferts.',
@@ -210,7 +238,6 @@ class AppInternationalization extends Translations {
           'paymentValidationFailure': 'Échec de la validation du paiement.',
           'or': ' ou ',
           'getStart': 'Démarrer',
-          'initTransferMessage': 'Nous effectuons votre transfert.',
           'failTransferMessage':
               'Veuillez patienter quelques instants, nous allons relancer votre transfert.',
           'emptyPaymentGateway': 'Aucune méthode de paiement disponible.',
@@ -222,7 +249,7 @@ class AppInternationalization extends Translations {
           'waitingPaymentValidation_2':
               'Une fois que vous avez reçu le message de paiement, saisissez le @code pour finaliser le paiement.',
           'transactionId': 'Transaction Id',
-          'noInternetConnection': 'Pas d\'accès à l\'internet.',
+          'noInternetConnection': 'Aucune connexion',
           'invalidGatewayNumber': 'Numéro @gateway non valide.',
           'availableOperator': 'Opérateur(s) Disponible(s)',
           'prev': 'Précédent',
@@ -288,6 +315,8 @@ class AppInternationalization extends Translations {
               "Confirmez-vous l'ajout de @number comme numéro de paiement par défaut ?",
           'contactRefreshed': 'Contact mis à jour',
           'invalidAmount': 'Montant non valide',
+          'day': 'jour',
+          'forfeitSelected': 'Forfait Selectionné',
           'selectDefaultBuyerContactMessage':
               'Sélectionnez le numéro du payeur parmi les numéros de paiement enregistrés',
           'TransAll': 'TransAll',
@@ -309,10 +338,101 @@ class AppInternationalization extends Translations {
     return value.tr;
   }
 
+  /// Returns the localized value of all.
+  String get all {
+    return _stringOfLocalizedValue(
+      'all',
+    );
+  }
+
+  /// Returns the localized value of cancel.
+  String get cancel {
+    return _stringOfLocalizedValue(
+      'cancel',
+    );
+  }
+
+  /// Returns the localized value of shareTransAllLinkMessage.
+  String get shareTransAllLinkMessage {
+    return _stringOfLocalizedValue(
+      'shareTransAllLinkMessage',
+    );
+  }
+
+  /// Returns the localized value of call.
+  String get call {
+    return _stringOfLocalizedValue(
+      'call',
+    );
+  }
+
+  /// Returns the localized value of data.
+  String get data {
+    return _stringOfLocalizedValue(
+      'data',
+    );
+  }
+
+  /// Returns the localized value of sms.
+  String get sms {
+    return _stringOfLocalizedValue(
+      'sms',
+    );
+  }
+
+  /// Returns the localized value of month.
+  String get month {
+    return _stringOfLocalizedValue(
+      'month',
+    );
+  }
+
+  /// Returns the localized value of week.
+  String get week {
+    return _stringOfLocalizedValue(
+      'week',
+    );
+  }
+
+  /// Returns the localized value of day.
+  String get day {
+    return _stringOfLocalizedValue(
+      'day',
+    );
+  }
+
+  /// Returns the localized value of forfeitSelected.
+  String get forfeitSelected {
+    return _stringOfLocalizedValue(
+      'forfeitSelected',
+    );
+  }
+
+  /// Returns the localized value of forfeit.
+  String get forfeit {
+    return _stringOfLocalizedValue(
+      'forfeit',
+    );
+  }
+
+  /// Returns the localized value of noForfeitFound.
+  String get noForfeitFound {
+    return _stringOfLocalizedValue(
+      'noForfeitFound',
+    );
+  }
+
   /// Returns the localized value of contactRefreshed.
   String get contactRefreshed {
     return _stringOfLocalizedValue(
       'contactRefreshed',
+    );
+  }
+
+  /// Returns the localized value of connectionRestore.
+  String get connectionRestore {
+    return _stringOfLocalizedValue(
+      'connectionRestore',
     );
   }
 
@@ -740,13 +860,6 @@ class AppInternationalization extends Translations {
   String get appName {
     return _stringOfLocalizedValue(
       'appName',
-    );
-  }
-
-  /// Returns the localized value of initTransferMessage.
-  String get initTransferMessage {
-    return _stringOfLocalizedValue(
-      'initTransferMessage',
     );
   }
 

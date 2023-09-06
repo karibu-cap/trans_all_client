@@ -88,7 +88,7 @@ class SimpleTextField extends StatelessWidget {
               controller: textController,
               style: TextStyle(color: AppColors.black),
               textAlign: TextAlign.center,
-              cursorColor: AppColors.darkBlack,
+              cursorColor: AppColors.darkGray,
               decoration: InputDecoration(
                 filled: true,
                 fillColor: AppColors.gray.withOpacity(0.07),

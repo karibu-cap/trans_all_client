@@ -6,18 +6,21 @@ Map<String, dynamic> _remoteConfigDefaultsDev = {
   RemoteConfigKeys.userCanRequestAirtimeBySms: true,
   RemoteConfigKeys.orangeNumberForSmsTransaction: '657569424',
   RemoteConfigKeys.mtnNumberForSmsTransaction: '676714797',
+  RemoteConfigKeys.featureForfeitEnable: true,
 };
 
 Map<String, dynamic> _remoteConfigDefaultsStaging = {
   RemoteConfigKeys.userCanRequestAirtimeBySms: true,
   RemoteConfigKeys.orangeNumberForSmsTransaction: '657569424',
   RemoteConfigKeys.mtnNumberForSmsTransaction: '676714797',
+  RemoteConfigKeys.featureForfeitEnable: true,
 };
 
 Map<String, dynamic> _remoteConfigDefaultsProd = {
   RemoteConfigKeys.userCanRequestAirtimeBySms: false,
   RemoteConfigKeys.orangeNumberForSmsTransaction: '657569424',
   RemoteConfigKeys.mtnNumberForSmsTransaction: '676714797',
+  RemoteConfigKeys.featureForfeitEnable: false,
 };
 
 /// Returns the default remote config for each environment.

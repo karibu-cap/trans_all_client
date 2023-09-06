@@ -21,13 +21,13 @@ dependencies:
   karibu_capital_core_internationalization:
     git:
       url: https://github.com/karibu-cap/flutter_core.git
-      ref: 272ae8e
+      ref: main
       path: internationalization
-    
+
   karibu_capital_core_static_analysis:
     git:
       url: https://github.com/karibu-cap/flutter_core.git
-      ref: 272ae8e
+      ref: main
       path: static_analysis
 
 dev_dependencies:
