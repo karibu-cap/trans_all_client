@@ -39,7 +39,7 @@ class FakeHiveService implements HiveService {
     return _database[transactionId];
   }
 
-  /// Delete local credit transaction with id.
+  /// Deletes local credit transaction with id.
   @override
   Future<void> deleteLocalTransaction(
     String transactionId,
