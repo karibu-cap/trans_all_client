@@ -57,13 +57,6 @@ class HistoryViewController extends GetxController {
     return null;
   }
 
-  /// Returns the duration.
-  int getDuration(DateTime preDate) {
-    final Duration duration = DateTime.now().difference(preDate);
-
-    return duration.inDays;
-  }
-
   /// Gets the user name.
   String? getUserName(String phoneNumber) {
     if (listOfContact.isEmpty) {

@@ -55,7 +55,7 @@ class AppInternationalization extends Translations {
           'reproduce': 'Reproduce',
           'errorEmptyNumberField': 'Please enter a number',
           'errorEmptyAmountField': 'Please enter an amount',
-          'errorSelectedPaymentMode': 'Please select a payment methode',
+          'errorSelectedPaymentMode': 'Please select a payment method',
           'greaterThan': 'greater than',
           'lessThan': 'less than',
           'number': 'number',
@@ -64,7 +64,8 @@ class AppInternationalization extends Translations {
           'unsupportedPaymentMethod': 'Unsupported payment method',
           'invalidNumber': 'Invalid number',
           'transferOf': 'Transfer of @amountToPay',
-          'initializationOfTransfer': 'Please wait. We make your transfer.',
+          'initializationOfTransfer':
+              'Please be patient while we conduct your transfer.',
           'appName': 'TransAll',
           'welcome':
               'Gain efficiency and peace of mind with our transfer management solution.',
@@ -77,18 +78,17 @@ class AppInternationalization extends Translations {
           'paymentValidationFailure': 'Payment validation failure.',
           'or': ' or ',
           'getStart': 'Get Started',
-          'initTransferMessage': 'We make your transfer.',
           'failTransferMessage':
-              'Please wait a few moments, we will restart your transfer.',
+              'Please be patient while we restart your transfer.',
           'emptyPaymentGateway': 'No payment method available.',
           'emptyTransfer': 'No transfer operator available.',
-          'receiverNumber': 'Receive Number',
+          'receiverNumber': 'Receiver Number',
           'availablePayment': 'Payment method(s)',
           'iniCreditTransfer': 'Credit transfer initiated',
           'waitingPaymentValidation_1': 'Your transaction has been initiated.',
           'waitingPaymentValidation_2':
               'Once you\'ve received the payment message, enter the @code to finalize the payment.',
-          'transactionId': 'Transaction Id',
+          'transactionId': 'Transaction ID',
           'noInternetConnection': 'No connection.',
           'initPayment': 'Payment initiation',
           'invalidGatewayNumber': 'Invalid @gateway number.',
@@ -139,7 +139,7 @@ class AppInternationalization extends Translations {
               'Please connect to the Internet before continuing.',
           'airtimeHistory': 'History',
           'chooseNumberToSend':
-              'If yes, choose the number who will receive the sms',
+              'If yes, choose the number that will receive the sms',
           'pendingTransaction': 'Pending transfers',
           'numberSaveSuccessful': 'Number saved successfully.',
           'invalidAmount': 'Invalid amount',
@@ -165,6 +165,7 @@ class AppInternationalization extends Translations {
           'sms': 'sms',
           'all': 'All',
           'data': 'data',
+          'cancel': 'Cancel',
           'shareTransAllLinkMessage': 'Hello 👋,'
               'I use Transall to buy or renew data bundle. It\'s fast, secure and user-friendly '
               'do as I do by following this link to download 👉 ',
@@ -174,6 +175,7 @@ class AppInternationalization extends Translations {
               'J\'utilise Transall pour acheter ou renouveler mes forfait et données internet. C\'est rapide, sûr et facile à utiliser '
               'fait comme moi en suivant ce lien pour télécharger 👉 ',
           'call': 'appel',
+          'cancel': 'Annuler',
           'all': 'Tout',
           'sms': 'sms',
           'data': 'internet',
@@ -221,7 +223,7 @@ class AppInternationalization extends Translations {
           'invalidNumber': 'Numéro invalid',
           'transferOf': 'Transfert de @amountToPay',
           'initializationOfTransfer':
-              'Veuillez patienter. Nous effectuons votre transfert.',
+              'Veuillez patienter, Nous éffectuons votre transfert.',
           'appName': 'TransAll',
           'welcome':
               'Gagnez en efficacité et en tranquillité d\'esprit grâce à notre solution de gestion des transferts.',
@@ -235,7 +237,6 @@ class AppInternationalization extends Translations {
           'paymentValidationFailure': 'Échec de la validation du paiement.',
           'or': ' ou ',
           'getStart': 'Démarrer',
-          'initTransferMessage': 'Nous effectuons votre transfert.',
           'failTransferMessage':
               'Veuillez patienter quelques instants, nous allons relancer votre transfert.',
           'emptyPaymentGateway': 'Aucune méthode de paiement disponible.',
@@ -339,6 +340,13 @@ class AppInternationalization extends Translations {
   String get all {
     return _stringOfLocalizedValue(
       'all',
+    );
+  }
+
+  /// Returns the localized value of cancel.
+  String get cancel {
+    return _stringOfLocalizedValue(
+      'cancel',
     );
   }
 
@@ -850,13 +858,6 @@ class AppInternationalization extends Translations {
   String get appName {
     return _stringOfLocalizedValue(
       'appName',
-    );
-  }
-
-  /// Returns the localized value of initTransferMessage.
-  String get initTransferMessage {
-    return _stringOfLocalizedValue(
-      'initTransferMessage',
     );
   }
 

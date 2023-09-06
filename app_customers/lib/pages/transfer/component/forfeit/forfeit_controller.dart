@@ -37,7 +37,12 @@ class ForfeitController extends ChangeNotifier {
   Completer<void> get initializeDone => _model.initializeDone;
 
   /// Constructs a new [ForfeitController].
-  ForfeitController({required ForfeitViewModel model}) : _model = model;
+  ForfeitController({
+    required ForfeitViewModel model,
+    required AppInternationalization localization,
+  }) : _model = model {
+    selectedOperator.add(localization.all);
+  }
 
   /// Returns the operator name.
   String? getOperatorName(String operationTransferType) {

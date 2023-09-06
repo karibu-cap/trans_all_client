@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:rxdart/rxdart.dart';
 import 'package:trans_all_common_models/models.dart';
 
-import '../../data/repository/forfeitRepository.dart';
+import '../../../../data/repository/forfeitRepository.dart';
 
 /// The forfeit view model.
 class ForfeitViewModel {

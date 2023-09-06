@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
@@ -17,6 +18,12 @@ class TransfersController extends GetxController {
   final AppInternationalization _localization;
   final CreditTransactionParams? _localCreditTransaction;
 
+  /// The page controller.
+  PageController pageController = PageController(initialPage: 0);
+
+  /// The total pageCount.
+  final int pageCount = 2;
+
   /// The animation controller.
   Rx<AnimationController> animateController =
       Rx<AnimationController>(AnimationController(
@@ -31,7 +38,7 @@ class TransfersController extends GetxController {
   TextEditingController paymentTextController;
 
   /// The current forfeit.
-  Forfeit? forfeit;
+  Rx<Forfeit?> forfeit = Rx<Forfeit?>(null);
 
   /// The receiver number text controller.
   TextEditingController receiverTextController;
@@ -63,6 +70,9 @@ class TransfersController extends GetxController {
 
   /// The amount error message.
   Rx<String> amountErrorMessage = Rx<String>('');
+
+  /// The active page index.
+  Rx<int> activePageIndex = Rx<int>(0);
 
   /// Stream the transfer.
   BehaviorSubject<List<TransferInfo>> get streamPendingTransferInfo =>
@@ -114,16 +124,35 @@ class TransfersController extends GetxController {
         ),
         _localization = localization,
         _transfersViewModel = transfersViewModel,
-        _localCreditTransaction = localCreditTransaction,
-        forfeit = getCurrentForfeit(
-          forfeitId ?? localCreditTransaction?.forfeitId,
-          forfeitRepository,
-        );
+        _localCreditTransaction = localCreditTransaction {
+    activePageIndex.value = forfeitId == null ? 0 : 1;
+    pageController = PageController(initialPage: forfeitId == null ? 0 : 1);
+  }
 
   @override
   void onClose() {
     super.onClose();
     cleanForm();
+  }
+
+  /// Set the active page on the screen.
+  void setActivePage(int index) {
+    if (index != 0 && index != 1) {
+      return;
+    }
+    activePageIndex.value = index;
+    if (pageController.hasClients && pageCount > 1) {
+      pageController.animateToPage(
+        index,
+        duration: Duration(milliseconds: 150),
+        curve: Curves.linear,
+      );
+    }
+  }
+
+  /// Set the current forfeit.
+  void setActiveForfeit(Forfeit? currentForfeit) {
+    forfeit.value = currentForfeit;
   }
 
   /// Checks if the payer number is valid.
@@ -239,9 +268,9 @@ class TransfersController extends GetxController {
       return;
     }
 
-    if (forfeit != null) {
+    if (forfeit.value != null) {
       final validOperator = supportedOperation.firstWhere(
-        (element) => element.reference.key == forfeit?.reference.key,
+        (element) => element.reference.key == forfeit.value?.reference.key,
       );
       if (RegExp(validOperator.tolerantRegex).hasMatch(number)) {
         currentOperation.value = validOperator;
@@ -426,7 +455,7 @@ class TransfersController extends GetxController {
             .replaceAll('+', '')
             .replaceAll('237', '')
             .replaceAll(' ', '')));
-    final contactId = DateTime.now().hashCode.toString();
+    final contactId = clock.now().hashCode.toString();
     if (contact == null) {
       return _transfersViewModel.addBuyerContact(
         contactId,
@@ -468,18 +497,6 @@ class TransfersController extends GetxController {
 
   /// Retry the transfer.
   void retryTransfer() => _transfersViewModel.retryTransfer();
-
-  /// Retrieves the current forfeit.
-  static Forfeit? getCurrentForfeit(
-    String? forfeitId,
-    ForfeitRepository forfeitRepository,
-  ) {
-    if (forfeitId == null || forfeitId.isEmpty) {
-      return null;
-    }
-
-    return forfeitRepository.getForfeitById(forfeitId);
-  }
 }
 
 class _MyTickerProvider extends TickerProvider {
