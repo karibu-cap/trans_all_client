@@ -4,10 +4,12 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:clock/clock.dart';
+import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:trans_all_common_internationalization/internationalization.dart';
 import 'package:trans_all_common_models/models.dart';
 
 import '../../config/environement_conf.dart';
@@ -246,9 +248,11 @@ class HiveServiceImpl implements HiveService {
   @override
   Future<ListPaymentGatewaysResponse> listPaymentGateways() async {
     final packageInfo = await PackageInfo.fromPlatform();
+    final localization = Get.find<AppInternationalization>();
 
     final headers = {
       PreferencesKeys.clientVersion: packageInfo.version,
+      PreferencesKeys.acceptLanguage: localization.locale.languageCode,
     };
     final List<PaymentGateways> payments = [];
     final url = Uri.parse(
@@ -284,9 +288,10 @@ class HiveServiceImpl implements HiveService {
   Future<ListOperationGatewaysResponse> listOperationGateways() async {
     final List<OperationGateways> operations = [];
     final packageInfo = await PackageInfo.fromPlatform();
-
+    final localization = Get.find<AppInternationalization>();
     final headers = {
       PreferencesKeys.clientVersion: packageInfo.version,
+      PreferencesKeys.acceptLanguage: localization.locale.languageCode,
     };
     final url = Uri.parse(
       '$_appBaseUrl/api/transfer/providers/all',
@@ -327,10 +332,12 @@ class HiveServiceImpl implements HiveService {
     required String receiverOperator,
   }) async {
     final packageInfo = await PackageInfo.fromPlatform();
+    final localization = Get.find<AppInternationalization>();
 
     final headers = {
       PreferencesKeys.contentType: 'application/json',
       PreferencesKeys.clientVersion: packageInfo.version,
+      PreferencesKeys.acceptLanguage: localization.locale.languageCode,
     };
     final body = jsonEncode({
       'buyerGatewayId': buyerGatewayId,
@@ -367,9 +374,11 @@ class HiveServiceImpl implements HiveService {
     required String transactionId,
   }) async {
     final packageInfo = await PackageInfo.fromPlatform();
+    final localization = Get.find<AppInternationalization>();
 
     final headers = {
       PreferencesKeys.clientVersion: packageInfo.version,
+      PreferencesKeys.acceptLanguage: localization.locale.languageCode,
     };
     final url = Uri.parse(
       '$_appBaseUrl/api/transfer/$transactionId',
@@ -444,9 +453,11 @@ class HiveServiceImpl implements HiveService {
   Future<List<Forfeit>?> getAllForfeit() async {
     final List<Forfeit> forfeits = [];
     final packageInfo = await PackageInfo.fromPlatform();
+    final localization = Get.find<AppInternationalization>();
 
     final headers = {
       PreferencesKeys.clientVersion: packageInfo.version,
+      PreferencesKeys.acceptLanguage: localization.locale.languageCode,
     };
 
     /// TODO: updates the url once the backend is ready.
