@@ -138,7 +138,8 @@ class AppInternationalization extends Translations {
           'signalOnInternetAbsent':
               'Please connect to the Internet before continuing.',
           'airtimeHistory': 'History',
-          'chooseNumberToSend': 'If yes, choose the number who will receive the sms',
+          'chooseNumberToSend':
+              'If yes, choose the number who will receive the sms',
           'pendingTransaction': 'Pending transfers',
           'numberSaveSuccessful': 'Number saved successfully.',
           'invalidAmount': 'Invalid amount',
@@ -153,6 +154,7 @@ class AppInternationalization extends Translations {
           'pendingTransfer': 'Pending transfers',
           'yesterday': 'Yesterday',
           'sentRequestBySmsTitle': 'Do you want to send your request by sms?',
+          'TransAll': 'TransAll',
         },
         'fr': {
           'iniCreditTransfer': 'Transfert de crédit initié',
@@ -288,6 +290,7 @@ class AppInternationalization extends Translations {
           'invalidAmount': 'Montant non valide',
           'selectDefaultBuyerContactMessage':
               'Sélectionnez le numéro du payeur parmi les numéros de paiement enregistrés',
+          'TransAll': 'TransAll',
         },
       };
 
@@ -315,7 +318,7 @@ class AppInternationalization extends Translations {
 
   /// Returns the localized value of refresh.
   String get refresh {
-      return _stringOfLocalizedValue(
+    return _stringOfLocalizedValue(
       'refresh',
     );
   }
@@ -1108,6 +1111,13 @@ class AppInternationalization extends Translations {
   String get share {
     return _stringOfLocalizedValue(
       'share',
+    );
+  }
+
+  /// cle TransAll.
+  String get transAll {
+    return _stringOfLocalizedValue(
+      'TransAll',
     );
   }
 
