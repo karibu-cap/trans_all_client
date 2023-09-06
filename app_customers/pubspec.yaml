@@ -120,8 +120,6 @@ dependencies:
   # Platform: ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS, SERVER
   package_info_plus: 3.0.3
 
-  sms_mms: ^0.0.2+1
-
   # TransAll common internationalization dependencies.
   trans_all_common_internationalization:
     path: ../common/internationalization

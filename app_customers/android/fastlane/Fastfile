@@ -40,7 +40,7 @@ platform :android do
           android_artifact_type: 'AAB',
           android_artifact_path: '../build/app/outputs/bundle/release/app-release.aab',
           firebase_cli_path: "/usr/local/bin/firebase",
-          firebase_cli_token: ENV['TRANSTU_FIREBASE_CLI_TOKEN'],
+          firebase_cli_token: ENV['TRANSALL_FIREBASE_CLI_TOKEN'],
           app: ENV['TRANSTU_ANDROID_APP_ID']
         )
       else
@@ -49,7 +49,7 @@ platform :android do
           release_notes: release_notes,
           apk_path: "../build/app/outputs/flutter-apk/app-release.apk",
           firebase_cli_path: "/usr/local/bin/firebase",
-          firebase_cli_token: ENV['TRANSTU_FIREBASE_CLI_TOKEN'],
+          firebase_cli_token: ENV['TRANSALL_FIREBASE_CLI_TOKEN'],
           app: ENV['TRANSTU_ANDROID_APP_ID']
         )
       end

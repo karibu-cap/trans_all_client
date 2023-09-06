@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:clock/clock.dart';
+import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:trans_all_common_models/models.dart';
 
@@ -113,7 +115,7 @@ abstract class HiveService {
   });
 }
 
-/// Hive constructor.
+/// The HiveBoxEvent.
 class HiveBoxEvent extends BoxEvent {
   /// Hive box event constructor.
   HiveBoxEvent(super.key, super.value, super.deleted);
