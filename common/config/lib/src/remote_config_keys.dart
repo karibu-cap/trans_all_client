@@ -22,6 +22,6 @@ class RemoteConfigKeys {
   static const featureCustomerServiceEnabled =
       'feature_customer_service_enabled';
 
-  /// The customer service link.
+  /// The of customer service link.
   static const customerServiceLink = 'customer_service_link';
 }
