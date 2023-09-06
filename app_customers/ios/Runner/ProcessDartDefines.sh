@@ -35,4 +35,3 @@ printf "%s\n" "${define_items[@]}" >> ${SRCROOT}/Flutter/DartEnvironmentVariable
 
 # Copy the appropriate GoogleService-Info plist to the Runner directory.
 cp ${SRCROOT}/Runner/Services/${TRANSTU_APP_ENVIRONMENT}/GoogleService-Info.plist ${SRCROOT}/Runner/GoogleService-Info.plist
- 
