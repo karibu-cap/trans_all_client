@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:karibu_capital_core_remote_config/remote_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:trans_all_common_config/config.dart';
 import 'package:trans_all_common_internationalization/internationalization.dart';
 
 import '../themes/app_colors.dart';
@@ -9,6 +11,7 @@ import '../util/preferences_keys.dart';
 import '../util/user_contact.dart';
 import '../widgets/alert_box.dart';
 import '../widgets/app_release_notification/in_app_update.dart';
+import '../widgets/contact_service_button/contact_service_view.dart';
 
 /// Wrapper for app pages.
 class AppPage extends StatelessWidget {
@@ -32,6 +35,9 @@ class AppPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final intl = Get.find<AppInternationalization>();
+    final bool featureEnabledCustomerFloatingButton = RemoteConfig().getBool(
+      RemoteConfigKeys.featureCustomerServiceEnabled,
+    );
     if (requestContactPermission) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
         final pref = await SharedPreferences.getInstance();
@@ -99,7 +105,14 @@ class AppPage extends StatelessWidget {
       });
     }
 
-    return InAppUpdateCheck(child: Center(child: child));
+    return InAppUpdateCheck(
+      child: Stack(
+        children: [
+          Center(child: child),
+          if (featureEnabledCustomerFloatingButton) ContactButtonService(),
+        ],
+      ),
+    );
   }
 }
 

@@ -120,6 +120,12 @@ dependencies:
   # Platform: ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS, SERVER
   package_info_plus: 3.0.3
 
+  # The auto size text package.
+  auto_size_text: ^3.0.0
+
+  # The tooltip package.
+  just_the_tooltip: ^0.0.12
+
   # TransAll common internationalization dependencies.
   trans_all_common_internationalization:
     path: ../common/internationalization
@@ -150,7 +156,6 @@ dependencies:
       url: https://github.com/karibu-cap/flutter_core.git
       ref: main
       path: static_analysis
-  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:

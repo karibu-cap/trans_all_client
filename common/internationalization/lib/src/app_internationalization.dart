@@ -2,7 +2,6 @@
 
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:karibu_capital_core_internationalization/internationalization.dart';
 
 /// AppInternalization defines all the 'local' strings displayed to
 /// the user.
@@ -10,10 +9,6 @@ import 'package:karibu_capital_core_internationalization/internationalization.da
 /// e.g: error messages, page titles.
 class AppInternationalization extends Translations {
   final Locale _locale;
-
-  static final Map<String, String> _placeholder = {
-    LocalizedString.defaultLanguage: LocalizedString.placeholder,
-  };
 
   /// The locales supported by the application.
   static const List<Locale> supportedLocales = [
@@ -174,12 +169,16 @@ class AppInternationalization extends Translations {
               'The buyer account @number is unsuficient for the current operation.',
           'cancel': 'Cancel',
           'transactionCancelled': 'Transaction cancelled',
-          'shareTransAllLinkMessage': 'Hello 👋,'
+          'no': 'No',
+          'chatHelperMessage': 'Hello, Need help?',
+          'chatServiceMessage':
+              'You will be redirected to our customer service in order to get some assistance.',
+          'shareTransAllLinkMessage': 'Hello,'
               'I use Transall to buy or renew data bundle. It\'s fast, secure and user-friendly '
-              'do as I do by following this link to download 👉 ',
+              'do as I do by following this link to download ',
           'userNumberNotFound': 'The buyer phone number @number is not found.',
           'clientWithMultiplePendingTransfer':
-              ' @receiverNumber already have ongoing transfer request. Please wait until it\'s finished 🙏.',
+              ' @receiverNumber already have ongoing transfer request. Please wait until it\'s finished.',
           'troubleWithProvider':
               'Unable to initialize the payment. Please try another payment method.',
           'unsupportedProvider':
@@ -195,14 +194,18 @@ class AppInternationalization extends Translations {
           'troubleWithProvider':
               'Impossible d\'initialiser le paiement. Veuillez essayer un autre mode de paiement.',
           'clientWithMultiplePendingTransfer':
-              '@receiverNumber a déjà un transfert en cours. Veuillez attendre qu\'il soit fini 🙏.',
+              '@receiverNumber a déjà un transfert en cours. Veuillez attendre qu\'il soit fini.',
           'userNumberNotFound': 'Le numero du payer @number est introuvable.',
-          'shareTransAllLinkMessage': 'Salut 👋,'
+          'shareTransAllLinkMessage': 'Salut,'
               'J\'utilise Transall pour acheter ou renouveler mes forfait et données internet. C\'est rapide, sûr et facile à utiliser '
-              'fait comme moi en suivant ce lien pour télécharger 👉 ',
+              'fait comme moi en suivant ce lien pour télécharger ',
           'insufficientFund':
               'Le compte de @number est insuffisant pour effectuer cette opération.',
           'transactionCancelled': 'La transaction a été annulée.',
+          'chatHelperMessage': 'Bonjour, Besoin d\'aide?',
+          'chatServiceMessage':
+              'Vous serez redirigé vers le service client afin de recevoir de l\'aide.',
+          'no': 'Non',
           'call': 'appel',
           'cancel': 'Annuler',
           'all': 'Tout',
@@ -390,6 +393,13 @@ class AppInternationalization extends Translations {
     );
   }
 
+  /// Returns the localized value of no.
+  String get no {
+    return _stringOfLocalizedValue(
+      'no',
+    );
+  }
+
   /// Returns the localized value of all.
   String get all {
     return _stringOfLocalizedValue(
@@ -425,10 +435,24 @@ class AppInternationalization extends Translations {
     );
   }
 
+  /// Returns the localized value of chatServiceMessage.
+  String get chatServiceMessage {
+    return _stringOfLocalizedValue(
+      'chatServiceMessage',
+    );
+  }
+
   /// Returns the localized value of cancel.
   String get cancel {
     return _stringOfLocalizedValue(
       'cancel',
+    );
+  }
+
+  /// Returns the localized value of chatHelperMessage.
+  String get chatHelperMessage {
+    return _stringOfLocalizedValue(
+      'chatHelperMessage',
     );
   }
 
