@@ -6,14 +6,12 @@ import 'package:provider/provider.dart';
 import 'package:trans_all_common_internationalization/internationalization.dart';
 import 'package:trans_all_common_models/models.dart';
 
-import '../../data/repository/forfeitRepository.dart';
-import '../../routes/app_router.dart';
-import '../../routes/pages_routes.dart';
-import '../../themes/app_colors.dart';
-import '../../util/constant.dart';
-import '../../util/key_internationalization.dart';
-import '../../widgets/custom_scaffold.dart';
-import '../../widgets/oparator_icon.dart';
+import '../../../../data/repository/forfeitRepository.dart';
+import '../../../../themes/app_colors.dart';
+import '../../../../util/constant.dart';
+import '../../../../util/key_internationalization.dart';
+import '../../../../widgets/oparator_icon.dart';
+import '../../transfer_controller_view.dart';
 import 'forfeit_controller.dart';
 import 'forfeit_view_model.dart';
 
@@ -25,19 +23,19 @@ class ForfeitView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final forfeitRepository = Get.find<ForfeitRepository>();
-
+    final localization = Get.find<AppInternationalization>();
     final model = ForfeitViewModel(forfeitRepository);
 
     return ChangeNotifierProvider(
-      create: (_) => ForfeitController(model: model),
+      create: (_) => ForfeitController(
+        model: model,
+        localization: localization,
+      ),
       child: Builder(
         builder: (context) {
-          return CustomScaffold(
-            displayInternetMessage: false,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: _ForfeitBody(),
-            ),
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _ForfeitBody(),
           );
         },
       ),
@@ -68,7 +66,7 @@ class _ForfeitBody extends StatelessWidget {
           );
         }
         if (listOfForfeit.isEmpty) {
-          Center(
+          return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -170,11 +168,11 @@ class _OperatorView extends StatelessWidget {
                 return StreamBuilder<String>(
                   stream: controller.selectedOperator.stream,
                   builder: (context, snapshot) {
-                    if (snapshot.data == null ||
-                        snapshot.data == 'All' ||
-                        snapshot.data == 'Tout') {
-                      controller.selectedOperator.add(localization.all);
-                    }
+                    // if (snapshot.data == null ||
+                    //     snapshot.data == 'All' ||
+                    //     snapshot.data == 'Tout') {
+                    //   controller.selectedOperator.add(localization.all);
+                    // }
                     final isSelected = snapshot.data == operator;
 
                     return GestureDetector(
@@ -343,6 +341,7 @@ class _ForfeitFilterView extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Provider.of<ForfeitController>(context);
     final localization = Get.find<AppInternationalization>();
+    final transferController = Get.find<TransfersController>();
 
     return StreamBuilder(
       stream: controller.filterListOfForfeit.stream,
@@ -386,12 +385,10 @@ class _ForfeitFilterView extends StatelessWidget {
             final forfeit = listOfForfeit[index];
 
             return GestureDetector(
-              onTap: () => AppRouter.go(
-                context,
-                PagesRoutes.creditTransaction.create(CreditTransactionParams(
-                  forfeitId: forfeit.id,
-                )),
-              ),
+              onTap: () {
+                transferController.setActiveForfeit(forfeit);
+                transferController.setActivePage(0);
+              },
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20.0),
                 child: Row(

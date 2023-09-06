@@ -15,4 +15,7 @@ class PreferencesKeys {
 
   /// The content type of client version.
   static const String clientVersion = 'X-Client-Version';
+
+  /// The content type of Accept-Language.
+  static const String acceptLanguage = 'Accept-Language';
 }

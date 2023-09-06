@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../pages/dashboard/dashboard_view.dart';
-import '../pages/forfeit/forfeit_view.dart';
 import '../pages/historiques_transaction/history_view.dart';
 import '../pages/init_tranction/init_transaction.dart';
 import '../pages/init_tranction/init_transaction_controller.dart';
@@ -39,13 +38,6 @@ class _GoRouterRoutesProvider {
         path: PagesRoutes.welcome.pattern,
         builder: (context, state) => AppPage(
           child: WelcomeView(),
-        ),
-      ),
-      GoRoute(
-        path: PagesRoutes.forfeit.pattern,
-        parentNavigatorKey: _rootNavigatorKey,
-        builder: (context, state) => AppPage(
-          child: ForfeitView(),
         ),
       ),
       GoRoute(

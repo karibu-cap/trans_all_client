@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:trans_all_common_internationalization/internationalization.dart';
@@ -6,7 +7,7 @@ import 'package:trans_all_common_internationalization/internationalization.dart'
 String dateFormatted(DateTime dateTime) {
   final localization = Get.find<AppInternationalization>();
 
-  final DateTime now = DateTime.now();
+  final DateTime now = clock.now();
   final DateFormat formatter =
       DateFormat.yMMMd(localization.locale.languageCode);
   if (dateTime.year == now.year &&

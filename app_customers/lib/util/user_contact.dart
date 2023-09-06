@@ -1,3 +1,4 @@
+import 'package:clock/clock.dart';
 import 'package:contacts_service/contacts_service.dart' as contactService;
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -115,14 +116,14 @@ Future<List<Contact>> listOfContact(
   final List<Contact> listOfContact = [];
   for (var entry in setOfContact.entries) {
     final contact = Contact.fromJson({
-      Contact.keyId: DateTime.now().hashCode.toString(),
+      Contact.keyId: clock.now().hashCode.toString(),
       Contact.keyIsBuyerContact: false,
       Contact.keyName: entry.value,
       Contact.keyPhoneNumber: entry.key,
     });
     await contactRepository.createUserContact(
       contact,
-      contactId: DateTime.now().hashCode.toString(),
+      contactId: clock.now().hashCode.toString(),
     );
     listOfContact.add(contact);
   }

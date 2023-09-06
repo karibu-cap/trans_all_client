@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,10 +8,10 @@ import 'package:karibu_capital_core_remote_config/remote_config.dart';
 import 'package:karibu_capital_core_utils/utils.dart';
 import 'package:overlay_tooltip/overlay_tooltip.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sms_mms/sms_mms.dart';
 import 'package:trans_all_common_config/config.dart';
 import 'package:trans_all_common_internationalization/internationalization.dart';
 import 'package:trans_all_common_models/models.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../routes/app_router.dart';
 import '../../../routes/pages_routes.dart';
@@ -63,12 +65,18 @@ class FormTransfer extends StatelessWidget {
           final String message =
               'Send ${controller.amountToPayTextController.text} from ${controller.paymentTextController.text} to ${controller.receiverTextController.text}';
 
-          final List<String> recipients = [defaultReceiverSmsNumber.value];
+          final uri = Platform.isAndroid
+              ? 'sms:${defaultReceiverSmsNumber.value}?body=$message'
+              : Platform.isIOS
+                  ? 'sms:${defaultReceiverSmsNumber.value}&body=$message'
+                  : null;
 
-          await SmsMms.send(
-            recipients: recipients,
-            message: message,
-          );
+          if (uri != null) {
+            await launchUrl(
+              Uri.parse(uri),
+              mode: LaunchMode.externalApplication,
+            );
+          }
         },
         title: localization.noInternetConnection,
         content: ValueListenableBuilder(
@@ -109,7 +117,8 @@ class FormTransfer extends StatelessWidget {
       final isValidPayerNumber = controller.isValidPayerNumber();
       final isValidReceiverNumber = controller.isValidReceiverNumber();
       final forfeit = controller.forfeit;
-      final isValidAmount = forfeit == null ? controller.isValidAmount() : true;
+      final isValidAmount =
+          forfeit.value == null ? controller.isValidAmount() : true;
       if (!isValidPayerNumber ||
           !isValidReceiverNumber ||
           !isValidAmount ||
@@ -131,13 +140,13 @@ class FormTransfer extends StatelessWidget {
       final transactionParam = CreditTransactionParams(
         buyerPhoneNumber: controller.paymentTextController.text,
         receiverPhoneNumber: controller.receiverTextController.text,
-        amountInXaf: forfeit != null
-            ? forfeit.amountInXAF.toString()
+        amountInXaf: forfeit.value != null
+            ? forfeit.value?.amountInXAF.toString()
             : controller.amountToPayTextController.value.text,
         buyerGatewayId: paymentSelected.id.key,
         receiverOperator: currentOperation.operatorName,
         featureReference: currentOperation.reference.key,
-        forfeitId: forfeit?.id,
+        forfeitId: forfeit.value?.id,
       );
       AppRouter.push(
         context,
@@ -311,9 +320,9 @@ class FormTransfer extends StatelessWidget {
               ),
             ),
             SizedBox(height: 10),
-            if (controller.forfeit != null && featureForfeitEnabled)
+            if (featureForfeitEnabled && controller.forfeit.value != null)
               _ForfeitView(),
-            if (controller.forfeit == null)
+            if (controller.forfeit.value == null)
               SimpleTextField(
                 inputFormatters: [
                   FilteringTextInputFormatter.deny(RegExp(r'[^0-9]')),
@@ -457,7 +466,7 @@ class _ForfeitView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<TransfersController>();
-    final Forfeit? forfeit = controller.forfeit;
+    final Forfeit? forfeit = controller.forfeit.value;
     final localization = Get.find<AppInternationalization>();
 
     if (forfeit == null) {
@@ -524,12 +533,9 @@ class _ForfeitView extends StatelessWidget {
               AppColors.darkGray,
               AppColors.white,
             ),
-            onPressed: () => AppRouter.go(
-              context,
-              PagesRoutes.creditTransaction.pattern,
-            ),
+            onPressed: () => controller.setActiveForfeit(null),
             child: Text(
-              localization.cancelled,
+              localization.cancel,
               style: TextStyle(color: AppColors.white),
             ),
           ),
