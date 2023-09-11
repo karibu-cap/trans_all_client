@@ -19,7 +19,6 @@ import 'data/repository/contactRepository.dart';
 import 'data/repository/forfeitRepository.dart';
 import 'data/repository/tranfersRepository.dart';
 import 'routes/app_router.dart';
-import 'themes/app_colors.dart';
 import 'util/user_contact.dart';
 
 Future<void> main() async {
@@ -70,8 +69,6 @@ class MyApp extends StatelessWidget {
 class _BuildApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final localization = Get.find<AppInternationalization>();
-
     return GetMaterialApp.router(
       debugShowCheckedModeBanner: false,
       routeInformationProvider: AppRouter.getRouteInformationProvider(),
@@ -85,21 +82,9 @@ class _BuildApp extends StatelessWidget {
       ],
       supportedLocales: AppInternationalization.supportedLocales,
       title: AppEnvironment.appName,
-      translations: localization,
+      translations: AppInternationalization(Get.deviceLocale ?? Locale('en')),
       locale: Get.deviceLocale,
       fallbackLocale: Locale('en', ''),
-      builder: (context, child) {
-        return Scaffold(
-          appBar: PreferredSize(
-            preferredSize: Size.fromHeight(50),
-            child: AppBar(
-              title: Text(localization.transAll),
-              backgroundColor: AppColors.darkGray,
-            ),
-          ),
-          body: child,
-        );
-      },
     );
   }
 }
