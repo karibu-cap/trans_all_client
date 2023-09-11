@@ -1227,7 +1227,7 @@ class AppInternationalization extends Translations {
     );
   }
 
-  /// cle TransAll.
+  /// Returns the localized value of TransAll.
   String get transAll {
     return _stringOfLocalizedValue(
       'TransAll',
