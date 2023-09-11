@@ -4,7 +4,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:trans_all_common_internationalization/internationalization.dart';
 
-
 import '../routes/app_router.dart';
 import '../themes/app_colors.dart';
 import 'internet_connection.dart';
