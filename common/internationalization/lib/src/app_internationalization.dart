@@ -154,6 +154,7 @@ class AppInternationalization extends Translations {
           'pendingTransfer': 'Pending transfers',
           'yesterday': 'Yesterday',
           'sentRequestBySmsTitle': 'Do you want to send your request by sms?',
+          'TransAll': 'TransAll',
           'connectionRestore': 'Connection restored',
           'forfeit': 'Forfeit',
           'day': 'day',
@@ -318,6 +319,7 @@ class AppInternationalization extends Translations {
           'forfeitSelected': 'Forfait Selectionné',
           'selectDefaultBuyerContactMessage':
               'Sélectionnez le numéro du payeur parmi les numéros de paiement enregistrés',
+          'TransAll': 'TransAll',
         },
       };
 
@@ -1222,6 +1224,13 @@ class AppInternationalization extends Translations {
   String get share {
     return _stringOfLocalizedValue(
       'share',
+    );
+  }
+
+  /// Returns the localized value of TransAll.
+  String get transAll {
+    return _stringOfLocalizedValue(
+      'TransAll',
     );
   }
 
