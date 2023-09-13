@@ -3,9 +3,6 @@ import 'base_model.dart';
 
 /// Model of forfeit.
 class Forfeit extends BaseModel {
-  /// The stored key ref for the [id] property.
-  static const keyId = 'id';
-
   /// The stored key ref for the [name] property.
   static const keyName = 'name';
 
@@ -27,8 +24,14 @@ class Forfeit extends BaseModel {
   /// The stored key ref for the [currency] property.
   static const keyCurrency = 'currency';
 
-  /// The id.
-  final String id;
+  /// The stored key ref for the [operatorName] property.
+  static const keyOperatorName = 'operatorName';
+
+  /// The stored key ref for the [exactMatchRegex] property.
+  static const keyExactMatchRegex = 'exactMatchRegex';
+
+  /// The stored key ref for the [tolerantRegex] property.
+  static const keyTolerantRegex = 'tolerantRegex';
 
   /// The name.
   final String name;
@@ -43,37 +46,50 @@ class Forfeit extends BaseModel {
   final Category category;
 
   /// The currency.
-  final String currency;
+  final String? currency;
 
   /// The amountInXAF of forfeit.
   final num amountInXAF;
 
-  /// The operator reference.
-  final OperationTransferType reference;
+  /// The forfeit operator.
+  final Operator operatorName;
+
+  /// The forfeit reference.
+  final String reference;
+
+  /// The exactMatchRegex.
+  final String exactMatchRegex;
+
+  /// The tolerantRegex.
+  final String tolerantRegex;
 
   /// Constructs a new [Forfeit] from [Map] object.
   Forfeit.fromJson(
     Map<String, dynamic> json,
   )   : name = json[keyName],
-        id = json[keyId],
-        currency = json[keyCurrency],
+        currency = json[keyCurrency] ?? 'XAF',
         amountInXAF = json[keyAmountInXAF],
         description = ForfeitDescription.fromJson(json[keyDescription]),
         validity = Validity.fromKey(json[keyValidity]),
         category = Category.fromKey(json[keyCategory]),
-        reference = OperationTransferType.fromKey(json[keyReference]),
+        reference = json[keyReference],
+        operatorName = Operator.fromKey(json[keyOperatorName]),
+        exactMatchRegex = json[keyExactMatchRegex],
+        tolerantRegex = json[keyTolerantRegex],
         super.fromJson();
 
   @override
   Map<String, dynamic> toJson() => <String, dynamic>{
-        keyId: id,
         keyName: name,
         keyDescription: description.toJson(),
         keyCategory: category.key,
         keyValidity: validity.key,
         keyCurrency: currency,
         keyAmountInXAF: amountInXAF,
-        keyReference: reference.key,
+        keyReference: reference,
+        keyOperatorName: operatorName.key,
+        keyExactMatchRegex: exactMatchRegex,
+        keyTolerantRegex: tolerantRegex,
       };
 }
 
@@ -103,6 +119,39 @@ class ForfeitDescription extends BaseModel {
         keyEn: en,
         keyFr: fr,
       };
+}
+
+/// Represents the Operator.
+class Operator {
+  /// The operator.
+  static final _data = <String, Operator>{
+    camtel.key: camtel,
+    orange.key: orange,
+    mtn.key: mtn,
+    unknown.key: unknown,
+  };
+
+  /// The camtel operator.
+  static const camtel = Operator._('Camtel');
+
+  /// The orange operator.
+  static const orange = Operator._('Orange');
+
+  /// The mtn operator.
+  static const mtn = Operator._('Mtn');
+
+  /// The unknown operator.
+  static const unknown = Operator._('unknown');
+
+  /// The operator key.
+  final String key;
+
+  const Operator._(this.key);
+
+  /// Constructs a new [Operator] form [key].
+  factory Operator.fromKey(String key) {
+    return _data[key] ?? unknown;
+  }
 }
 
 /// Represents the forfeit Validity.
