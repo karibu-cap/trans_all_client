@@ -7,6 +7,8 @@ Map<String, dynamic> _remoteConfigDefaultsDev = {
   RemoteConfigKeys.orangeNumberForSmsTransaction: '657569424',
   RemoteConfigKeys.mtnNumberForSmsTransaction: '676714797',
   RemoteConfigKeys.featureForfeitEnable: true,
+  RemoteConfigKeys.featureCustomerServiceEnabled: true,
+  RemoteConfigKeys.customerServiceLink: 'https://wa.me/237696404016',
 };
 
 Map<String, dynamic> _remoteConfigDefaultsStaging = {
@@ -14,6 +16,8 @@ Map<String, dynamic> _remoteConfigDefaultsStaging = {
   RemoteConfigKeys.orangeNumberForSmsTransaction: '657569424',
   RemoteConfigKeys.mtnNumberForSmsTransaction: '676714797',
   RemoteConfigKeys.featureForfeitEnable: true,
+  RemoteConfigKeys.featureCustomerServiceEnabled: true,
+  RemoteConfigKeys.customerServiceLink: 'https://wa.me/237696404016',
 };
 
 Map<String, dynamic> _remoteConfigDefaultsProd = {
@@ -21,6 +25,8 @@ Map<String, dynamic> _remoteConfigDefaultsProd = {
   RemoteConfigKeys.orangeNumberForSmsTransaction: '657569424',
   RemoteConfigKeys.mtnNumberForSmsTransaction: '676714797',
   RemoteConfigKeys.featureForfeitEnable: false,
+  RemoteConfigKeys.featureCustomerServiceEnabled: false,
+  RemoteConfigKeys.customerServiceLink: 'https://wa.me/237696404016',
 };
 
 /// Returns the default remote config for each environment.

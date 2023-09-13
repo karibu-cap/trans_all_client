@@ -17,4 +17,11 @@ class RemoteConfigKeys {
 
   /// Boolean to active or disable the forfeit feature.
   static const featureForfeitEnable = 'feature_forfeit_enable';
+
+  /// Boolean to enabled or disable the customer service button.
+  static const featureCustomerServiceEnabled =
+      'feature_customer_service_enabled';
+
+  /// The customer service link.
+  static const customerServiceLink = 'customer_service_link';
 }
