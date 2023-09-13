@@ -41,7 +41,7 @@ class CustomScaffold extends StatelessWidget {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(50),
         child: AppBar(
-          title: Text(localization.transAll),
+          title: Text(title ?? localization.transAll),
           backgroundColor: AppColors.darkGray,
         ),
       ),
