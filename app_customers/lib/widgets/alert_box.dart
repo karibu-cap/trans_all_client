@@ -5,7 +5,7 @@ import '../themes/app_colors.dart';
 /// Custom alert box.
 class AlertBoxView extends StatelessWidget {
   /// The title of the alert box.
-  final String title;
+  final String? title;
 
   /// The positive Btn Text.
   final String? positiveBtnText;
@@ -34,7 +34,7 @@ class AlertBoxView extends StatelessWidget {
   /// Constructor of new [ContactTextFieldForm].
   const AlertBoxView({
     super.key,
-    required this.title,
+    this.title,
     required this.content,
     this.positiveBtnText,
     this.negativeBtnText,
@@ -59,21 +59,22 @@ class AlertBoxView extends StatelessWidget {
               color: Colors.white,
               borderRadius: const BorderRadius.all(Radius.circular(12)),
             ),
-            padding: EdgeInsets.only(top: 60, left: 20, right: 20),
+            padding: EdgeInsets.only(top: 40, left: 20, right: 20),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 17,
-                    color: AppColors.purple,
-                    fontWeight: FontWeight.bold,
+                if (title != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 12.0),
+                    child: Text(
+                      title ?? '',
+                      style: const TextStyle(
+                        fontSize: 17,
+                        color: AppColors.purple,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: 16,
-                ),
                 content,
                 FittedBox(
                   child: ButtonBar(
@@ -132,10 +133,13 @@ class AlertBoxView extends StatelessWidget {
               ],
             ),
           ),
-          CircleAvatar(
-            maxRadius: topSize ?? 40.0,
-            backgroundColor: topBackgroundColor ?? AppColors.darkGray,
-            child: icon ?? Icon(Icons.message),
+          SizedBox(
+            height: 70,
+            child: CircleAvatar(
+              maxRadius: topSize ?? 40.0,
+              backgroundColor: topBackgroundColor ?? AppColors.darkGray,
+              child: icon ?? Icon(Icons.message),
+            ),
           ),
         ],
       ),
@@ -148,7 +152,7 @@ void showAlertBoxView({
   required BuildContext context,
   String? positiveBtnText,
   String? negativeBtnText,
-  required String title,
+  String? title,
   required Widget content,
   GestureTapCallback? positiveBtnPressed,
   GestureTapCallback? negativeBtnPressed,
