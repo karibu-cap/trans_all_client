@@ -10,11 +10,11 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:trans_all_common_internationalization/internationalization.dart';
 import 'package:trans_all_common_models/models.dart';
 
-import '../../config/environement_conf.dart';
 import '../../util/constant.dart';
 import '../../util/preferences_keys.dart';
 import '../../util/request_response.dart';
 import 'hive_service.dart';
+import 'utils/constants.dart';
 
 /// Live hive implementation.
 class HiveServiceImpl implements HiveService {
@@ -33,8 +33,6 @@ class HiveServiceImpl implements HiveService {
 
   final _databaseDefaultBuyerContacts =
       Hive.box<Contact>(Constant.defaultBuyerContactsTable);
-
-  final String _appBaseUrl = AppEnvironment.appBaseUrl;
 
   /// New constructor of [HiveServiceImpl].
   HiveServiceImpl() {
@@ -148,7 +146,7 @@ class HiveServiceImpl implements HiveService {
     };
     final List<PaymentGateways> payments = [];
     final url = Uri.parse(
-      '$_appBaseUrl/api/payment/methods/all',
+      AppRoute.paymentGatewaysRoute,
     );
     try {
       final response = await http.get(
@@ -163,16 +161,24 @@ class HiveServiceImpl implements HiveService {
         convertData.map<PaymentGateways>(PaymentGateways.fromJson).toList(),
       );
 
+      unawaited(_databasePaymentGateways.clear());
+      unawaited(_databasePaymentGateways.addAll(payments));
+
       return ListPaymentGatewaysResponse(listPaymentGateways: payments);
     } catch (e) {
       _logger.severe(
         'Failed to parse the received list of payment gateway got at $url. the response body received is $e',
       );
-      if (e is SocketException) {
-        return ListPaymentGatewaysResponse(error: RequestError.internetError);
+      final localOperator = _databasePaymentGateways.values.toList();
+
+      if (localOperator.isEmpty) {
+        if (e is SocketException) {
+          return ListPaymentGatewaysResponse(error: RequestError.internetError);
+        }
+        return ListPaymentGatewaysResponse(listPaymentGateways: []);
       }
 
-      return ListPaymentGatewaysResponse(error: RequestError.unknown);
+      return ListPaymentGatewaysResponse(listPaymentGateways: localOperator);
     }
   }
 
@@ -186,7 +192,7 @@ class HiveServiceImpl implements HiveService {
       PreferencesKeys.acceptLanguage: localization.locale.languageCode,
     };
     final url = Uri.parse(
-      '$_appBaseUrl/api/transfer/providers/all',
+      AppRoute.operatorGatewaysRoute,
     );
     try {
       final response = await http.get(
@@ -199,18 +205,26 @@ class HiveServiceImpl implements HiveService {
       operations.addAll(
         convertData.map<OperationGateways>(OperationGateways.fromJson).toList(),
       );
+      unawaited(_databaseOperatorGateway.clear());
+      unawaited(_databaseOperatorGateway.addAll(operations));
 
       return ListOperationGatewaysResponse(listOperationGateways: operations);
     } catch (e) {
       _logger.severe(
         'Failed to parse the received list of operator gateway got at $url. the response body received is $e',
       );
+      final localOperator = _databaseOperatorGateway.values.toList();
 
-      if (e is SocketException) {
-        return ListOperationGatewaysResponse(error: RequestError.internetError);
+      if (localOperator.isEmpty) {
+        if (e is SocketException) {
+          return ListOperationGatewaysResponse(
+              error: RequestError.internetError);
+        }
+        return ListOperationGatewaysResponse(listOperationGateways: []);
       }
 
-      return ListOperationGatewaysResponse(error: RequestError.unknown);
+      return ListOperationGatewaysResponse(
+          listOperationGateways: localOperator);
     }
   }
 
@@ -240,14 +254,24 @@ class HiveServiceImpl implements HiveService {
       'receiverOperator': receiverOperator,
     });
     final url = Uri.parse(
-      '$_appBaseUrl/api/transfer/create',
+      AppRoute.createTransferRoute,
     );
     try {
       final response = await http.post(url, headers: headers, body: body);
       final dynamic data = jsonDecode(response.body);
       final Map<String, dynamic> convertData = data as Map<String, dynamic>;
 
-      return CreateRemoteTransactionResponse(transactionId: convertData['id']);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return CreateRemoteTransactionResponse(
+          transactionId: convertData['id'],
+        );
+      }
+
+      final ErrorResponseBody error = ErrorResponseBody.fromJson(convertData);
+
+      return CreateRemoteTransactionResponse(
+        error: requestErrorMessage(error.code),
+      );
     } catch (e) {
       _logger.severe(
         'Failed to create remote credit transaction with status code $e',
@@ -273,23 +297,22 @@ class HiveServiceImpl implements HiveService {
       PreferencesKeys.acceptLanguage: localization.locale.languageCode,
     };
     final url = Uri.parse(
-      '$_appBaseUrl/api/transfer/$transactionId',
+      '${AppRoute.getTheTransaction}/$transactionId',
     );
     final response = await http.get(url, headers: headers);
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      final dynamic data = jsonDecode(response.body);
-      final Map<String, dynamic> convertData = data as Map<String, dynamic>;
+    final dynamic data = jsonDecode(response.body);
+    final Map<String, dynamic> convertData = data as Map<String, dynamic>;
+    if (response.statusCode == 200 || response.statusCode == 201) {
       final TransferInfo transferInfo =
           TransferInfo.fromJson(json: convertData);
 
       return transferInfo;
-    } else {
-      _logger.severe(
-        'Failed to retrieve the transaction $transactionId  got at $url. the response body received is ${response.body}',
-      );
-
-      return null;
     }
+    _logger.severe(
+      'Failed to retrieve the transaction $transactionId  got at $url. the response body received is ${response.body}',
+    );
+
+    return null;
   }
 
   @override
@@ -352,12 +375,8 @@ class HiveServiceImpl implements HiveService {
       PreferencesKeys.acceptLanguage: localization.locale.languageCode,
     };
 
-    /// TODO: updates the url once the backend is ready.
-    /// TODO: updates the url once the backend is ready.
-    /// TODO: updates the url once the backend is ready.
-    /// TODO: updates the url once the backend is ready.
     final url = Uri.parse(
-      '$_appBaseUrl/api/forfeit/providers/all',
+      AppRoute.listOfForfeit,
     );
     try {
       final response = await http.get(

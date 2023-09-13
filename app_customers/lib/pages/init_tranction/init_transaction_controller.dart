@@ -15,8 +15,8 @@ class InitTransactionController extends GetxController {
   final TransferRepository _transferRepository;
   final _logger = Logger('InitTransactionController');
 
-  /// Returns false if the request was successful.
-  Rx<bool> get internetError => _model.internetError;
+  /// Returns the error message.
+  Rx<String?> get errorMessage => _model.errorMessage;
 
   /// The current forfeit to transfers.
   Forfeit? get forfeit => _model.forfeit;

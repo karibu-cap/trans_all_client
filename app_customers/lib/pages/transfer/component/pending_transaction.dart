@@ -119,7 +119,7 @@ class _PendingTransferView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<TransfersController>();
-    final Forfeit? forfeit = controller.forfeit?.value;
+    final Forfeit? forfeit = controller.forfeit.value;
 
     return Center(
       child: Container(

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:rxdart/rxdart.dart' hide Rx;
 import 'package:trans_all_common_models/models.dart';
 
+import '../../data/database/hive_service.dart';
 import '../../data/repository/contactRepository.dart';
 import '../../data/repository/tranfersRepository.dart';
 import '../../util/user_contact.dart';
@@ -47,23 +48,21 @@ class TransfersViewModel {
 
   Future<void> _init() async {
     internetError.value = false;
+    supportedPaymentGateway.value = null;
+    supportedTransferOperationGateway.value = null;
 
     final supportedPayment =
         await _transferRepository.listOfSupportedPaymentGateways();
     final supportedOperation =
         await _transferRepository.listOfSupportedOperationGateways();
-    final localOperationGateways =
-        await _transferRepository.listOfLocalSupportedOperationGateways();
-    final localPaymentGateways =
-        await _transferRepository.listOfLocalSupportedPaymentGateways();
-    if (supportedPayment.error != null || supportedOperation.error != null) {
-      if (localOperationGateways.isEmpty || localPaymentGateways.isEmpty) {
-        internetError.value = true;
-      } else {
-        supportedPaymentGateway.value ??= localPaymentGateways;
-        supportedTransferOperationGateway.value ??= localOperationGateways;
-        internetError.value = false;
-      }
+
+    if ((supportedPayment.error != null &&
+            supportedPayment.error == RequestError.internetError) ||
+        (supportedOperation.error != null &&
+            supportedOperation.error == RequestError.internetError)) {
+      supportedPaymentGateway.value ??= [];
+      supportedTransferOperationGateway.value ??= [];
+      internetError.value = true;
     } else {
       supportedPaymentGateway.value ??= supportedPayment.listPaymentGateways;
       supportedTransferOperationGateway.value ??=
@@ -88,9 +87,7 @@ class TransfersViewModel {
 
   /// Watch the list of contact.
   StreamSubscription<List<Contact>> watchContact() {
-    return UserContactConfig.userContact.stream.listen((value) {
-      streamOfContact.add(value);
-    });
+    return UserContactConfig.userContact.stream.listen(streamOfContact.add);
   }
 
   /// Updates the pending transaction.
