@@ -25,7 +25,7 @@ dependencies:
 
   # Plugin for Firebase Core, enabling connecting to multiple Firebase apps.
   # Platform: ANDROID, IOS, MACOS, WEB
-  firebase_core: 2.13.0
+  firebase_core: ^2.15.1
 
   # Provides an API for querying information about an application package.
   # Platform: ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS, SERVER
