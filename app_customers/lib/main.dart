@@ -20,6 +20,7 @@ import 'data/repository/forfeitRepository.dart';
 import 'data/repository/tranfersRepository.dart';
 import 'routes/app_router.dart';
 import 'util/user_contact.dart';
+import 'widgets/contact_service_button/contact_service_model.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -55,6 +56,7 @@ class MyApp extends StatelessWidget {
       Get.lazyPut(() => TransferRepository(hiveService));
       Get.lazyPut(() => ContactRepository(hiveService));
       Get.lazyPut(() => ForfeitRepository(hiveService));
+      Get.lazyPut(ContactServiceModel.new);
 
       return;
     }

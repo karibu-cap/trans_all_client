@@ -4,6 +4,10 @@ class PreferencesKeys {
   /// has already opened the Welcome screen.
   static const String isFirstOpenWelcomeScreen = 'AlphaWelcomeScreenOpened';
 
+  /// The variable that determines if the user dismiss the customer service.
+  static const String isCustomerServiceFloatingButtonCollapsed =
+      'isCustomerServiceFloatingButtonCollapsed';
+
   /// The content type key.
   static const String contentType = 'Content-Type';
 
