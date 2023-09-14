@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:karibu_capital_core_utils/utils.dart';
@@ -34,7 +35,7 @@ class ForfeitView extends StatelessWidget {
       child: Builder(
         builder: (context) {
           return Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(3.0),
             child: _ForfeitBody(),
           );
         },
@@ -116,23 +117,21 @@ class _ForfeitSkeleton extends StatelessWidget {
         SizedBox(
           height: 10,
         ),
-        _ForfeitCategoryView(),
-        SizedBox(
-          height: 10,
-        ),
-        _ValidityView(),
-        SizedBox(
-          height: 10,
-        ),
-        Center(
-          child: Container(
-            height: 4,
-            width: 60,
-            decoration: BoxDecoration(
-              color: AppColors.black,
-              borderRadius: const BorderRadius.all(Radius.circular(8)),
-            ),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          physics: BouncingScrollPhysics(),
+          child: Row(
+            children: [
+              _ForfeitCategoryView(),
+              SizedBox(
+                width: 3,
+              ),
+              _ValidityView(),
+            ],
           ),
+        ),
+        SizedBox(
+          height: 10,
         ),
         Expanded(child: _ForfeitFilterView()),
       ],
@@ -168,21 +167,17 @@ class _OperatorView extends StatelessWidget {
                 return StreamBuilder<String>(
                   stream: controller.selectedOperator.stream,
                   builder: (context, snapshot) {
-                    // if (snapshot.data == null ||
-                    //     snapshot.data == 'All' ||
-                    //     snapshot.data == 'Tout') {
-                    //   controller.selectedOperator.add(localization.all);
-                    // }
                     final isSelected = snapshot.data == operator;
 
                     return GestureDetector(
-                      onTap: () {
+                      onTap: (() {
                         controller.selectedOperator.add(operator);
                         controller.updateFilterListOfForfeit();
-                      },
+                      }),
                       child: Container(
+                        width: 90,
                         padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                        margin: const EdgeInsets.symmetric(horizontal: 8),
+                        margin: const EdgeInsets.symmetric(horizontal: 3),
                         decoration: BoxDecoration(
                           color:
                               isSelected ? AppColors.darkGray : AppColors.white,
@@ -225,50 +220,51 @@ class _ForfeitCategoryView extends StatelessWidget {
         ? SizedBox()
         : SizedBox(
             height: 40,
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: controller.listOfForfeitCategory.length,
-              scrollDirection: Axis.horizontal,
-              physics: BouncingScrollPhysics(),
-              itemBuilder: (context, index) {
-                final forfeitCategory =
-                    controller.listOfForfeitCategory.toList()[index];
+            child: Row(
+              children: List.generate(
+                controller.listOfForfeitCategory.length,
+                ((index) {
+                  final forfeitCategory =
+                      controller.listOfForfeitCategory.toList()[index];
 
-                if (forfeitCategory.category == Category.unknown) {
-                  return SizedBox();
-                }
+                  if (forfeitCategory.category == Category.unknown) {
+                    return SizedBox();
+                  }
 
-                return GestureDetector(
-                  onTap: () => controller.changeCategoryState(
-                    !forfeitCategory.isSelected,
-                    forfeitCategory,
-                  ),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                    margin: const EdgeInsets.symmetric(horizontal: 8),
-                    decoration: BoxDecoration(
-                      color: forfeitCategory.isSelected
-                          ? AppColors.darkGray
-                          : AppColors.white,
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(16.0)),
-                      border: Border.all(
-                        color: AppColors.lightGray,
-                      ),
+                  return GestureDetector(
+                    onTap: () => controller.changeCategoryState(
+                      !forfeitCategory.isSelected,
+                      forfeitCategory,
                     ),
-                    child: Center(
-                      child: Text(
-                        forfeitCategoryTranslate(forfeitCategory.category.key),
-                        style: TextStyle(
-                          color: forfeitCategory.isSelected
-                              ? AppColors.white
-                              : AppColors.black,
+                    child: Container(
+                      width: 90,
+                      padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                      margin: const EdgeInsets.symmetric(horizontal: 3),
+                      decoration: BoxDecoration(
+                        color: forfeitCategory.isSelected
+                            ? AppColors.darkGray
+                            : AppColors.white,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(16.0)),
+                        border: Border.all(
+                          color: AppColors.lightGray,
+                        ),
+                      ),
+                      child: Center(
+                        child: Text(
+                          forfeitCategoryTranslate(
+                              forfeitCategory.category.key),
+                          style: TextStyle(
+                            color: forfeitCategory.isSelected
+                                ? AppColors.white
+                                : AppColors.black,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                );
-              },
+                  );
+                }),
+              ),
             ),
           );
   }
@@ -285,50 +281,51 @@ class _ValidityView extends StatelessWidget {
         ? SizedBox()
         : SizedBox(
             height: 40,
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: controller.listOfForfeitValidity.length,
-              scrollDirection: Axis.horizontal,
-              physics: BouncingScrollPhysics(),
-              itemBuilder: (context, index) {
-                final validity =
-                    controller.listOfForfeitValidity.toList()[index];
+            child: Row(
+              children: List.generate(
+                controller.listOfForfeitValidity.length,
+                ((index) {
+                  final validity =
+                      controller.listOfForfeitValidity.toList()[index];
 
-                if (validity.validity == Validity.unknown) {
-                  return SizedBox();
-                }
+                  if (validity.validity == Validity.unknown) {
+                    return SizedBox();
+                  }
 
-                return GestureDetector(
-                  onTap: () => controller.changeValidityState(
-                    !validity.isSelected,
-                    validity,
-                  ),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                    margin: const EdgeInsets.symmetric(horizontal: 8),
-                    decoration: BoxDecoration(
-                      color: validity.isSelected
-                          ? AppColors.darkGray
-                          : AppColors.white,
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(16.0)),
-                      border: Border.all(
-                        color: AppColors.lightGray,
-                      ),
+                  return GestureDetector(
+                    onTap: () => controller.changeValidityState(
+                      !validity.isSelected,
+                      validity,
                     ),
-                    child: Center(
-                      child: Text(
-                        forfeitValidityTranslate(validity.validity.key),
-                        style: TextStyle(
-                          color: validity.isSelected
-                              ? AppColors.white
-                              : AppColors.black,
+                    child: Container(
+                      width: 90,
+                      padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                      margin: const EdgeInsets.symmetric(horizontal: 3),
+                      decoration: BoxDecoration(
+                        color: validity.isSelected
+                            ? AppColors.darkGray
+                            : AppColors.white,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(16.0)),
+                        border: Border.all(
+                          color: AppColors.lightGray,
+                        ),
+                      ),
+                      child: Center(
+                        child: AutoSizeText(
+                          forfeitValidityTranslate(validity.validity.key),
+                          maxLines: 1,
+                          style: TextStyle(
+                            color: validity.isSelected
+                                ? AppColors.white
+                                : AppColors.black,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                );
-              },
+                  );
+                }),
+              ),
             ),
           );
   }
@@ -385,19 +382,20 @@ class _ForfeitFilterView extends StatelessWidget {
             final forfeit = listOfForfeit[index];
 
             return GestureDetector(
-              onTap: () {
+              onTap: (() {
                 transferController.setActiveForfeit(forfeit);
                 transferController.setActivePage(0);
-              },
+              }),
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(
-                      child: OperatorIcon(
-                        operatorType: forfeit.reference.key,
-                      ),
+                    OperatorIcon(
+                      operatorType: forfeit.operatorName.key,
+                    ),
+                    SizedBox(
+                      width: 10,
                     ),
                     Expanded(
                       flex: 2,
@@ -418,15 +416,16 @@ class _ForfeitFilterView extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Expanded(
-                      child: Text(
-                        Currency.formatWithCurrency(
-                          price: num.parse(forfeit.amountInXAF.toString()),
-                          locale: localization.locale,
-                          currencyCodeAlpha3: DefaultCurrency.xaf,
-                        ),
-                        style: TextStyle(color: AppColors.black),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      Currency.formatWithCurrency(
+                        price: num.parse(forfeit.amountInXAF.toString()),
+                        locale: localization.locale,
+                        currencyCodeAlpha3: DefaultCurrency.xaf,
                       ),
+                      style: TextStyle(color: AppColors.black),
                     ),
                   ],
                 ),

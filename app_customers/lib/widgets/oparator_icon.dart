@@ -42,21 +42,21 @@ class OperatorIcon extends StatelessWidget {
         width: 40,
       );
     }
-    if (operatorType == OperationTransferType.mtnUnitTransfer.key) {
+    if (operatorType == Operator.mtn.key) {
       return Image.asset(
         'assets/icons/mtn_operator.png',
         height: 40,
         width: 40,
       );
     }
-    if (operatorType == OperationTransferType.orangeUnitTransfer.key) {
+    if (operatorType == Operator.orange.key) {
       return Image.asset(
         'assets/icons/orange_operator.png',
         height: 40,
         width: 40,
       );
     }
-    if (operatorType == OperationTransferType.camtelUnitTransfer.key) {
+    if (operatorType == Operator.camtel.key) {
       return Image.asset(
         'assets/icons/camtel.png',
         height: 40,
@@ -68,7 +68,6 @@ class OperatorIcon extends StatelessWidget {
       return Container(
         alignment: Alignment.center,
         height: 40,
-        width: 40,
         padding: const EdgeInsets.all(2.0),
         decoration: BoxDecoration(
           color: AppColors.white,
