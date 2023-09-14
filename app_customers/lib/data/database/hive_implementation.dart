@@ -35,12 +35,7 @@ class HiveServiceImpl implements HiveService {
       Hive.box<Contact>(Constant.defaultBuyerContactsTable);
 
   /// New constructor of [HiveServiceImpl].
-  HiveServiceImpl() {
-    /// Schedule the synchronization every 1 hour.
-    Timer.periodic(Duration(hours: 1), (timer) {
-      synchronizeLocalRemoteGateways();
-    });
-  }
+  HiveServiceImpl();
 
   @override
   Future<void> createLocalTransaction(
@@ -205,6 +200,7 @@ class HiveServiceImpl implements HiveService {
       operations.addAll(
         convertData.map<OperationGateways>(OperationGateways.fromJson).toList(),
       );
+
       unawaited(_databaseOperatorGateway.clear());
       unawaited(_databaseOperatorGateway.addAll(operations));
 
@@ -326,45 +322,6 @@ class HiveServiceImpl implements HiveService {
   }
 
   @override
-  void synchronizeLocalRemoteGateways() async {
-    final localOperationGateways = _databaseOperatorGateway.values.toList();
-    final localPaymentGateways = _databasePaymentGateways.values.toList();
-    final remoteOperationGateways =
-        (await listOperationGateways()).listOperationGateways;
-    final remotePaymentGateways =
-        (await listPaymentGateways()).listPaymentGateways;
-    bool canUpdatePayment = false;
-    bool canUpdateOperation = false;
-    if (remoteOperationGateways == null || remotePaymentGateways == null) {
-      return;
-    }
-    for (final operator in remoteOperationGateways) {
-      final index = localOperationGateways.indexWhere(
-        (element) => element.reference == operator.reference,
-      );
-      if (index == -1) {
-        canUpdateOperation = true;
-      }
-    }
-    for (final payment in remotePaymentGateways) {
-      final index = localPaymentGateways.indexWhere(
-        (element) => element.id == payment.id,
-      );
-      if (index == -1) {
-        canUpdatePayment = true;
-      }
-    }
-    if (canUpdateOperation || canUpdatePayment) {
-      await _databaseOperatorGateway.clear();
-      await _databasePaymentGateways.clear();
-      await _databaseOperatorGateway.addAll(remoteOperationGateways);
-      await _databasePaymentGateways.addAll(remotePaymentGateways);
-    }
-
-    return;
-  }
-
-  @override
   Future<List<Forfeit>?> getAllForfeit() async {
     final List<Forfeit> forfeits = [];
     final packageInfo = await PackageInfo.fromPlatform();
@@ -383,15 +340,18 @@ class HiveServiceImpl implements HiveService {
         url,
         headers: headers,
       );
-      final List<dynamic> data = jsonDecode(response.body);
+
+      final result = jsonDecode(response.body);
+
+      final List<dynamic> data = result['data'];
       final List<Map<String, dynamic>> convertData =
           data.map((e) => e as Map<String, dynamic>).toList();
       forfeits.addAll(
         convertData.map<Forfeit>(Forfeit.fromJson).toList(),
       );
 
-      await _forfeitRow.clear();
-      await _forfeitRow.addAll(forfeits);
+      unawaited(_forfeitRow.clear());
+      unawaited(_forfeitRow.addAll(forfeits));
 
       return forfeits;
     } catch (e) {

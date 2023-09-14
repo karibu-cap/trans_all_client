@@ -10,7 +10,15 @@ class ForfeitAdapter extends TypeAdapter<Forfeit> {
   Forfeit read(BinaryReader reader) {
     final Map<String, dynamic> json = Map.from(reader.readMap());
 
-    return Forfeit.fromJson(json);
+    return Forfeit.fromJson({
+      ...json,
+      Forfeit.keyDescription: {
+        ForfeitDescription.keyEn: json[Forfeit.keyDescription]
+            [ForfeitDescription.keyEn],
+        ForfeitDescription.keyFr: json[Forfeit.keyDescription]
+            [ForfeitDescription.keyFr],
+      },
+    });
   }
 
   @override
