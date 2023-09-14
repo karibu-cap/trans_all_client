@@ -144,11 +144,6 @@ class FakeHiveService implements HiveService {
   }
 
   @override
-  void synchronizeLocalRemoteGateways() {
-    return;
-  }
-
-  @override
   Set<Contact> getAllLocalContact() {
     return fakeUserContacts.values.toSet();
   }
@@ -184,10 +179,10 @@ class FakeHiveService implements HiveService {
 
   @override
   Future<List<Forfeit>?> getAllForfeit() async {
-    return fakeForfeits;
+    return fakeForfeits['data'];
   }
 
   @override
   Forfeit? getForfeitById(String id) =>
-      fakeForfeits.firstWhere((element) => element.id == id);
+      fakeForfeits['data']?.firstWhere((element) => element.reference == id);
 }
