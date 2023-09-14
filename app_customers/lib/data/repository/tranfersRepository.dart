@@ -136,8 +136,4 @@ class TransferRepository {
   Future<List<OperationGateways>>
       listOfLocalSupportedOperationGateways() async =>
           _hiveService.listLocalOperationGateways();
-
-  /// Synchronize the local operator and payment.
-  void synchronizeLocalRemoteGateways() async =>
-      _hiveService.synchronizeLocalRemoteGateways();
 }

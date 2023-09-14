@@ -37,7 +37,7 @@ class ForfeitViewModel {
     if (forfeits == null) return;
     listOfForfeit.addAll(forfeits);
     if (forfeits.isNotEmpty) {
-      final operator = forfeits.map((e) => e.reference.key).toSet();
+      final operator = forfeits.map((e) => e.operatorName.key).toSet();
       listOfOperatorType.addAll(operator);
       filterListOfForfeit.add(forfeits);
       final validity = forfeits.map((e) => e.validity).toSet();

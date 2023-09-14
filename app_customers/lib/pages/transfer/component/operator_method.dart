@@ -75,15 +75,15 @@ class _AvailableOperatorGateway extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FittedBox(
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
       child: Row(
-        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: supportedOperation.map<Widget>((currentOperator) {
           return Padding(
             padding: const EdgeInsets.all(5.0),
-            child: FittedBox(
-              child: OperatorIcon(operatorType: currentOperator.reference.key),
+            child: OperatorIcon(
+              operatorType: currentOperator.operatorName.key,
             ),
           );
         }).toList(),

@@ -5,17 +5,18 @@ class AppRoute {
   static final String _appBaseUrl = AppEnvironment.appBaseUrl;
 
   /// The payment gateways route.
-  static final paymentGatewaysRoute = '$_appBaseUrl/payment/methods/all';
+  static final paymentGatewaysRoute = '$_appBaseUrl/api/payment/methods/all';
 
   /// The operator gateways route.
-  static final operatorGatewaysRoute = '$_appBaseUrl/transfer/providers/all';
+  static final operatorGatewaysRoute =
+      '$_appBaseUrl/api/transfer/providers/all';
 
   /// The create transfer route.
-  static final createTransferRoute = '$_appBaseUrl/transfer/create';
+  static final createTransferRoute = '$_appBaseUrl/api/transfer/create';
 
   /// The get transaction route.
-  static final getTheTransaction = '$_appBaseUrl/transfer';
+  static final getTheTransaction = '$_appBaseUrl/api/transfer';
 
   /// The list of forfeit route.
-  static final listOfForfeit = '$_appBaseUrl/forfeit/providers/all';
+  static final listOfForfeit = '$_appBaseUrl/api/feature/forfeit/all';
 }

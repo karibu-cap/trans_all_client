@@ -73,7 +73,6 @@ class TransfersViewModel {
     retrieveUserBuyerContacts();
     watchTransfer();
     watchContact();
-    _transferRepository.synchronizeLocalRemoteGateways();
 
     return;
   }

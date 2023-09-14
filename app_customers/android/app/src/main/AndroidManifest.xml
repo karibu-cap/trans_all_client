@@ -21,7 +21,7 @@
             <!-- start local notification config-->
             <meta-data
                 android:name="com.google.firebase.messaging.default_notification_icon"
-                android:resource="@drawable/transAll_icon" />
+                android:resource="@drawable/trans_all_icon" />
             <meta-data
                 android:name="com.google.firebase.messaging.default_notification_color"
                 android:resource="@color/colorPrimary" />

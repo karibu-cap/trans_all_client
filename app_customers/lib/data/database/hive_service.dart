@@ -85,9 +85,6 @@ abstract class HiveService {
     required String transactionId,
   });
 
-  /// Synchronizes the local operator and payment.
-  void synchronizeLocalRemoteGateways();
-
   /// Lists all local forfeit.
   Future<List<Forfeit>?> getAllForfeit();
 
