@@ -1,3 +1,4 @@
+import '../models.dart';
 import 'base_model.dart';
 
 /// Model of OperationGateways.
@@ -18,7 +19,7 @@ class OperationGateways extends BaseModel {
   final OperationTransferType reference;
 
   /// The operator name.
-  final String operatorName;
+  final Operator operatorName;
 
   /// The exactMatchRegex.
   final String exactMatchRegex;
@@ -30,7 +31,7 @@ class OperationGateways extends BaseModel {
   OperationGateways.fromJson(
     Map<String, dynamic> json,
   )   : exactMatchRegex = json[keyExactMatchRegex],
-        operatorName = json[keyOperatorName],
+        operatorName = Operator.fromKey(json[keyOperatorName]),
         tolerantRegex = json[keyTolerantRegex],
         reference = OperationTransferType.fromKey(json[keyReference]),
         super.fromJson();
@@ -38,7 +39,7 @@ class OperationGateways extends BaseModel {
   @override
   Map<String, dynamic> toJson() => <String, dynamic>{
         keyExactMatchRegex: exactMatchRegex,
-        keyOperatorName: operatorName,
+        keyOperatorName: operatorName.key,
         keyReference: reference.key,
         keyTolerantRegex: tolerantRegex,
       };
