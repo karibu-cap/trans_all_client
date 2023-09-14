@@ -193,7 +193,7 @@ class TransfersController extends GetxController {
     if (!RegExp(currentOperator.exactMatchRegex)
         .hasMatch(receiverTextController.text)) {
       receiverNumberErrorMessage.value = _localization.invalidGatewayNumber
-          .trParams({'gateway': currentOperator.operatorName});
+          .trParams({'gateway': currentOperator.operatorName.key});
 
       return false;
     }
@@ -270,7 +270,8 @@ class TransfersController extends GetxController {
 
     if (forfeit.value != null) {
       final validOperator = supportedOperation.firstWhere(
-        (element) => element.reference.key == forfeit.value?.reference.key,
+        (element) =>
+            element.operatorName.key == forfeit.value?.operatorName.key,
       );
       if (RegExp(validOperator.tolerantRegex).hasMatch(number)) {
         currentOperation.value = validOperator;
@@ -279,32 +280,26 @@ class TransfersController extends GetxController {
         return null;
       }
       receiverNumberErrorMessage.value = _localization.invalidGatewayNumber
-          .trParams({'gateway': validOperator.operatorName});
+          .trParams({'gateway': validOperator.operatorName.key});
 
       return;
     }
 
     for (final operation in supportedOperation) {
       if (RegExp(operation.tolerantRegex).hasMatch(number)) {
-        if (operation.reference == OperationTransferType.orangeUnitTransfer) {
+        if (operation.operatorName == Operator.orange) {
           currentOperation.value = operation;
           receiverNumberErrorMessage.value = '';
 
           return;
         }
-        if (operation.reference == OperationTransferType.mtnUnitTransfer) {
+        if (operation.operatorName == Operator.mtn) {
           currentOperation.value = operation;
           receiverNumberErrorMessage.value = '';
 
           return;
         }
-        if (operation.reference == OperationTransferType.camtelUnitTransfer) {
-          currentOperation.value = operation;
-          receiverNumberErrorMessage.value = '';
-
-          return;
-        }
-        if (operation.reference == OperationTransferType.yoomeeUnitTransfer) {
+        if (operation.operatorName == Operator.camtel) {
           currentOperation.value = operation;
           receiverNumberErrorMessage.value = '';
 

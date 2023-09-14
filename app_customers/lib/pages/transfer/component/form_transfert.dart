@@ -144,9 +144,8 @@ class FormTransfer extends StatelessWidget {
             ? forfeit.value?.amountInXAF.toString()
             : controller.amountToPayTextController.value.text,
         buyerGatewayId: paymentSelected.id.key,
-        receiverOperator: currentOperation.operatorName,
+        receiverOperator: currentOperation.operatorName.key,
         featureReference: currentOperation.reference.key,
-        forfeitId: forfeit.value?.id,
       );
       AppRouter.push(
         context,
@@ -306,7 +305,7 @@ class FormTransfer extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: OperatorIcon(
                   operatorType:
-                      controller.currentOperation.value?.reference.key ??
+                      controller.currentOperation.value?.operatorName.key ??
                           PaymentId.unknown.key,
                 ),
               ),
@@ -487,26 +486,16 @@ class _ForfeitView extends StatelessWidget {
           children: [
             Expanded(
               child: OperatorIcon(
-                operatorType: forfeit.reference.key,
+                operatorType: forfeit.operatorName.key,
               ),
             ),
             Expanded(
               flex: 2,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    forfeit.name,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Text(
-                    localization.locale.languageCode == LanguageCode.en
-                        ? forfeit.description.en
-                        : forfeit.description.fr,
-                  ),
-                ],
+              child: Text(
+                forfeit.name,
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
             Expanded(

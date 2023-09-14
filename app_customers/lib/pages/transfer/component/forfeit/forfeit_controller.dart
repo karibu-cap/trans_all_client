@@ -45,14 +45,14 @@ class ForfeitController extends ChangeNotifier {
   }
 
   /// Returns the operator name.
-  String? getOperatorName(String operationTransferType) {
-    if (operationTransferType == OperationTransferType.camtelUnitTransfer.key) {
+  String? getOperatorName(String operator) {
+    if (operator == Operator.camtel.key) {
       return 'Camtel';
     }
-    if (operationTransferType == OperationTransferType.mtnUnitTransfer.key) {
+    if (operator == Operator.mtn.key) {
       return 'MTN';
     }
-    if (operationTransferType == OperationTransferType.orangeUnitTransfer.key) {
+    if (operator == Operator.orange.key) {
       return 'Orange';
     }
 
@@ -116,14 +116,14 @@ class ForfeitController extends ChangeNotifier {
 
     if (selectedValidity.isEmpty && selectedCategory.isEmpty) {
       final filterElement =
-          listOfForfeit.where((e) => selectOperator == e.reference.key);
+          listOfForfeit.where((e) => selectOperator == e.operatorName.key);
       _model.filterListOfForfeit.add([...filterElement]);
 
       return;
     }
 
     final filterElement = listOfForfeit
-        .where((e) => selectOperator == e.reference.key)
+        .where((e) => selectOperator == e.operatorName.key)
         .where((element) =>
             selectedValidity.contains(element.validity.key) ||
             selectedCategory.contains(element.category.key));
