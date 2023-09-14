@@ -126,6 +126,9 @@ dependencies:
   # The tooltip package.
   just_the_tooltip: ^0.0.12
 
+  # The local notification package.
+  flutter_local_notifications: ^15.1.1
+
   # TransAll common internationalization dependencies.
   trans_all_common_internationalization:
     path: ../common/internationalization
@@ -185,12 +188,12 @@ dev_dependencies:
   dart_code_metrics: ^4.19.2
 
   # Command-line tool which simplifies the task of updating your Flutter app's launcher icon.
-  flutter_launcher_icons: "^0.11.0"
+  flutter_launcher_icons: ^0.13.1
 
   hive_generator: ^2.0.1
 
   # Configurations for flutter icons generation.
-flutter_icons:
+flutter_launcher_icons:
   android: true
   ios: true
   remove_alpha_ios: true
