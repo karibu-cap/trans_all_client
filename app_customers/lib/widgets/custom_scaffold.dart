@@ -1,8 +1,5 @@
 import 'package:animation_wrappers/animations/faded_slide_animation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:get/get.dart';
-import 'package:trans_all_common_internationalization/internationalization.dart';
 
 import '../routes/app_router.dart';
 import '../themes/app_colors.dart';
@@ -34,17 +31,33 @@ class CustomScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final canPop = AppRouter.canPop(context);
-    final localization = Get.find<AppInternationalization>();
 
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(50),
-        child: AppBar(
-          title: Text(localization.transAll),
-          backgroundColor: AppColors.darkGray,
-        ),
-      ),
+      appBar: canPop
+          ? AppBar(
+              backgroundColor: AppColors.white,
+              elevation: 0.0,
+              leading: InkWell(
+                child: Container(
+                  margin: EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    border: const Border.fromBorderSide(
+                      BorderSide(color: AppColors.lightGray),
+                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(9)),
+                  ),
+                  child: Icon(
+                    size: 15,
+                    Icons.arrow_back_ios,
+                    color: AppColors.black,
+                  ),
+                ),
+                onTap: () => Navigator.of(context).pop(),
+              ),
+            )
+          : null,
       body: SafeArea(
         bottom: false,
         child: Center(
@@ -61,9 +74,19 @@ class CustomScaffold extends StatelessWidget {
                         ? InternetConnectivityView()
                         : SizedBox.shrink(),
                   ),
-                SizedBox(
-                  height: 7,
-                ),
+                title != null
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Text(
+                          title ?? '',
+                          style: TextStyle(
+                            color: AppColors.black,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      )
+                    : SizedBox.shrink(),
                 Expanded(
                   child: child,
                 ),

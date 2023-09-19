@@ -14,6 +14,7 @@ import '../../data/repository/tranfersRepository.dart';
 import '../../routes/pages_routes.dart';
 import '../../themes/app_colors.dart';
 import '../../util/constant.dart';
+import '../../widgets/custom_app_bar.dart';
 import '../../widgets/custom_scaffold.dart';
 import 'component/forfeit/forfeit_view.dart';
 import 'component/form_transfert.dart';
@@ -243,33 +244,35 @@ class _OverlayTooltipView extends StatelessWidget {
         ),
       ),
       builder: (context) => GestureDetector(
-        onTap: () {
+        onTap: (() {
           final FocusScopeNode currentFocus = FocusScope.of(context);
           if (!currentFocus.hasPrimaryFocus) {
             currentFocus.unfocus();
           }
-        },
+        }),
         child: CustomScaffold(
           displayInternetMessage: displayInternetMessage ?? true,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Column(
-              children: [
-                if (featureForfeitEnabled)
-                  Expanded(
-                    child: Column(
-                      children: [
-                        _Header(),
-                        Expanded(
-                          child: _PageView(),
-                        ),
-                      ],
-                    ),
+          child: Column(
+            children: [
+              if (featureForfeitEnabled)
+                Expanded(
+                  child: Column(
+                    children: [
+                      CustomAppBar(
+                        child: _Header(),
+                      ),
+                      Expanded(
+                        child: _PageView(),
+                      ),
+                    ],
                   ),
-                if (!featureForfeitEnabled)
-                  Expanded(child: _TransferBodyTransaction()),
-              ],
-            ),
+                ),
+              if (!featureForfeitEnabled)
+                CustomAppBar(
+                  disableSuperposition: true,
+                  child: _TransferBodyTransaction(),
+                ),
+            ],
           ),
         ),
       ),
@@ -348,14 +351,17 @@ class _PageView extends StatelessWidget {
   Widget build(BuildContext context) {
     final transfersController = Get.find<TransfersController>();
 
-    return PageView.builder(
-      allowImplicitScrolling: true,
-      controller: transfersController.pageController,
-      onPageChanged: transfersController.setActivePage,
-      itemCount: transfersController.pageCount,
-      itemBuilder: (context, index) {
-        return _CurrentPageWidget(index);
-      },
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: PageView.builder(
+        allowImplicitScrolling: true,
+        controller: transfersController.pageController,
+        onPageChanged: transfersController.setActivePage,
+        itemCount: transfersController.pageCount,
+        itemBuilder: (context, index) {
+          return _CurrentPageWidget(index);
+        },
+      ),
     );
   }
 }
