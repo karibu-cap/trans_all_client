@@ -1,10 +1,13 @@
 import 'dart:async';
 
 import 'package:clock/clock.dart';
+import 'package:firebase_messaging/firebase_messaging.dart' as fcm;
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:karibu_capital_core_cloud_messaging/cloud_messaging.dart';
+import 'package:karibu_capital_core_cloud_messaging/convert_remote_message.dart';
 import 'package:karibu_capital_core_remote_config/remote_config.dart';
 import 'package:logging/logging.dart';
 import 'package:trans_all_common_config/config.dart';
@@ -19,8 +22,23 @@ import 'data/repository/contactRepository.dart';
 import 'data/repository/forfeitRepository.dart';
 import 'data/repository/tranfersRepository.dart';
 import 'routes/app_router.dart';
+import 'util/local_notification.dart';
 import 'util/user_contact.dart';
 import 'widgets/contact_service_button/contact_service_model.dart';
+
+/// Handle the message non app background state.
+@pragma('vm:entry-point')
+Future<void> handlerFcmOnBackgroundMessage(
+  fcm.RemoteMessage remoteMessage,
+) async {
+  final newMessage = convertRemoteMessage(remoteMessage);
+  await LocalNotificationApi.init();
+  await LocalNotificationApi.showNotification(
+    body: newMessage.notification?.body,
+    title: newMessage.notification?.title,
+    payload: newMessage.notification?.title,
+  );
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,6 +55,8 @@ Future<void> main() async {
     service: getAppConfigDefaults().remoteConfigType,
     defaults: getRemoteConfigDefaults(),
   );
+  await LocalNotificationApi.init();
+
   runApp(MyApp());
 }
 
@@ -49,23 +69,41 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hiveService = HiveService(HiveServiceType.hive);
-
+    final cloudMessaging = CloudMessaging(type: CloudMessagingType.firebase);
     void _initGetProviders() {
       UserContactConfig.init();
       Get.lazyPut(() => _appInternationalization);
       Get.lazyPut(() => TransferRepository(hiveService));
       Get.lazyPut(() => ContactRepository(hiveService));
       Get.lazyPut(() => ForfeitRepository(hiveService));
-      Get.lazyPut(ContactServiceModel.new);
+      Get.lazyPut(() => cloudMessaging);
+      Get.put(ContactServiceModel());
 
       return;
     }
 
     _initGetProviders();
     _streamPendingTransaction();
+    _initCloudMessaging();
 
     return _BuildApp();
   }
+}
+
+Future<void> _initCloudMessaging() async {
+  final CloudMessaging cloudMessaging = Get.find<CloudMessaging>();
+
+  /// Call when the app is in background state.
+  CloudMessaging.onFcmBackgroundMessage(handlerFcmOnBackgroundMessage);
+
+  // Call when the app is in foreground state.
+  cloudMessaging.onMessage?.listen((event) async {
+    await LocalNotificationApi.showNotification(
+      body: event.notification?.body,
+      title: event.notification?.title,
+      payload: event.notification?.title,
+    );
+  });
 }
 
 class _BuildApp extends StatelessWidget {

@@ -190,7 +190,7 @@ class _FloatingDraggableWidgetView extends GetView<ContactServiceModel> {
                                       floatingWidgetHeight -
                                       MediaQuery.of(context).padding.top -
                                       floatingWidgetWidth) -
-                                  70
+                                  200
                               : controller.top - floatingWidgetHeight,
                           left: controller.left == -1 ? 10 : controller.left,
                           duration: Duration(

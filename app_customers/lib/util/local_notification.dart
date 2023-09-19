@@ -1,82 +1,83 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:karibu_capital_core_cloud_messaging/cloud_messaging.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-/// The local notifications service.
-class LocalNotificationsService {
-  /// The flutter local notification plugin.
-  static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
+import '../themes/app_colors.dart';
 
-  /// Initialize flutter local notification.
-  Future<void> init(String icon) async {
-    final AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings(icon);
-    final DarwinInitializationSettings initializationSettingsIOS =
-        DarwinInitializationSettings();
-    final InitializationSettings initializationSettings =
-        InitializationSettings(
-      android: initializationSettingsAndroid,
-      iOS: initializationSettingsIOS,
-    );
-    unawaited(
-      flutterLocalNotificationsPlugin.initialize(initializationSettings),
-    );
+/// The local notification api.
+class LocalNotificationApi {
+  static final _notifications = FlutterLocalNotificationsPlugin();
+
+  static Future _notificationDetail() async {
+    return const NotificationDetails(
+        android: AndroidNotificationDetails(
+            'default_notifications_channel_id', 'channel name',
+            channelDescription: 'channel description',
+            importance: Importance.max,
+            priority: Priority.high,
+            audioAttributesUsage: AudioAttributesUsage.notificationEvent,
+            enableVibration: true,
+            visibility: NotificationVisibility.public,
+            category: AndroidNotificationCategory.alarm,
+            colorized: true,
+            color: AppColors.purple,
+            largeIcon: DrawableResourceAndroidBitmap('ic_stat_ic_notification'),
+            actions: [
+              AndroidNotificationAction(
+                'DISMISS',
+                'dismiss',
+              ),
+            ]),
+        iOS: DarwinNotificationDetails());
   }
 
-  /// Shows a local notification when the app is in the foreground.
-  static void showNotificationOnForeground(
-    RemoteMessage message,
-    LocalNotificationChannel channel,
-  ) {
-    final notification = message.notification;
-    final android = message.notification?.android;
-    if (notification != null) {
-      AndroidNotificationDetails? androidNotificationDetails;
-      DarwinNotificationDetails? iOSNotificationDetails;
-      if (android != null) {
-        androidNotificationDetails = AndroidNotificationDetails(
-          channel.channelId,
-          channel.channelName,
-          importance: Importance.max,
-          styleInformation: BigTextStyleInformation(
-            notification.body ?? '',
-            contentTitle: notification.title,
-          ),
-          priority: Priority.max,
-          playSound: true,
-          icon: channel.icon,
-        );
-      }
-      flutterLocalNotificationsPlugin.show(
-        notification.hashCode,
-        notification.title,
-        notification.body,
-        NotificationDetails(
-          android: androidNotificationDetails,
-          iOS: iOSNotificationDetails,
-        ),
-      );
+  /// Clears all notification.
+  static Future<void> clearAllNotification() async {
+    await _notifications.cancelAll();
+
+    return;
+  }
+
+  /// Shows notification.
+  static Future<void> showNotification({
+    String? title,
+    String? body,
+    String? payload,
+  }) async {
+    await _notifications.show(
+      Random().nextInt(10000),
+      title,
+      body,
+      await _notificationDetail(),
+      payload: payload,
+    );
+
+    return;
+  }
+
+  /// Initializes the local notification.
+  static Future init() async {
+    final permissionResult = await Permission.notification.isDenied;
+
+    if (!permissionResult) {
+      await Permission.notification.request();
     }
+
+    const androidSetting =
+        AndroidInitializationSettings('@drawable/ic_stat_ic_notification');
+    const iosSetting = DarwinInitializationSettings();
+    final InitializationSettings settings = const InitializationSettings(
+      android: androidSetting,
+      iOS: iosSetting,
+    );
+    await _notifications.initialize(
+      settings,
+    );
+    await _notifications
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.requestPermission();
   }
-}
-
-/// Channel for local notifications.
-class LocalNotificationChannel {
-  /// The id of the channel.
-  final String channelId;
-
-  /// The name of the channel.
-  final String channelName;
-
-  /// The notification icon.
-  final String icon;
-
-  /// Constructs a [LocalNotificationChannel].
-  const LocalNotificationChannel({
-    required this.channelId,
-    required this.channelName,
-    required this.icon,
-  });
 }
