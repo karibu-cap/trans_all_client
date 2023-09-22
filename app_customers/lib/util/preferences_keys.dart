@@ -22,4 +22,7 @@ class PreferencesKeys {
 
   /// The content type of Accept-Language.
   static const String acceptLanguage = 'Accept-Language';
+
+  /// The variable that save the current theme data.
+  static const String currentThemeData = 'currentThemeData';
 }

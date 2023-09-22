@@ -17,6 +17,7 @@ import '../../themes/app_colors.dart';
 import '../../themes/app_text_styles.dart';
 import '../../util/constant.dart';
 import '../../util/format_date_time.dart';
+import '../../util/operator_name.dart';
 import '../../widgets/custom_scaffold.dart';
 import '../../widgets/oparator_icon.dart';
 import 'history_view_controller.dart';
@@ -136,25 +137,12 @@ class _HistoricTransaction extends GetView<HistoryViewController> {
       }
       if (allTransaction.isEmpty) {
         return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Lottie.asset(
-                AnimationAsset.noItem,
-                width: 100,
-                height: 100,
-                fit: BoxFit.cover,
-              ),
-              Text(
-                localization.noTransferHistory,
-                style: TextStyle(
-                  color: AppColors.black,
-                  fontWeight: FontWeight.w400,
-                  fontSize: 15,
-                ),
-              ),
-            ],
+          child: Text(
+            localization.noTransferHistory,
+            style: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 15,
+            ),
           ),
         );
       }
@@ -233,7 +221,6 @@ class _HistoricTransaction extends GetView<HistoryViewController> {
                 return Container(
                   padding: EdgeInsets.symmetric(horizontal: 10),
                   decoration: BoxDecoration(
-                    color: AppColors.white,
                     border: const Border.fromBorderSide(
                       BorderSide(color: AppColors.lightGray),
                     ),
@@ -251,7 +238,6 @@ class _HistoricTransaction extends GetView<HistoryViewController> {
                         height: 5,
                         width: 50,
                         decoration: BoxDecoration(
-                          color: AppColors.black,
                           border: const Border.fromBorderSide(
                             BorderSide(color: AppColors.lightGray),
                           ),
@@ -295,6 +281,8 @@ class _TransactionDateHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
       child: Column(
@@ -306,14 +294,13 @@ class _TransactionDateHeader extends StatelessWidget {
             style: TextStyle(
               fontSize: AppFontSizes.largeBody,
               fontWeight: AppFontWeights.medium,
-              color: AppColors.black,
             ),
           ),
           SizedBox(
             height: 4,
           ),
           DottedLine(
-            dashColor: AppColors.black,
+            dashColor: theme.colorScheme.secondary,
             lineThickness: 3,
           ),
         ],
@@ -393,7 +380,7 @@ class _HistoryView extends StatelessWidget {
                   children: [
                     SizedBox(
                       child: OperatorIcon(
-                        operatorType: transfer.feature.key,
+                        operatorType: retrieveOperatorName(transfer.feature),
                       ),
                     ),
                     SizedBox(
@@ -417,7 +404,6 @@ class _HistoryView extends StatelessWidget {
                             ? transfer.buyerPhoneNumber
                             : '$buyerName (${transfer.buyerPhoneNumber})',
                         style: TextStyle(
-                          color: AppColors.black,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -432,7 +418,6 @@ class _HistoryView extends StatelessWidget {
                             ? transfer.receiverPhoneNumber
                             : '$receiverName (${transfer.receiverPhoneNumber})',
                         style: TextStyle(
-                          color: AppColors.black,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -445,7 +430,6 @@ class _HistoryView extends StatelessWidget {
                       Text(
                         transferBuyerGateway,
                         style: TextStyle(
-                          color: AppColors.black,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -462,7 +446,6 @@ class _HistoryView extends StatelessWidget {
                               Text(
                                 forfeit.name,
                                 style: TextStyle(
-                                  color: AppColors.black,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -493,7 +476,6 @@ class _HistoryView extends StatelessWidget {
                           currencyCodeAlpha3: DefaultCurrency.xaf,
                         ),
                         style: TextStyle(
-                          color: AppColors.black,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -507,9 +489,8 @@ class _HistoryView extends StatelessWidget {
                     ),
                     SizedBox(
                       height: 30,
-                      child: TextButton(
+                      child: FilledButton(
                         style: TextButton.styleFrom(
-                          backgroundColor: AppColors.darkGray,
                           shape: RoundedRectangleBorder(
                             borderRadius: const BorderRadius.all(
                               Radius.circular(9),
@@ -521,7 +502,6 @@ class _HistoryView extends StatelessWidget {
                             localization.clone.toUpperCase(),
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              color: AppColors.white,
                               fontSize: 10,
                             ),
                           ),

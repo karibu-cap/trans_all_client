@@ -31,27 +31,30 @@ class CustomScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final canPop = AppRouter.canPop(context);
+    final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: canPop
           ? AppBar(
-              backgroundColor: AppColors.white,
+              backgroundColor: theme.appBarTheme.backgroundColor,
               elevation: 0.0,
               leading: InkWell(
                 child: Container(
                   margin: EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: AppColors.white,
-                    border: const Border.fromBorderSide(
-                      BorderSide(color: AppColors.lightGray),
+                    color: theme.appBarTheme.backgroundColor,
+                    border: Border.fromBorderSide(
+                      BorderSide(
+                        color:
+                            theme.textTheme.titleSmall?.color ?? AppColors.gray,
+                      ),
                     ),
                     borderRadius: BorderRadius.all(Radius.circular(9)),
                   ),
                   child: Icon(
                     size: 15,
                     Icons.arrow_back_ios,
-                    color: AppColors.black,
                   ),
                 ),
                 onTap: () => Navigator.of(context).pop(),
@@ -80,7 +83,7 @@ class CustomScaffold extends StatelessWidget {
                         child: Text(
                           title ?? '',
                           style: TextStyle(
-                            color: AppColors.black,
+                            color: theme.appBarTheme.titleTextStyle?.color,
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),

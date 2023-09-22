@@ -6,12 +6,13 @@ import 'package:trans_all_common_models/models.dart';
 
 import '../../data/repository/forfeitRepository.dart';
 import '../../data/repository/tranfersRepository.dart';
+import '../../routes/pages_routes.dart';
 import '../../util/key_internationalization.dart';
 
 enum LoadingState {
-  loading,
-  initiate,
-  processToTransfer,
+  load,
+  initiated,
+  proceeded,
   failed,
   succeeded,
 }
@@ -21,7 +22,7 @@ class InitTransactionViewModel {
   final TransferRepository _transferRepository;
 
   /// The current forfeit to transfers.
-  Forfeit? forfeit;
+  Rx<Forfeit?>? forfeit;
 
   /// Returns the error message.
   Rx<String?> errorMessage = Rx<String?>(null);
@@ -30,52 +31,43 @@ class InitTransactionViewModel {
   Rx<String?> transactionId = Rx<String?>(null);
 
   /// The number who make the payment.
-  final String buyerPhoneNumber;
+  Rx<String?> buyerPhoneNumber = Rx<String?>(null);
 
   /// The buyer gateway.
-  final String buyerGatewayId;
-
-  /// The receive operator.
-  final String receiverOperator;
-
-  /// The reference.
-  final String featureReference;
+  Rx<String?> buyerGatewayId = Rx<String?>(null);
 
   /// The receiver number.
-  final String receiverPhoneNumber;
+  Rx<String?> receiverPhoneNumber = Rx<String?>(null);
 
   /// The amount of transaction.
-  final num amountToPay;
+  Rx<num?> amountToPay = Rx<num?>(null);
+
+  /// The credit transaction.
+  final CreditTransactionParams creditTransactionParams;
 
   /// The init loading state.
-  Rx<LoadingState> loadingState = Rx(LoadingState.loading);
+  Rx<LoadingState> loadingState = Rx(LoadingState.load);
 
   /// Constructor of new [InitTransactionViewModel].
   InitTransactionViewModel({
-    required this.buyerPhoneNumber,
-    required this.receiverPhoneNumber,
-    required this.amountToPay,
-    required this.buyerGatewayId,
-    required this.featureReference,
-    required this.receiverOperator,
+    required this.creditTransactionParams,
     required TransferRepository transferRepository,
     required ForfeitRepository forfeitRepository,
-    String? existedTransactionId,
-    String? forfeitId,
-  })  : _transferRepository = transferRepository,
-        forfeit = getCurrentForfeit(
-          forfeitId,
-          forfeitRepository,
-        ) {
-    if (existedTransactionId != null) {
-      retrieveTransaction(existedTransactionId);
+  }) : _transferRepository = transferRepository {
+    getCurrentForfeit(
+      creditTransactionParams.forfeitId,
+      forfeitRepository,
+    );
+    final transactionId = creditTransactionParams.transactionId;
+    if (transactionId != null) {
+      retrieveTransaction(transactionId);
     } else {
       init();
     }
   }
 
   /// Retrieves the current forfeit.
-  static Forfeit? getCurrentForfeit(
+  Forfeit? getCurrentForfeit(
     String? forfeitId,
     ForfeitRepository forfeitRepository,
   ) {
@@ -83,7 +75,9 @@ class InitTransactionViewModel {
       return null;
     }
 
-    return forfeitRepository.getForfeitById(forfeitId);
+    forfeit?.value = forfeitRepository.getForfeitById(forfeitId);
+
+    return null;
   }
 
   /// Retrieves transaction.
@@ -91,46 +85,70 @@ class InitTransactionViewModel {
     final transfer = _transferRepository.getLocalTransaction(idOfTransaction);
     if (transfer == null) return;
     transactionId.value = idOfTransaction;
+    amountToPay.value = transfer.amount;
+    receiverPhoneNumber.value = transfer.receiverPhoneNumber;
+    buyerPhoneNumber.value = transfer.buyerPhoneNumber;
+    buyerGatewayId.value = transfer.buyerGateway.key;
+
     updateLoadingState(transfer);
   }
 
   /// The init function.
   Future<void> init() async {
+    final amount = num.parse(creditTransactionParams.amountInXaf ?? '');
+    final buyerGatewayIdFromParam = creditTransactionParams.buyerGatewayId;
+    final buyerPhoneNumberFromParam = creditTransactionParams.buyerPhoneNumber;
+    final featureReferenceFromParam = creditTransactionParams.featureReference;
+    final receiverOperatorFromParam = creditTransactionParams.receiverOperator;
+    final receiverPhoneNumberFromParam =
+        creditTransactionParams.receiverPhoneNumber;
+    if (buyerGatewayIdFromParam == null ||
+        buyerPhoneNumberFromParam == null ||
+        featureReferenceFromParam == null ||
+        receiverOperatorFromParam == null ||
+        receiverPhoneNumberFromParam == null) {
+      return;
+    }
+    amountToPay.value = amount;
+    receiverPhoneNumber.value = receiverPhoneNumberFromParam;
+    buyerPhoneNumber.value = buyerPhoneNumberFromParam;
+    buyerGatewayId.value = buyerGatewayIdFromParam;
+
     // Init the transaction.
     final transactionIdResult =
         await _transferRepository.createRemoteTransaction(
-      amountToPay: amountToPay,
-      buyerGatewayId: buyerGatewayId,
-      buyerPhoneNumber: buyerPhoneNumber,
-      featureReference: featureReference,
-      receiverOperator: receiverOperator,
-      receiverPhoneNumber: receiverPhoneNumber,
+      amountToPay: amount,
+      buyerGatewayId: buyerGatewayIdFromParam,
+      buyerPhoneNumber: buyerPhoneNumberFromParam,
+      featureReference: featureReferenceFromParam,
+      receiverOperator: receiverOperatorFromParam,
+      receiverPhoneNumber: receiverPhoneNumberFromParam,
     );
     final error = transactionIdResult.error;
     if (transactionIdResult.transactionId == null && error != null) {
       errorMessage.value = requestErrorTranslate(
         requestError: error,
-        buyerPhoneNumber: buyerPhoneNumber,
-        receiverNumber: receiverPhoneNumber,
+        buyerPhoneNumber: buyerPhoneNumberFromParam,
+        receiverNumber: receiverPhoneNumberFromParam,
       );
       loadingState.value = LoadingState.failed;
 
       return null;
     }
 
-    loadingState.value = LoadingState.initiate;
+    loadingState.value = LoadingState.initiated;
     transactionId.value ??= transactionIdResult.transactionId;
     errorMessage.value = null;
 
     final transfers = TransferInfo.fromJson(json: {
-      TransferInfo.keyAmountXAF: amountToPay,
+      TransferInfo.keyAmountXAF: amount,
       TransferInfo.keyBuyerGateway: buyerGatewayId,
       TransferInfo.keyBuyerPhoneNumber: buyerPhoneNumber,
       TransferInfo.keyId: transactionId.value,
       TransferInfo.keyCreatedAt: clock.now().toString(),
-      TransferInfo.keyFeature: featureReference,
+      TransferInfo.keyFeature: featureReferenceFromParam,
       TransferInfo.keyReason: null,
-      TransferInfo.keyReceiverOperator: receiverOperator,
+      TransferInfo.keyReceiverOperator: receiverOperatorFromParam,
       TransferInfo.keyReceiverPhoneNumber: receiverPhoneNumber,
       TransferInfo.keyStatus: TransferStatus.waitingRequest.key,
       TransferInfo.keyPayments: [
@@ -169,10 +187,10 @@ class InitTransactionViewModel {
       return;
     }
     if (transfer.status.key == TransferStatus.requestSend.key) {
-      loadingState.value = LoadingState.processToTransfer;
+      loadingState.value = LoadingState.proceeded;
 
       return;
     }
-    loadingState.value = LoadingState.initiate;
+    loadingState.value = LoadingState.initiated;
   }
 }

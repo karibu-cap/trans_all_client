@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trans_all_common_models/models.dart';
 
-import '../themes/app_colors.dart';
-
 /// Display the list of contact view.
 class ContactListWidget extends StatelessWidget {
   /// The scroll controller.
@@ -55,7 +53,6 @@ class ContactListWidget extends StatelessWidget {
                       child: Text(
                         firstValue,
                         style: TextStyle(
-                          color: AppColors.white,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

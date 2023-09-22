@@ -6,23 +6,23 @@ import 'package:trans_all_common_internationalization/internationalization.dart'
 
 import '../../routes/app_router.dart';
 import '../../routes/pages_routes.dart';
-import '../../themes/app_button_styles.dart';
-import '../../themes/app_colors.dart';
-import '../../themes/app_text_styles.dart';
 import '../../util/preferences_keys.dart';
+import '../../util/themes.dart';
 
 /// The welcome view.
 class WelcomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = Get.find<AppInternationalization>();
+    final theme = Theme.of(context);
+    final addThemeData = Get.find<ThemeManager>();
 
     return Scaffold(
-      backgroundColor: AppColors.darkGray,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: Stack(
         children: [
           Container(
-            color: AppColors.white,
+            color: theme.scaffoldBackgroundColor,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -43,14 +43,16 @@ class WelcomeView extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Image(
-                              image:
-                                  AssetImage('assets/icons/transTu_dark.png'),
+                              image: AssetImage(
+                                addThemeData.themeMode == ThemeMode.dark
+                                    ? 'assets/icons/transTu_white_icon.png'
+                                    : 'assets/icons/transTu_dark.png',
+                              ),
                               height: value * 200,
                             ),
                             Text(
                               localizations.appName,
-                              style: AppTextStyles.commonTitleLabel.copyWith(
-                                color: AppColors.darkGray,
+                              style: theme.textTheme.titleLarge?.copyWith(
                                 fontSize: 30,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -60,8 +62,7 @@ class WelcomeView extends StatelessWidget {
                             ),
                             Text(
                               localizations.welcome,
-                              style: AppTextStyles.commonTitleLabel.copyWith(
-                                color: AppColors.darkGray,
+                              style: theme.textTheme.titleLarge?.copyWith(
                                 fontSize: 16,
                                 height: 2,
                               ),
@@ -87,27 +88,38 @@ class WelcomeView extends StatelessWidget {
                 builder: (context, value, child) {
                   return Opacity(
                     opacity: value,
-                    child: ElevatedButton(
-                      style: roundedBigButton(
-                        context,
-                        AppColors.darkGray,
-                        AppColors.darkGray,
-                      ),
-                      onPressed: () async {
-                        final pref = await SharedPreferences.getInstance();
-                        await pref.setBool(
-                            PreferencesKeys.isFirstOpenWelcomeScreen, false);
-                        AppRouter.go(
-                          context,
-                          PagesRoutes.creditTransaction.pattern,
-                        );
-                      },
-                      child: Text(
-                        localizations.getStart,
-                        style: TextStyle(
-                          color: AppColors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
+                    child: Container(
+                      height: 60,
+                      width: MediaQuery.of(context).size.width,
+                      constraints: BoxConstraints(maxWidth: 500),
+                      child: FilledButton(
+                        style: theme.filledButtonTheme.style?.copyWith(
+                          shape: MaterialStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(15.0)),
+                              side: BorderSide(
+                                color: theme.primaryColor,
+                                width: 2,
+                              ),
+                            ),
+                          ),
+                        ),
+                        onPressed: (() async {
+                          final pref = await SharedPreferences.getInstance();
+                          await pref.setBool(
+                              PreferencesKeys.isFirstOpenWelcomeScreen, false);
+                          AppRouter.go(
+                            context,
+                            PagesRoutes.creditTransaction.pattern,
+                          );
+                        }),
+                        child: Text(
+                          localizations.getStart,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
                         ),
                       ),
                     ),

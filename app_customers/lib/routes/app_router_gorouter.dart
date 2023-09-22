@@ -80,25 +80,18 @@ class _GoRouterRoutesProvider {
             CreditTransactionParams.keyParamForfeitId,
           );
 
-          if (paymentNumber == null ||
-              receiverNumber == null ||
-              amount == null ||
-              buyerGatewayId == null ||
-              receiverOperator == null ||
-              featureReference == null) {
-            return AppPage(child: AppPageNotFound());
-          }
-
           return AppPage(
             child: InitTransaction(
-              amountToPay: num.parse(amount),
-              buyerPhoneNumber: paymentNumber,
-              receiverPhoneNumber: receiverNumber,
-              buyerGatewayId: buyerGatewayId,
-              featureReference: featureReference,
-              receiverOperator: receiverOperator,
-              transferId: transferId,
-              forfeitId: forfeitId,
+              creditTransactionParams: CreditTransactionParams(
+                amountInXaf: amount,
+                receiverOperator: receiverOperator,
+                buyerGatewayId: buyerGatewayId,
+                receiverPhoneNumber: receiverNumber,
+                buyerPhoneNumber: paymentNumber,
+                featureReference: featureReference,
+                transactionId: transferId,
+                forfeitId: forfeitId,
+              ),
             ),
           );
         },

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:trans_all_common_internationalization/internationalization.dart';
 
 import '../themes/app_colors.dart';
+import '../util/themes.dart';
 
 /// The custom app bar widget.
 class CustomAppBar extends StatelessWidget {
@@ -61,9 +62,11 @@ class _AppBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localization = Get.find<AppInternationalization>();
+    final addThemeData = Get.find<ThemeManager>();
+    final theme = Theme.of(context);
 
     return Container(
-      color: AppColors.darkGray,
+      color: theme.appBarTheme.backgroundColor,
       height: 80,
       width: MediaQuery.of(context).size.width,
       child: Padding(
@@ -87,8 +90,17 @@ class _AppBarWidget extends StatelessWidget {
             Row(
               children: [
                 InkWell(
+                  onTap: (() {
+                    if (addThemeData.themeMode == ThemeMode.dark) {
+                      addThemeData.updateCurrentTheme(ThemeMode.light);
+                    } else {
+                      addThemeData.updateCurrentTheme(ThemeMode.dark);
+                    }
+                  }),
                   child: Icon(
-                    Icons.sunny,
+                    addThemeData.themeMode != ThemeMode.dark
+                        ? Icons.nightlight_round
+                        : Icons.sunny,
                     color: AppColors.white,
                   ),
                 ),

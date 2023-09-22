@@ -54,9 +54,6 @@ class AnimationAsset {
 
   /// The success transaction asset.
   static const firstSuccess = 'assets/icons/first_success.json';
-
-  /// The noItem asset.
-  static const noItem = 'assets/icons/no_item.json';
 }
 
 /// The language code.

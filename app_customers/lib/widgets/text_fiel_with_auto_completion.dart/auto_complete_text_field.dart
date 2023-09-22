@@ -73,12 +73,9 @@ class AutoCompleteTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final borderRadius = const BorderRadius.all(Radius.circular(12));
+
     final saveIcon = saveContactIcon;
-    final borderColor = errorMessage.isNotEmpty
-        ? AppColors.red
-        : isValidField
-            ? AppColors.lightGreen
-            : AppColors.gray;
+
     Get.put(
       AutoCompleteTextFieldController(
         textController,
@@ -182,6 +179,12 @@ class AutoCompleteTextField extends StatelessWidget {
       }
     }
 
+    final borderColor = errorMessage.isNotEmpty
+        ? AppColors.red
+        : isValidField
+            ? AppColors.lightGreen
+            : AppColors.gray;
+
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Padding(
@@ -198,7 +201,6 @@ class AutoCompleteTextField extends StatelessWidget {
                     alignment: Alignment.center,
                     child: Text(
                       labelText,
-                      style: TextStyle(color: AppColors.black),
                     ),
                   ),
                 ),
@@ -213,10 +215,9 @@ class AutoCompleteTextField extends StatelessWidget {
                 if (!kIsWeb)
                   Expanded(
                     child: Container(
-                      height: 55,
+                      height: 65,
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        color: AppColors.white,
                         border: Border.fromBorderSide(
                           BorderSide(color: borderColor),
                         ),
@@ -240,13 +241,10 @@ class AutoCompleteTextField extends StatelessWidget {
                         keyboardType: TextInputType.number,
                         controller: textController,
                         style: TextStyle(
-                          color: AppColors.darkGray,
                           fontWeight: FontWeight.w500,
                         ),
-                        cursorColor: AppColors.darkGray,
                         decoration: InputDecoration(
                           filled: false,
-                          fillColor: AppColors.purple.withOpacity(0.03),
                           border: OutlineInputBorder(
                             borderSide: BorderSide(color: borderColor),
                             borderRadius: borderRadius,
@@ -272,11 +270,6 @@ class AutoCompleteTextField extends StatelessWidget {
                           prefixIcon: prefixIcon,
                           suffixIcon: suffixImage,
                           hintText: '6** *** ***',
-                          hintStyle: TextStyle(
-                            color: AppColors.lightGray.withOpacity(
-                              0.1,
-                            ),
-                          ),
                         ),
                         onChanged: _onTextFieldChange,
                       ),

@@ -47,6 +47,8 @@ class AlertBoxView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Dialog(
       elevation: 0,
       backgroundColor: AppColors.transparent,
@@ -56,7 +58,7 @@ class AlertBoxView extends StatelessWidget {
           Container(
             margin: EdgeInsets.only(top: 40),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: theme.dialogBackgroundColor,
               borderRadius: const BorderRadius.all(Radius.circular(12)),
             ),
             padding: EdgeInsets.only(top: 40, left: 20, right: 20),
@@ -86,41 +88,28 @@ class AlertBoxView extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: Text(
                               negativeBtnText ?? '',
-                              style: const TextStyle(
-                                color: AppColors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
                             ),
                           ),
                           onPressed: negativeBtnPressed ??
                               () => Navigator.of(context).pop(),
-                          style: TextButton.styleFrom(
-                            backgroundColor: AppColors.purple,
-                            shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(9)),
-                            ),
-                          ),
                         ),
                       SizedBox(
                         height: 8,
                         width: 8,
                       ),
                       if (positiveBtnText != null)
-                        TextButton(
+                        FilledButton(
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: Text(
                               positiveBtnText ?? '',
                               style: const TextStyle(
-                                color: AppColors.white,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
                           onPressed: positiveBtnPressed,
                           style: TextButton.styleFrom(
-                            backgroundColor: AppColors.darkGray,
                             shape: RoundedRectangleBorder(
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(9)),
@@ -137,7 +126,8 @@ class AlertBoxView extends StatelessWidget {
             height: 70,
             child: CircleAvatar(
               maxRadius: topSize ?? 40.0,
-              backgroundColor: topBackgroundColor ?? AppColors.darkGray,
+              backgroundColor: topBackgroundColor ??
+                  theme.floatingActionButtonTheme.backgroundColor,
               child: icon ?? Icon(Icons.message),
             ),
           ),

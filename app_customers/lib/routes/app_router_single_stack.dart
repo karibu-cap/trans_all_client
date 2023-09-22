@@ -65,12 +65,14 @@ class SingleStackNavigator extends StatelessWidget {
 
         return AppPage(
           child: InitTransaction(
-            amountToPay: num.parse(amount),
-            buyerPhoneNumber: paymentNumber,
-            receiverPhoneNumber: receiverNumber,
-            buyerGatewayId: buyerGatewayId,
-            featureReference: featureReference,
-            receiverOperator: receiverOperator,
+            creditTransactionParams: CreditTransactionParams(
+              amountInXaf: amount,
+              receiverOperator: receiverOperator,
+              buyerGatewayId: buyerGatewayId,
+              receiverPhoneNumber: receiverNumber,
+              buyerPhoneNumber: paymentNumber,
+              featureReference: featureReference,
+            ),
           ),
         );
       }

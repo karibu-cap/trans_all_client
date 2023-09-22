@@ -41,6 +41,7 @@ class FormTransfer extends StatelessWidget {
     final localization = Get.find<AppInternationalization>();
     final controller = Get.find<TransfersController>();
     final border = Radius.circular(25.0);
+    final theme = Theme.of(context);
 
     void alertToSentRequestBySms() {
       final mtnNumberForSMSAirtimeTransaction = RemoteConfig().getString(
@@ -54,7 +55,6 @@ class FormTransfer extends StatelessWidget {
         context: context,
         icon: Icon(
           Icons.wifi_tethering_error,
-          color: AppColors.white,
           size: 30,
         ),
         topBackgroundColor: AppColors.orange,
@@ -95,10 +95,9 @@ class FormTransfer extends StatelessWidget {
         context: context,
         icon: Icon(
           Icons.wifi_tethering_error,
-          color: AppColors.white,
           size: 30,
         ),
-        topBackgroundColor: AppColors.orange,
+        topBackgroundColor: theme.colorScheme.errorContainer,
         positiveBtnText: localization.ok,
         positiveBtnPressed: () async {
           Navigator.of(context, rootNavigator: true).pop();
@@ -224,7 +223,6 @@ class FormTransfer extends StatelessWidget {
                         ),
                         child: Icon(
                           Icons.keyboard_arrow_down_sharp,
-                          color: AppColors.black,
                         ),
                       ),
                     )
@@ -243,7 +241,7 @@ class FormTransfer extends StatelessWidget {
                   ? Tooltip(
                       message: localization.setAsDefaultBuyer,
                       child: InkWell(
-                        onTap: () {
+                        onTap: (() {
                           final FocusScopeNode currentFocus =
                               FocusScope.of(context);
                           if (!currentFocus.hasPrimaryFocus) {
@@ -253,7 +251,6 @@ class FormTransfer extends StatelessWidget {
                             context: context,
                             icon: Icon(
                               Icons.question_mark,
-                              color: AppColors.white,
                               size: 30,
                             ),
                             title: localization.confirmation,
@@ -262,27 +259,25 @@ class FormTransfer extends StatelessWidget {
                             content: Text(
                               localization.confirmSetAsDefault.trParams({
                                 Constant.number:
-                                    controller.paymentTextController.text
+                                    controller.paymentTextController.text,
                               }),
+                              style: theme.textTheme.bodySmall,
                             ),
                             positiveBtnPressed: () async {
                               await controller.saveBuyerNumberAsDefaultBuyer();
                               Navigator.of(context, rootNavigator: true).pop();
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(
-                                backgroundColor: AppColors.white,
                                 content: Text(
                                   localization.numberSaveSuccessful,
-                                  style: TextStyle(color: AppColors.black),
                                 ),
                                 behavior: SnackBarBehavior.floating,
                               ));
                             },
                           );
-                        },
+                        }),
                         child: Icon(
                           Icons.save_alt,
-                          color: AppColors.black,
                         ),
                       ),
                     )
@@ -334,23 +329,30 @@ class FormTransfer extends StatelessWidget {
                 onChanged: controller.updateAmount,
               ),
             SizedBox(height: 10),
-            ElevatedButton(
-              style: roundedBigButton(
-                context,
-                AppColors.darkGray,
-                AppColors.white,
-              ),
-              onPressed: checksTheForm,
-              child: Text(
-                '${localization.pay} ${controller.buttonToPayTextAmount.value.isNotEmpty ? '${Currency.formatWithCurrency(
-                    price: num.parse(controller.buttonToPayTextAmount.value),
-                    locale: localization.locale,
-                    currencyCodeAlpha3: DefaultCurrency.xaf,
-                  )}' : ''}',
-                style: TextStyle(
-                  color: AppColors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
+            SizedBox(
+              height: 60,
+              width: MediaQuery.of(context).size.width,
+              child: FilledButton(
+                style: theme.filledButtonTheme.style?.copyWith(
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(15.0)),
+                      side: BorderSide(color: theme.primaryColor, width: 2),
+                    ),
+                  ),
+                ),
+                onPressed: checksTheForm,
+                child: Text(
+                  '${localization.pay} ${controller.buttonToPayTextAmount.value.isNotEmpty ? '${Currency.formatWithCurrency(
+                      price: num.parse(controller.buttonToPayTextAmount.value),
+                      locale: localization.locale,
+                      currencyCodeAlpha3: DefaultCurrency.xaf,
+                    )}' : ''}',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
                 ),
               ),
             ),
@@ -388,7 +390,6 @@ class _AlertMessageContent extends StatelessWidget {
           child: Text(
             localization.sentRequestBySmsTitle,
             style: TextStyle(
-              color: AppColors.black,
               fontSize: 15,
             ),
           ),
@@ -399,7 +400,6 @@ class _AlertMessageContent extends StatelessWidget {
         Text(
           '${localization.chooseNumberToSend}: ',
           style: TextStyle(
-            color: AppColors.black,
             fontSize: 14,
           ),
         ),
@@ -411,7 +411,6 @@ class _AlertMessageContent extends StatelessWidget {
             Text(
               mtnNumberForSMSAirtimeTransaction,
               style: TextStyle(
-                color: AppColors.black,
                 fontSize: 15,
               ),
             ),
@@ -423,7 +422,6 @@ class _AlertMessageContent extends StatelessWidget {
                 value == mtnNumberForSMSAirtimeTransaction
                     ? Icons.circle
                     : Icons.circle_outlined,
-                color: AppColors.darkGray,
                 size: 20,
               ),
             ),
@@ -435,7 +433,6 @@ class _AlertMessageContent extends StatelessWidget {
             Text(
               orangeNumberForSMSAirtimeTransaction,
               style: TextStyle(
-                color: AppColors.black,
                 fontSize: 15,
               ),
             ),
@@ -447,7 +444,6 @@ class _AlertMessageContent extends StatelessWidget {
                 value == orangeNumberForSMSAirtimeTransaction
                     ? Icons.circle
                     : Icons.circle_outlined,
-                color: AppColors.darkGray,
                 size: 20,
               ),
             ),

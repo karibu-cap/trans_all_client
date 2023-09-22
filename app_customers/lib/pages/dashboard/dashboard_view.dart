@@ -90,6 +90,7 @@ class _DashboardBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final localizations = Get.find<AppInternationalization>();
     void handlePress(
       int index,
@@ -105,8 +106,10 @@ class _DashboardBody extends StatelessWidget {
       extendBody: true,
       bottomNavigationBar: AnimatedBottomNavigationBar.builder(
         itemCount: pages.length,
-        tabBuilder: (index, isActive) {
-          final color = isActive ? AppColors.white : AppColors.gray;
+        tabBuilder: ((index, isActive) {
+          final color = isActive
+              ? theme.bottomNavigationBarTheme.selectedItemColor
+              : theme.bottomNavigationBarTheme.unselectedItemColor;
 
           return Column(
             mainAxisSize: MainAxisSize.min,
@@ -129,10 +132,10 @@ class _DashboardBody extends StatelessWidget {
               ),
             ],
           );
-        },
+        }),
         height: 80,
         splashSpeedInMilliseconds: 300,
-        backgroundColor: AppColors.darkGray,
+        backgroundColor: theme.bottomAppBarTheme.color,
         activeIndex: navigationShell.currentIndex,
         gapLocation: GapLocation.end,
         notchSmoothness: NotchSmoothness.defaultEdge,
@@ -146,10 +149,9 @@ class _DashboardBody extends StatelessWidget {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColors.darkGray,
+        backgroundColor: theme.floatingActionButtonTheme.backgroundColor,
         child: Icon(
           Icons.share,
-          color: AppColors.white,
         ),
         onPressed: () => Share.share(
           '${localizations.shareTransAllLinkMessage} https://play.google.com/store/apps/details?id=com.karibu.transtu.prod',

@@ -76,7 +76,6 @@ class SimpleTextField extends StatelessWidget {
               alignment: Alignment.center,
               child: Text(
                 labelText,
-                style: TextStyle(color: AppColors.black),
               ),
             ),
             SizedBox(
@@ -86,12 +85,9 @@ class SimpleTextField extends StatelessWidget {
               inputFormatters: inputFormatters,
               keyboardType: TextInputType.number,
               controller: textController,
-              style: TextStyle(color: AppColors.black),
               textAlign: TextAlign.center,
-              cursorColor: AppColors.darkGray,
               decoration: InputDecoration(
-                filled: true,
-                fillColor: AppColors.gray.withOpacity(0.07),
+                filled: false,
                 border: OutlineInputBorder(
                   borderSide: BorderSide(color: borderColor),
                   borderRadius: borderRadius,
@@ -118,11 +114,6 @@ class SimpleTextField extends StatelessWidget {
                 prefixIcon: prefixIcon,
                 suffixIcon: suffixImage,
                 hintText: '100',
-                hintStyle: TextStyle(
-                  color: AppColors.lightGray.withOpacity(
-                    0.1,
-                  ),
-                ),
               ),
               onChanged: onChanged,
             ),

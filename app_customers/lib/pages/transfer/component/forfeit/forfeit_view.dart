@@ -68,25 +68,13 @@ class _ForfeitBody extends StatelessWidget {
         }
         if (listOfForfeit.isEmpty) {
           return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Lottie.asset(
-                  AnimationAsset.noItem,
-                  width: 100,
-                  height: 100,
-                  fit: BoxFit.cover,
-                ),
-                Text(
-                  localization.noForfeitFound,
-                  style: TextStyle(
-                    color: AppColors.black,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 15,
-                  ),
-                ),
-              ],
+            child: Text(
+              localization.noForfeitFound,
+              style: TextStyle(
+                color: AppColors.black,
+                fontWeight: FontWeight.w400,
+                fontSize: 15,
+              ),
             ),
           );
         }
@@ -146,6 +134,7 @@ class _OperatorView extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Provider.of<ForfeitController>(context);
     final localization = Get.find<AppInternationalization>();
+    final theme = Theme.of(context);
 
     return controller.listOfOperatorType.length == 1
         ? SizedBox()
@@ -180,7 +169,7 @@ class _OperatorView extends StatelessWidget {
                         margin: const EdgeInsets.symmetric(horizontal: 3),
                         decoration: BoxDecoration(
                           color:
-                              isSelected ? AppColors.darkGray : AppColors.white,
+                              isSelected ? theme.primaryColor : AppColors.white,
                           borderRadius:
                               const BorderRadius.all(Radius.circular(16.0)),
                           border: const Border.fromBorderSide(BorderSide(
@@ -194,8 +183,8 @@ class _OperatorView extends StatelessWidget {
                                 : (operatorName ?? ''),
                             style: TextStyle(
                               color: isSelected
-                                  ? AppColors.white
-                                  : AppColors.black,
+                                  ? theme.primaryTextTheme.bodyLarge?.color
+                                  : AppColors.darkGray,
                             ),
                           ),
                         ),
@@ -215,6 +204,7 @@ class _ForfeitCategoryView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Provider.of<ForfeitController>(context);
+    final theme = Theme.of(context);
 
     return controller.listOfForfeitCategory.length == 1
         ? SizedBox()
@@ -237,12 +227,12 @@ class _ForfeitCategoryView extends StatelessWidget {
                       forfeitCategory,
                     ),
                     child: Container(
-                      width: 90,
+                      constraints: BoxConstraints(minWidth: 90),
                       padding: const EdgeInsets.symmetric(horizontal: 18.0),
                       margin: const EdgeInsets.symmetric(horizontal: 3),
                       decoration: BoxDecoration(
                         color: forfeitCategory.isSelected
-                            ? AppColors.darkGray
+                            ? theme.primaryColor
                             : AppColors.white,
                         borderRadius:
                             const BorderRadius.all(Radius.circular(16.0)),
@@ -256,8 +246,8 @@ class _ForfeitCategoryView extends StatelessWidget {
                               forfeitCategory.category.key),
                           style: TextStyle(
                             color: forfeitCategory.isSelected
-                                ? AppColors.white
-                                : AppColors.black,
+                                ? theme.primaryTextTheme.bodyLarge?.color
+                                : AppColors.darkGray,
                           ),
                         ),
                       ),
@@ -276,6 +266,7 @@ class _ValidityView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Provider.of<ForfeitController>(context);
+    final theme = Theme.of(context);
 
     return controller.listOfForfeitValidity.length == 1
         ? SizedBox()
@@ -303,7 +294,7 @@ class _ValidityView extends StatelessWidget {
                       margin: const EdgeInsets.symmetric(horizontal: 3),
                       decoration: BoxDecoration(
                         color: validity.isSelected
-                            ? AppColors.darkGray
+                            ? theme.primaryColor
                             : AppColors.white,
                         borderRadius:
                             const BorderRadius.all(Radius.circular(16.0)),
@@ -317,8 +308,8 @@ class _ValidityView extends StatelessWidget {
                           maxLines: 1,
                           style: TextStyle(
                             color: validity.isSelected
-                                ? AppColors.white
-                                : AppColors.black,
+                                ? theme.primaryTextTheme.bodyLarge?.color
+                                : AppColors.darkGray,
                           ),
                         ),
                       ),
@@ -339,6 +330,7 @@ class _ForfeitFilterView extends StatelessWidget {
     final controller = Provider.of<ForfeitController>(context);
     final localization = Get.find<AppInternationalization>();
     final transferController = Get.find<TransfersController>();
+    final theme = Theme.of(context);
 
     return StreamBuilder(
       stream: controller.filterListOfForfeit.stream,
@@ -358,18 +350,8 @@ class _ForfeitFilterView extends StatelessWidget {
 
         if (listOfForfeit.isEmpty) {
           return Center(
-            child: Column(
-              children: [
-                Lottie.asset(
-                  AnimationAsset.noItem,
-                  width: 100,
-                  height: 100,
-                  fit: BoxFit.cover,
-                ),
-                Text(
-                  localization.noForfeitFound,
-                ),
-              ],
+            child: Text(
+              localization.noForfeitFound,
             ),
           );
         }
@@ -404,8 +386,9 @@ class _ForfeitFilterView extends StatelessWidget {
                         children: [
                           Text(
                             forfeit.name,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: theme.primaryColor,
                             ),
                           ),
                           Text(
@@ -425,7 +408,8 @@ class _ForfeitFilterView extends StatelessWidget {
                         locale: localization.locale,
                         currencyCodeAlpha3: DefaultCurrency.xaf,
                       ),
-                      style: TextStyle(color: AppColors.black),
+                      style: theme.textTheme.bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),

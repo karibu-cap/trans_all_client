@@ -132,6 +132,9 @@ dependencies:
   # The flutter package for manager the color scheme.
   flex_color_scheme: ^7.2.0
 
+  # The google font package.
+  google_fonts: ^4.0.4
+
   # TransAll common internationalization dependencies.
   trans_all_common_internationalization:
     path: ../common/internationalization

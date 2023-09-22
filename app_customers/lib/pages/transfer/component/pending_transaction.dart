@@ -9,6 +9,7 @@ import '../../../routes/pages_routes.dart';
 import '../../../themes/app_colors.dart';
 import '../../../util/constant.dart';
 import '../../../util/get_client_status.dart';
+import '../../../util/operator_name.dart';
 import '../../../widgets/oparator_icon.dart';
 import '../transfer_controller_view.dart';
 
@@ -43,7 +44,7 @@ class _ListOfPendingTransfer extends StatelessWidget {
   Widget build(BuildContext context) {
     final localization = Get.find<AppInternationalization>();
 
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,9 +52,6 @@ class _ListOfPendingTransfer extends StatelessWidget {
         children: [
           Text(
             localization.pendingTransfer,
-            style: TextStyle(
-              color: AppColors.black,
-            ),
           ),
           SizedBox(
             height: 10,
@@ -75,26 +73,27 @@ class _ListOfPendingTransfer extends StatelessWidget {
                         : PaymentId.unknown.key;
 
                 return InkWell(
-                    onTap: () => AppRouter.push(
-                          context,
-                          PagesRoutes.initTransaction.create(
-                            CreditTransactionParams(
-                              buyerPhoneNumber: transfer.buyerPhoneNumber,
-                              receiverPhoneNumber: transfer.receiverPhoneNumber,
-                              amountInXaf: transfer.amount.toString(),
-                              buyerGatewayId: transfer.buyerGateway.key,
-                              receiverOperator: transfer.receiverOperator,
-                              featureReference: transfer.feature.key,
-                              transactionId: transfer.id,
-                              forfeitId: transfer.forfeitId,
-                            ),
-                          ),
-                        ),
-                    child: _PendingTransferView(
-                      transfer: transfer,
-                      localization: localization,
-                      transferBuyerGateway: transferBuyerGateway,
-                    ));
+                  onTap: () => AppRouter.push(
+                    context,
+                    PagesRoutes.initTransaction.create(
+                      CreditTransactionParams(
+                        buyerPhoneNumber: transfer.buyerPhoneNumber,
+                        receiverPhoneNumber: transfer.receiverPhoneNumber,
+                        amountInXaf: transfer.amount.toString(),
+                        buyerGatewayId: transfer.buyerGateway.key,
+                        receiverOperator: transfer.receiverOperator,
+                        featureReference: transfer.feature.key,
+                        transactionId: transfer.id,
+                        forfeitId: transfer.forfeitId,
+                      ),
+                    ),
+                  ),
+                  child: _PendingTransferView(
+                    transfer: transfer,
+                    localization: localization,
+                    transferBuyerGateway: transferBuyerGateway,
+                  ),
+                );
               },
             ),
           ),
@@ -124,196 +123,145 @@ class _PendingTransferView extends StatelessWidget {
     return Center(
       child: Container(
         margin: EdgeInsets.only(right: 10),
-        width: MediaQuery.of(context).size.width * 0.8,
-        constraints: BoxConstraints(maxWidth: 400),
+        //width: MediaQuery.of(context).size.width * 0.8,
+        //constraints: BoxConstraints(maxWidth: 400),
         child: Card(
-          elevation: 0,
-          color: AppColors.lightGreen.withOpacity(0.01),
-          shape: RoundedRectangleBorder(
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
-            side: BorderSide(
-              color: AppColors.black,
-            ),
-          ),
           child: Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 8,
               vertical: 3,
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SizedBox(
-                            height: 30,
-                            width: 30,
-                            child: OperatorIcon(
-                              operatorType: transfer.feature.key,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          FittedBox(
-                            child: forfeit == null
-                                ? Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        '${localization.amount}: ',
-                                        style: TextStyle(
-                                          color: AppColors.black,
-                                        ),
-                                      ),
-                                      Text(
-                                        Currency.formatWithCurrency(
-                                          price: transfer.amount,
-                                          locale: localization.locale,
-                                          currencyCodeAlpha3:
-                                              DefaultCurrency.xaf,
-                                        ),
-                                        style: TextStyle(
-                                          color: AppColors.darkGray,
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                : Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        '${localization.forfeit}: ',
-                                        style: TextStyle(
-                                          color: AppColors.black,
-                                        ),
-                                      ),
-                                      Text(
-                                        forfeit.name,
-                                        style: TextStyle(
-                                          color: AppColors.darkGray,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          FittedBox(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '${localization.from}: ',
-                                  style: TextStyle(
-                                    color: AppColors.black,
-                                  ),
-                                ),
-                                Text(
-                                  transfer.buyerPhoneNumber,
-                                  style: TextStyle(
-                                    color: AppColors.darkGray,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          FittedBox(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  '${localization.to}: ',
-                                  style: TextStyle(
-                                    color: AppColors.black,
-                                  ),
-                                ),
-                                Text(
-                                  transfer.receiverPhoneNumber,
-                                  style: TextStyle(
-                                    color: AppColors.darkGray,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          FittedBox(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                FittedBox(
-                                  child: Text(
-                                    '${localization.by}: ',
-                                    style: TextStyle(
-                                      color: AppColors.black,
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  transferBuyerGateway,
-                                  style: TextStyle(
-                                    color: AppColors.darkGray,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          FittedBox(
-                            child: Row(
-                              children: [
-                                Text(
-                                  '${localization.status}: ',
-                                  style: TextStyle(
-                                    color: AppColors.black,
-                                  ),
-                                ),
-                                Text(
-                                  getValidStatus(
-                                    transfer.status,
-                                    transfer.payments.last.status,
-                                  ).toUpperCase(),
-                                  style: TextStyle(
-                                    color: AppColors.green,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                    SizedBox(
+                      height: 30,
+                      width: 30,
+                      child: OperatorIcon(
+                        operatorType: retrieveOperatorName(transfer.feature),
                       ),
                     ),
                   ],
+                ),
+                SizedBox(
+                  width: 15,
+                ),
+                FittedBox(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      FittedBox(
+                        child: forfeit == null
+                            ? Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '${localization.amount}: ',
+                                  ),
+                                  Text(
+                                    Currency.formatWithCurrency(
+                                      price: transfer.amount,
+                                      locale: localization.locale,
+                                      currencyCodeAlpha3: DefaultCurrency.xaf,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    '${localization.forfeit}: ',
+                                  ),
+                                  Text(
+                                    forfeit.name,
+                                  ),
+                                ],
+                              ),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      FittedBox(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '${localization.from}: ',
+                            ),
+                            Text(
+                              transfer.buyerPhoneNumber,
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      FittedBox(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '${localization.to}: ',
+                            ),
+                            Text(
+                              transfer.receiverPhoneNumber,
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      FittedBox(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            FittedBox(
+                              child: Text(
+                                '${localization.by}: ',
+                              ),
+                            ),
+                            Text(
+                              transferBuyerGateway,
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      FittedBox(
+                        child: Row(
+                          children: [
+                            Text(
+                              '${localization.status}: ',
+                            ),
+                            Text(
+                              getValidStatus(
+                                transfer.status,
+                                transfer.payments.last.status,
+                              ).toUpperCase(),
+                              style: TextStyle(
+                                color: AppColors.green,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

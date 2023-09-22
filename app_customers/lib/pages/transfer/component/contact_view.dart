@@ -85,11 +85,9 @@ class ContactWidget extends StatelessWidget {
           children: [
             Icon(
               Icons.people,
-              color: AppColors.black,
             ),
             Icon(
               Icons.keyboard_arrow_down_sharp,
-              color: AppColors.black,
             ),
           ],
         ),
@@ -119,6 +117,7 @@ class _ContactsView extends StatelessWidget {
     final localization = Get.find<AppInternationalization>();
     final controller = Get.find<TransfersController>();
     final contactPermissionState = UserContactConfig.contactPermissionState;
+    final theme = Theme.of(context);
 
     return StreamBuilder<List<Contact>>(
       stream: controller.streamOfContact.stream,
@@ -137,7 +136,6 @@ class _ContactsView extends StatelessWidget {
               Text(
                 localization.contact,
                 style: TextStyle(
-                  color: AppColors.darkGray,
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
                 ),
@@ -149,7 +147,6 @@ class _ContactsView extends StatelessWidget {
                 Text(
                   title,
                   style: TextStyle(
-                    color: AppColors.black,
                     fontSize: 15,
                   ),
                 ),
@@ -163,25 +160,12 @@ class _ContactsView extends StatelessWidget {
               if (contactsList.isEmpty &&
                   contactPermissionState == ContactPermissionState.allow)
                 Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Lottie.asset(
-                        AnimationAsset.noItem,
-                        width: 100,
-                        height: 100,
-                        fit: BoxFit.cover,
-                      ),
-                      Text(
-                        localization.noContactFound,
-                        style: TextStyle(
-                          color: AppColors.black,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 15,
-                        ),
-                      ),
-                    ],
+                  child: Text(
+                    localization.noContactFound,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 15,
+                    ),
                   ),
                 ),
               if (contactsList.isEmpty &&
@@ -193,7 +177,6 @@ class _ContactsView extends StatelessWidget {
                     Text(
                       localization.contactRequestMessage,
                       style: TextStyle(
-                        color: AppColors.black,
                         fontSize: 15,
                         height: 1.5,
                       ),
@@ -203,7 +186,7 @@ class _ContactsView extends StatelessWidget {
                       height: 20,
                     ),
                     TextButton(
-                      onPressed: () async {
+                      onPressed: (() async {
                         controller.updateLoadOfContacts(true);
                         await UserContactConfig.init(
                             requestContactPermission: true);
@@ -214,21 +197,19 @@ class _ContactsView extends StatelessWidget {
 
                           return;
                         }
-                      },
-                      style: TextButton.styleFrom(
-                        backgroundColor: AppColors.darkGray,
-                        shape: RoundedRectangleBorder(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(9)),
+                      }),
+                      style: theme.textButtonTheme.style?.copyWith(
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(9)),
+                          ),
                         ),
                       ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Text(
                           localization.allowAccess,
-                          style: const TextStyle(
-                            color: AppColors.white,
-                          ),
                         ),
                       ),
                     ),
@@ -254,9 +235,6 @@ class _ContactsView extends StatelessWidget {
                                   SizedBox(height: 10),
                                   Text(
                                     localization.waitMessage,
-                                    style: const TextStyle(
-                                      color: AppColors.black,
-                                    ),
                                   ),
                                 ],
                               )
@@ -270,25 +248,12 @@ class _ContactsView extends StatelessWidget {
                 Expanded(
                   child: Center(
                     child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Lottie.asset(
-                            AnimationAsset.noItem,
-                            width: 100,
-                            height: 100,
-                            fit: BoxFit.cover,
-                          ),
-                          Text(
-                            localization.noResultFound,
-                            style: TextStyle(
-                              color: AppColors.darkGray,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ],
+                      child: Text(
+                        localization.noResultFound,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 15,
+                        ),
                       ),
                     ),
                   ),
@@ -314,13 +279,14 @@ class _ContactsView extends StatelessWidget {
                       right: 10,
                       bottom: 10,
                       child: FloatingActionButton(
-                        backgroundColor: AppColors.darkGray,
                         tooltip: localization.refresh,
-                        onPressed: () async {
+                        onPressed: (() async {
                           unawaited(
-                              controller.animateController.value.repeat());
+                            controller.animateController.value.repeat(),
+                          );
                           final request = await UserContactConfig.init(
-                              requestContactPermission: true);
+                            requestContactPermission: true,
+                          );
                           await Future.delayed(
                             const Duration(seconds: 3),
                           );
@@ -340,7 +306,7 @@ class _ContactsView extends StatelessWidget {
                             );
                           }
                           controller.animateController.value.stop();
-                        },
+                        }),
                         child: RotationTransition(
                           turns: Tween(begin: 0.0, end: 1.0).animate(
                             controller.animateController.value,

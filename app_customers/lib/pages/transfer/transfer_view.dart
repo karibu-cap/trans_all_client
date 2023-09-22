@@ -118,21 +118,14 @@ class _TransferBodyTransaction extends StatelessWidget {
                   SizedBox(
                     height: 20,
                   ),
-                  TextButton(
-                    onPressed: controller.retryTransfer,
-                    style: TextButton.styleFrom(
-                      backgroundColor: AppColors.darkGray,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(9)),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(
-                        localization.retry,
-                        style: const TextStyle(
-                          color: AppColors.white,
+                  SizedBox(
+                    height: 40,
+                    child: FilledButton(
+                      onPressed: controller.retryTransfer,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Text(
+                          localization.retry,
                         ),
                       ),
                     ),
@@ -270,7 +263,10 @@ class _OverlayTooltipView extends StatelessWidget {
               if (!featureForfeitEnabled)
                 CustomAppBar(
                   disableSuperposition: true,
-                  child: _TransferBodyTransaction(),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: _TransferBodyTransaction(),
+                  ),
                 ),
             ],
           ),
