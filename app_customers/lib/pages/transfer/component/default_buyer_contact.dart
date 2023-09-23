@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 import 'package:trans_all_common_internationalization/internationalization.dart';
 import 'package:trans_all_common_models/models.dart';
 
-import '../../../themes/app_colors.dart';
-import '../../../util/constant.dart';
 import '../../../widgets/contact_list_widget.dart';
 import '../transfer_controller_view.dart';
 
@@ -35,7 +32,6 @@ class DefaultBuyerContactsView extends StatelessWidget {
               Text(
                 localization.saveContactNumber,
                 style: TextStyle(
-                  color: AppColors.darkGray,
                   fontSize: 20,
                 ),
               ),
@@ -45,25 +41,13 @@ class DefaultBuyerContactsView extends StatelessWidget {
               if (defaultBuyerNumber.isEmpty)
                 Expanded(
                   child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Lottie.asset(
-                          AnimationAsset.noItem,
-                          width: 100,
-                          height: 100,
-                          fit: BoxFit.cover,
-                        ),
-                        Text(
-                          localization.emptyBuyerContactsList,
-                          style: TextStyle(
-                            color: AppColors.black,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ],
+                    child: Text(
+                      localization.emptyBuyerContactsList,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 15,
+                      ),
                     ),
                   ),
                 ),
@@ -71,12 +55,12 @@ class DefaultBuyerContactsView extends StatelessWidget {
                 Expanded(
                   child: ContactListWidget(
                     listOfContact: defaultBuyerNumber,
-                    onContactPressed: (contact) {
+                    onContactPressed: ((contact) {
                       controller.updatePayerContact(
                         contact.phoneNumber,
                       );
                       Navigator.pop(context);
-                    },
+                    }),
                   ),
                 ),
             ],

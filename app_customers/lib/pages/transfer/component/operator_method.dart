@@ -4,8 +4,6 @@ import 'package:overlay_tooltip/overlay_tooltip.dart';
 import 'package:trans_all_common_internationalization/internationalization.dart';
 import 'package:trans_all_common_models/models.dart';
 
-import '../../../themes/app_colors.dart';
-import '../../../themes/app_text_styles.dart';
 import '../../../widgets/m_tooltip.dart';
 import '../../../widgets/oparator_icon.dart';
 import 'question_mask_view.dart';
@@ -22,47 +20,43 @@ class TransferAirtimeMethod extends StatelessWidget {
   Widget build(BuildContext context) {
     final localization = Get.find<AppInternationalization>();
 
-    return Container(
-      padding: EdgeInsets.all(10),
-      height: 100,
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        border: const Border.fromBorderSide(
-          BorderSide(color: AppColors.lightGray),
-        ),
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          FittedBox(
-            child: Row(
-              children: [
-                Text(
-                  '${localization.availableOperator} ',
-                  style: AppTextStyles.headerH3Label,
-                ),
-                OverlayTooltipItem(
-                  displayIndex: 1,
-                  tooltip: (controller) => Padding(
-                    padding: const EdgeInsets.only(bottom: 15),
-                    child: MTooltip(
-                      controller: controller,
-                      message: localization.availableOperatorDescription,
+    return Card(
+      child: SizedBox(
+        height: 100,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              FittedBox(
+                child: Row(
+                  children: [
+                    Text(
+                      '${localization.availableOperator} ',
                     ),
-                  ),
-                  child: QuestionMaskView(
-                    index: 1,
-                  ),
+                    OverlayTooltipItem(
+                      displayIndex: 1,
+                      tooltip: (controller) => Padding(
+                        padding: const EdgeInsets.only(bottom: 15),
+                        child: MTooltip(
+                          controller: controller,
+                          message: localization.availableOperatorDescription,
+                        ),
+                      ),
+                      child: QuestionMaskView(
+                        index: 1,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              _AvailableOperatorGateway(supportedOperation),
+            ],
           ),
-          SizedBox(
-            height: 5,
-          ),
-          _AvailableOperatorGateway(supportedOperation),
-        ],
+        ),
       ),
     );
   }
@@ -75,15 +69,16 @@ class _AvailableOperatorGateway extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
+    return Expanded(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: supportedOperation.map<Widget>((currentOperator) {
-          return Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: OperatorIcon(
-              operatorType: currentOperator.operatorName.key,
+          return Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: OperatorIcon(
+                operatorType: currentOperator.operatorName.key,
+              ),
             ),
           );
         }).toList(),

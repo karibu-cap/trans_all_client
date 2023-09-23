@@ -22,9 +22,11 @@ class InternetConnectivityView extends StatelessWidget {
     return StreamBuilder<InternetConnectionStatus>(
       stream: InternetConnectionCheckerPlus.createInstance().onStatusChange,
       builder: (context, snapshot) {
+        final theme = Theme.of(context);
+
         final connectionStatus = snapshot.data;
         final Widget noConnection = Container(
-          color: AppColors.darkGray,
+          color: theme.secondaryHeaderColor,
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 10),
             child: Row(
@@ -34,7 +36,6 @@ class InternetConnectivityView extends StatelessWidget {
                 Text(
                   localization.noInternetConnection,
                   style: TextStyle(
-                    color: AppColors.white,
                     fontSize: 14,
                   ),
                 ),

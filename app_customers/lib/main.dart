@@ -19,6 +19,7 @@ import 'data/repository/contactRepository.dart';
 import 'data/repository/forfeitRepository.dart';
 import 'data/repository/tranfersRepository.dart';
 import 'routes/app_router.dart';
+import 'util/themes.dart';
 import 'util/user_contact.dart';
 import 'widgets/contact_service_button/contact_service_model.dart';
 
@@ -49,6 +50,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hiveService = HiveService(HiveServiceType.hive);
+    final appThemeData = ThemeManager();
 
     void _initGetProviders() {
       UserContactConfig.init();
@@ -56,6 +58,7 @@ class MyApp extends StatelessWidget {
       Get.lazyPut(() => TransferRepository(hiveService));
       Get.lazyPut(() => ContactRepository(hiveService));
       Get.lazyPut(() => ForfeitRepository(hiveService));
+      Get.lazyPut(() => appThemeData);
       Get.lazyPut(ContactServiceModel.new);
 
       return;
@@ -71,22 +74,27 @@ class MyApp extends StatelessWidget {
 class _BuildApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      routeInformationProvider: AppRouter.getRouteInformationProvider(),
-      routerDelegate: AppRouter.getRouterDelegate(),
-      routeInformationParser: AppRouter.getRouteInformationParser(),
-      backButtonDispatcher: AppRouter.getBackButtonDispatcher(),
-      localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: AppInternationalization.supportedLocales,
-      title: AppEnvironment.appName,
-      translations: AppInternationalization(Get.deviceLocale ?? Locale('en')),
-      locale: Get.deviceLocale,
-      fallbackLocale: Locale('en', ''),
+    return GetBuilder<ThemeManager>(
+      builder: (controller) => GetMaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        routeInformationProvider: AppRouter.getRouteInformationProvider(),
+        routerDelegate: AppRouter.getRouterDelegate(),
+        routeInformationParser: AppRouter.getRouteInformationParser(),
+        backButtonDispatcher: AppRouter.getBackButtonDispatcher(),
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: AppInternationalization.supportedLocales,
+        title: AppEnvironment.appName,
+        translations: AppInternationalization(Get.deviceLocale ?? Locale('en')),
+        locale: Get.deviceLocale,
+        fallbackLocale: Locale('en', ''),
+        theme: lightTheme(),
+        darkTheme: darkTheme(),
+        themeMode: controller.themeMode,
+      ),
     );
   }
 }

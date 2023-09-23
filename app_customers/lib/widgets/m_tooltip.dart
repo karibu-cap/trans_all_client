@@ -27,118 +27,117 @@ class MTooltip extends StatelessWidget {
     final hasNextItem = currentDisplayIndex < totalLength;
     final hasPreviousItem = currentDisplayIndex != 1;
     final localization = Get.find<AppInternationalization>();
+    final theme = Theme.of(context);
 
-    return Container(
-      width: 200,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: const BorderRadius.all(Radius.circular(9)),
-      ),
-      padding: const EdgeInsets.only(left: 5, right: 5, top: 3, bottom: 3),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Card(
+      child: SizedBox(
+        width: 200,
+        child: Padding(
+          padding: EdgeInsets.only(left: 5, right: 5, top: 3, bottom: 3),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Opacity(
-                opacity: totalLength == 1 ? 0 : 1,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: Text(
-                    '$currentDisplayIndex ${localization.of} $totalLength',
-                    style: TextStyle(
-                      color: AppColors.gray,
-                      fontSize: 12.5,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ),
-              ),
-              InkWell(
-                onTap: controller.dismiss,
-                child: SizedBox(
-                  height: 20,
-                  width: 20,
-                  child: CircleAvatar(
-                    backgroundColor: AppColors.darkGray,
-                    child: Icon(
-                      Icons.close,
-                      color: AppColors.white,
-                      size: 15,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Text(message),
-          const SizedBox(
-            height: 16,
-          ),
-          Divider(
-            height: 1,
-            thickness: 1,
-            color: AppColors.lightGray,
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          FittedBox(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Opacity(
-                  opacity: hasPreviousItem ? 1 : 0,
-                  child: TextButton(
-                    onPressed: controller.previous,
-                    style: TextButton.styleFrom(
-                      backgroundColor: AppColors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(9)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Opacity(
+                    opacity: totalLength == 1 ? 0 : 1,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: Text(
+                        '$currentDisplayIndex ${localization.of} $totalLength',
                       ),
                     ),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(
-                        localization.prev,
-                        style: TextStyle(
-                          color: Colors.white,
+                  ),
+                  InkWell(
+                    onTap: controller.dismiss,
+                    child: SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircleAvatar(
+                        backgroundColor:
+                            theme.floatingActionButtonTheme.backgroundColor,
+                        child: Icon(
+                          Icons.close,
+                          size: 15,
                         ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                TextButton(
-                  onPressed: controller.next,
-                  style: TextButton.styleFrom(
-                    backgroundColor: AppColors.purple,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: const BorderRadius.all(Radius.circular(9)),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Text(
-                      hasNextItem ? localization.next : localization.complete,
-                      style: const TextStyle(
-                        color: Colors.white,
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Text(message),
+              const SizedBox(
+                height: 16,
+              ),
+              Divider(
+                height: 1,
+                thickness: 1,
+                color: AppColors.lightGray,
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              FittedBox(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Opacity(
+                      opacity: hasPreviousItem ? 1 : 0,
+                      child: TextButton(
+                        onPressed: controller.previous,
+                        style: TextButton.styleFrom(
+                          backgroundColor: AppColors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(9)),
+                          ),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Text(
+                            localization.prev,
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    TextButton(
+                      onPressed: controller.next,
+                      style: TextButton.styleFrom(
+                        backgroundColor: AppColors.purple,
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(9)),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Text(
+                          hasNextItem
+                              ? localization.next
+                              : localization.complete,
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

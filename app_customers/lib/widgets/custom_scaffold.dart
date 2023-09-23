@@ -1,8 +1,5 @@
 import 'package:animation_wrappers/animations/faded_slide_animation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:get/get.dart';
-import 'package:trans_all_common_internationalization/internationalization.dart';
 
 import '../routes/app_router.dart';
 import '../themes/app_colors.dart';
@@ -34,17 +31,36 @@ class CustomScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final canPop = AppRouter.canPop(context);
-    final localization = Get.find<AppInternationalization>();
+    final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: AppColors.white,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(50),
-        child: AppBar(
-          title: Text(localization.transAll),
-          backgroundColor: AppColors.darkGray,
-        ),
-      ),
+      backgroundColor: theme.scaffoldBackgroundColor,
+      appBar: canPop
+          ? AppBar(
+              backgroundColor: theme.appBarTheme.backgroundColor,
+              elevation: 0.0,
+              leading: InkWell(
+                child: Container(
+                  margin: EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: theme.appBarTheme.backgroundColor,
+                    border: Border.fromBorderSide(
+                      BorderSide(
+                        color:
+                            theme.textTheme.titleSmall?.color ?? AppColors.gray,
+                      ),
+                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(9)),
+                  ),
+                  child: Icon(
+                    size: 15,
+                    Icons.arrow_back_ios,
+                  ),
+                ),
+                onTap: () => Navigator.of(context).pop(),
+              ),
+            )
+          : null,
       body: SafeArea(
         bottom: false,
         child: Center(
@@ -61,9 +77,19 @@ class CustomScaffold extends StatelessWidget {
                         ? InternetConnectivityView()
                         : SizedBox.shrink(),
                   ),
-                SizedBox(
-                  height: 7,
-                ),
+                title != null
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Text(
+                          title ?? '',
+                          style: TextStyle(
+                            color: theme.appBarTheme.titleTextStyle?.color,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      )
+                    : SizedBox.shrink(),
                 Expanded(
                   child: child,
                 ),

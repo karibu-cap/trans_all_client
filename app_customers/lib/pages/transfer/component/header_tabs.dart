@@ -78,29 +78,29 @@ class _Tab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget child = SizedBox(
+    final theme = Theme.of(context);
+
+    final Widget child = SizedBox(
       height: 50,
       width: 150,
-      child: Center(
-        child: Text(
-          label,
-          style: TextStyle(
-            color: active ? AppColors.white : AppColors.darkGray,
+      child: ColoredBox(
+        color: active ? theme.primaryColor : AppColors.white,
+        child: Center(
+          child: Text(
+            label,
+            style: TextStyle(
+              color: active
+                  ? theme.primaryTextTheme.bodyLarge?.color
+                  : AppColors.darkGray,
+            ),
           ),
         ),
       ),
     );
-    if (active) {
-      child = ColoredBox(
-        color: AppColors.darkGray,
-        child: child,
-      );
-    }
 
     return Material(
       child: InkWell(
         onTap: onTap,
-        hoverColor: Colors.transparent,
         child: child,
       ),
     );

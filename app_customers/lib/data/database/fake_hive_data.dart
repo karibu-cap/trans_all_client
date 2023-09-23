@@ -119,10 +119,10 @@ final fakeTransactions = {
   }),
   'cc7c33c5-ec6d-4b1f-9f10-8c8c1c7c0afb': TransferInfo.fromJson(json: {
     TransferInfo.keyAmountXAF: 500,
-    TransferInfo.keyBuyerGateway: PaymentId.mtnPaymentId.key,
-    TransferInfo.keyBuyerPhoneNumber: '62783748',
+    TransferInfo.keyBuyerGateway: PaymentId.orangePaymentId.key,
+    TransferInfo.keyBuyerPhoneNumber: '696689073',
     TransferInfo.keyCreatedAt: '2022-10-12 15:30:00Z',
-    TransferInfo.keyFeature: OperationTransferType.camtelUnitTransfer.key,
+    TransferInfo.keyFeature: OperationTransferType.mtnUnitTransfer.key,
     TransferInfo.keyReason: null,
     TransferInfo.keyReceiverOperator: 'mtn',
     TransferInfo.keyReceiverPhoneNumber: '673729217',
@@ -131,7 +131,7 @@ final fakeTransactions = {
     TransferInfo.keyPayments: [
       {
         TransTuPayment.keyGateway: PaymentId.mtnPaymentId.key,
-        TransTuPayment.keyPhoneNumber: '697783748',
+        TransTuPayment.keyPhoneNumber: '687768765',
         TransTuPayment.keyStatus: PaymentStatus.succeeded.key,
       },
     ],
@@ -160,7 +160,7 @@ final fakeTransactions = {
     TransferInfo.keyBuyerGateway: PaymentId.mtnPaymentId.key,
     TransferInfo.keyBuyerPhoneNumber: '697783748',
     TransferInfo.keyCreatedAt: '2022-10-13 15:30:00Z',
-    TransferInfo.keyFeature: OperationTransferType.camtelUnitTransfer.key,
+    TransferInfo.keyFeature: OperationTransferType.mtnUnitTransfer.key,
     TransferInfo.keyReason: null,
     TransferInfo.keyReceiverOperator: 'mtn',
     TransferInfo.keyReceiverPhoneNumber: '673729217',
@@ -250,7 +250,7 @@ final fakeUserContacts = {
       Contact.keyId: '4b3f3f02',
       Contact.keyIsBuyerContact: false,
       Contact.keyName: 'jhon',
-      Contact.keyPhoneNumber: '687768765',
+      Contact.keyPhoneNumber: '696689073',
     },
   ),
   '4b3f3f00000': Contact.fromJson(

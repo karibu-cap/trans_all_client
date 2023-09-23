@@ -4,7 +4,6 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../pages/init_tranction/init_transaction.dart';
 import '../pages/welcome/welcome_view.dart';
 import '../util/preferences_keys.dart';
 import 'app_page.dart';
@@ -106,16 +105,7 @@ class BeamerRoutesProvider {
           return BeamPage(
             key: ValueKey('initTransaction'),
             type: BeamPageType.slideTransition,
-            child: AppPage(
-              child: InitTransaction(
-                amountToPay: num.parse(amount),
-                buyerPhoneNumber: paymentNumber,
-                receiverPhoneNumber: receiverNumber,
-                buyerGatewayId: buyerGatewayId,
-                featureReference: featureReference,
-                receiverOperator: receiverOperator,
-              ),
-            ),
+            child: AppPage(child: SizedBox.shrink()),
           );
         },
         PagesRoutes.historic.pattern: (context, state, data) {

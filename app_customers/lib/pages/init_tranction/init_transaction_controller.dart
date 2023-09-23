@@ -6,6 +6,7 @@ import 'package:trans_all_common_models/models.dart';
 
 import '../../data/repository/contactRepository.dart';
 import '../../data/repository/tranfersRepository.dart';
+import '../../routes/pages_routes.dart';
 import 'init_transaction_view_model.dart';
 
 /// The new initialization controller.
@@ -18,11 +19,27 @@ class InitTransactionController extends GetxController {
   /// Returns the error message.
   Rx<String?> get errorMessage => _model.errorMessage;
 
+  /// The credit transaction.
+  CreditTransactionParams get creditTransactionParams =>
+      _model.creditTransactionParams;
+
   /// The current forfeit to transfers.
-  Forfeit? get forfeit => _model.forfeit;
+  Rx<Forfeit?>? get forfeit => _model.forfeit;
 
   /// The transaction id.
   Rx<String?> get transactionId => _model.transactionId;
+
+  /// The number who make the payment.
+  Rx<String?> get buyerPhoneNumber => _model.buyerPhoneNumber;
+
+  /// The buyer gateway.
+  Rx<String?> get buyerGatewayId => _model.buyerGatewayId;
+
+  /// The receiver number.
+  Rx<String?> get receiverPhoneNumber => _model.receiverPhoneNumber;
+
+  /// The amount of transaction.
+  Rx<num?> get amountToPay => _model.amountToPay;
 
   /// The loading state.
   Rx<LoadingState> get loadingState => _model.loadingState;
@@ -37,7 +54,7 @@ class InitTransactionController extends GetxController {
   /// Initialize the transaction.
   Future<void> initializationTransaction() async {
     transactionId.value = null;
-    loadingState.value = LoadingState.loading;
+    loadingState.value = LoadingState.load;
     await _model.init();
   }
 

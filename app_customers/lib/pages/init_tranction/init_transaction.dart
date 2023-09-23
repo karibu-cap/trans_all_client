@@ -11,7 +11,6 @@ import '../../data/repository/forfeitRepository.dart';
 import '../../data/repository/tranfersRepository.dart';
 import '../../routes/app_router.dart';
 import '../../routes/pages_routes.dart';
-import '../../themes/app_colors.dart';
 import '../../util/constant.dart';
 import '../../widgets/custom_scaffold.dart';
 import 'init_transaction_controller.dart';
@@ -19,41 +18,17 @@ import 'init_transaction_view_model.dart';
 
 /// The Initialize transaction view.
 class InitTransaction extends StatelessWidget {
-  /// The id of transfer.
-  final String? transferId;
+  /// The credit transaction params.
+  final CreditTransactionParams creditTransactionParams;
 
-  /// The number who make the payment.
-  final String buyerPhoneNumber;
-
-  /// The number who make the payment.
-  final String buyerGatewayId;
-
-  /// The number who make the payment.
-  final String receiverOperator;
-
-  /// The number who make the payment.
-  final String featureReference;
-
-  /// The receiver number.
-  final String receiverPhoneNumber;
-
-  /// The amount of transaction.
-  final num amountToPay;
-
-  /// The id of forfeit to transfers.
-  final String? forfeitId;
+  /// The boolean to verify if is testing mode.
+  final bool isTesting;
 
   /// Constructs a new [InitTransaction] view.
   const InitTransaction({
     super.key,
-    required this.buyerPhoneNumber,
-    required this.receiverPhoneNumber,
-    required this.amountToPay,
-    required this.buyerGatewayId,
-    required this.featureReference,
-    required this.receiverOperator,
-    this.transferId,
-    this.forfeitId,
+    required this.creditTransactionParams,
+    this.isTesting = false,
   });
 
   @override
@@ -64,16 +39,9 @@ class InitTransaction extends StatelessWidget {
     final forfeitRepository = Get.find<ForfeitRepository>();
 
     final initTransactionModel = InitTransactionViewModel(
-      buyerPhoneNumber: buyerPhoneNumber,
-      receiverPhoneNumber: receiverPhoneNumber,
-      amountToPay: amountToPay,
-      buyerGatewayId: buyerGatewayId,
-      featureReference: featureReference,
-      receiverOperator: receiverOperator,
-      transferRepository: transferRepository,
-      existedTransactionId: transferId,
-      forfeitId: forfeitId,
+      creditTransactionParams: creditTransactionParams,
       forfeitRepository: forfeitRepository,
+      transferRepository: transferRepository,
     );
 
     Get.put(
@@ -85,9 +53,10 @@ class InitTransaction extends StatelessWidget {
     );
 
     return CustomScaffold(
+      displayInternetMessage: !isTesting,
       child: Builder(builder: (context) {
         final controller = Get.find<InitTransactionController>();
-        final forfeit = controller.forfeit;
+        final forfeit = controller.forfeit?.value;
 
         return Center(
           child: Padding(
@@ -101,14 +70,13 @@ class InitTransaction extends StatelessWidget {
                       Constant.amountToPay: forfeit != null
                           ? localization.forfeit
                           : Currency.formatWithCurrency(
-                              price: amountToPay,
+                              price: controller.amountToPay.value ?? 0,
                               locale: localization.locale,
                               currencyCodeAlpha3: DefaultCurrency.xaf,
                             ),
                     },
                   ),
                   style: TextStyle(
-                    color: AppColors.black,
                     fontWeight: FontWeight.w500,
                     fontSize: 30,
                   ),
@@ -125,7 +93,6 @@ class InitTransaction extends StatelessWidget {
                         Text(
                           forfeit.name,
                           style: TextStyle(
-                            color: AppColors.black,
                             fontWeight: FontWeight.w500,
                             fontSize: 17,
                           ),
@@ -138,7 +105,6 @@ class InitTransaction extends StatelessWidget {
                               ? forfeit.description.en
                               : forfeit.description.fr,
                           style: TextStyle(
-                            color: AppColors.black,
                             fontWeight: FontWeight.w500,
                             fontSize: 14,
                           ),
@@ -165,14 +131,14 @@ class InitTransaction extends StatelessWidget {
                                 Text(
                                   localization.payer,
                                   style: TextStyle(
-                                    color: AppColors.black,
                                     fontSize: 15,
                                   ),
                                 ),
                                 Text(
-                                  controller.getUserName(buyerPhoneNumber),
+                                  controller.getUserName(
+                                    controller.buyerPhoneNumber.value ?? '',
+                                  ),
                                   style: TextStyle(
-                                    color: AppColors.black,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 15,
                                   ),
@@ -190,16 +156,13 @@ class InitTransaction extends StatelessWidget {
                             children: [
                               Icon(
                                 Icons.forward,
-                                color: AppColors.black,
                               ),
                               Icon(
-                                color: AppColors.black,
                                 Icons.phone_android_outlined,
                                 size: 50,
                               ),
                               Icon(
                                 Icons.forward,
-                                color: AppColors.black,
                               ),
                             ],
                           ),
@@ -219,14 +182,14 @@ class InitTransaction extends StatelessWidget {
                                 Text(
                                   localization.receiver,
                                   style: TextStyle(
-                                    color: AppColors.black,
                                     fontSize: 15,
                                   ),
                                 ),
                                 Text(
-                                  controller.getUserName(receiverPhoneNumber),
+                                  controller.getUserName(
+                                    controller.receiverPhoneNumber.value ?? '',
+                                  ),
                                   style: TextStyle(
-                                    color: AppColors.black,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 15,
                                   ),
@@ -243,7 +206,8 @@ class InitTransaction extends StatelessWidget {
                   height: 10,
                 ),
                 _BodyTransaction(
-                  buyerGatewayId: buyerGatewayId,
+                  isTesting: isTesting,
+                  buyerGatewayId: controller.buyerGatewayId.value ?? '',
                 ),
               ],
             ),
@@ -256,16 +220,18 @@ class InitTransaction extends StatelessWidget {
 
 class _BodyTransaction extends StatelessWidget {
   final String buyerGatewayId;
+  final bool isTesting;
 
   const _BodyTransaction({
     required this.buyerGatewayId,
+    required this.isTesting,
   });
   @override
   Widget build(BuildContext context) {
-    return GetX<InitTransactionController>(builder: (controller) {
+    return GetX<InitTransactionController>(builder: ((controller) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (controller.loadingState.value != LoadingState.initiate ||
-            controller.loadingState.value != LoadingState.processToTransfer) {
+        if (controller.loadingState.value != LoadingState.initiated ||
+            controller.loadingState.value != LoadingState.proceeded) {
           controller.watchTransaction();
         }
       });
@@ -274,32 +240,38 @@ class _BodyTransaction extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          _ImageStatus(controller.loadingState.value),
+          _ImageStatus(
+            controller.loadingState.value,
+            isTesting,
+          ),
           SizedBox(
             height: 20,
           ),
           PlayAnimationBuilder<double>(
-              tween: Tween<double>(begin: 0.0, end: 1.0),
-              duration: Duration(seconds: 1),
-              curve: Curves.easeOut,
-              builder: (context, value, child) {
-                return Opacity(
-                    opacity: value,
-                    child: _CurrentWidget(
-                      buyerGatewayId: buyerGatewayId,
-                    ));
-              }),
+            tween: Tween<double>(begin: 0.0, end: 1.0),
+            duration: Duration(seconds: 1),
+            curve: Curves.easeOut,
+            builder: (context, value, child) {
+              return Opacity(
+                opacity: value,
+                child: _CurrentWidget(
+                  buyerGatewayId: buyerGatewayId,
+                ),
+              );
+            },
+          ),
         ],
       );
-    });
+    }));
   }
 }
 
 class _ImageStatus extends GetView<InitTransactionController> {
   /// The loadingState.
   final LoadingState loadingState;
+  final bool isTesting;
 
-  _ImageStatus(this.loadingState);
+  _ImageStatus(this.loadingState, this.isTesting);
 
   @override
   Widget build(BuildContext context) {
@@ -319,12 +291,14 @@ class _ImageStatus extends GetView<InitTransactionController> {
                       width: 200,
                       height: 200,
                       fit: BoxFit.cover,
+                      repeat: !isTesting,
                     ),
                     Lottie.asset(
                       AnimationAsset.firstSuccess,
                       width: 200,
                       height: 200,
                       fit: BoxFit.cover,
+                      repeat: !isTesting,
                     ),
                   ],
                 )
@@ -334,12 +308,14 @@ class _ImageStatus extends GetView<InitTransactionController> {
                       width: 150,
                       height: 150,
                       fit: BoxFit.cover,
+                      repeat: !isTesting,
                     )
                   : Lottie.asset(
                       AnimationAsset.loading,
                       width: 220,
                       height: 220,
                       fit: BoxFit.cover,
+                      repeat: !isTesting,
                     ),
         );
       },
@@ -356,6 +332,8 @@ class _CurrentWidget extends GetView<InitTransactionController> {
   @override
   Widget build(BuildContext context) {
     final localization = Get.find<AppInternationalization>();
+    final theme = Theme.of(context);
+
     if (controller.loadingState.value == LoadingState.failed) {
       return Column(
         children: [
@@ -364,7 +342,6 @@ class _CurrentWidget extends GetView<InitTransactionController> {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w800,
-              color: AppColors.darkGray,
             ),
           ),
           SizedBox(
@@ -376,7 +353,7 @@ class _CurrentWidget extends GetView<InitTransactionController> {
               style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w300,
-                color: AppColors.red2,
+                color: theme.colorScheme.error,
               ),
             ),
           SizedBox(
@@ -385,43 +362,36 @@ class _CurrentWidget extends GetView<InitTransactionController> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              SizedBox(
-                height: 50,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.darkGray,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: const BorderRadius.all(Radius.circular(9)),
-                    ),
-                  ),
-                  onPressed: () => AppRouter.go(
-                    context,
-                    PagesRoutes.creditTransaction.pattern,
-                  ),
-                  child: Text(
-                    localization.newTransaction,
-                    style: TextStyle(
-                      color: AppColors.white,
-                      fontWeight: FontWeight.w300,
+              Expanded(
+                child: SizedBox(
+                  height: 50,
+                  child: OutlinedButton(
+                    onPressed: () => controller.initializationTransaction(),
+                    child: Text(
+                      localization.retry,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w300,
+                      ),
                     ),
                   ),
                 ),
               ),
               SizedBox(
-                height: 50,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.purple,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: const BorderRadius.all(Radius.circular(9)),
+                width: 20,
+              ),
+              Expanded(
+                child: SizedBox(
+                  height: 50,
+                  child: FilledButton(
+                    onPressed: () => AppRouter.go(
+                      context,
+                      PagesRoutes.creditTransaction.pattern,
                     ),
-                  ),
-                  onPressed: () => controller.initializationTransaction(),
-                  child: Text(
-                    localization.retry,
-                    style: TextStyle(
-                      color: AppColors.white,
-                      fontWeight: FontWeight.w300,
+                    child: Text(
+                      localization.newTransaction,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w300,
+                      ),
                     ),
                   ),
                 ),
@@ -432,7 +402,7 @@ class _CurrentWidget extends GetView<InitTransactionController> {
       );
     }
 
-    if (controller.loadingState.value == LoadingState.initiate) {
+    if (controller.loadingState.value == LoadingState.initiated) {
       return Container(
         margin: EdgeInsets.only(top: 10),
         padding: EdgeInsets.all(10),
@@ -446,7 +416,6 @@ class _CurrentWidget extends GetView<InitTransactionController> {
           style: TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w400,
-            color: AppColors.black,
           ),
         ),
       );
@@ -459,7 +428,6 @@ class _CurrentWidget extends GetView<InitTransactionController> {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w800,
-              color: AppColors.darkGray,
             ),
           ),
           SizedBox(
@@ -470,7 +438,6 @@ class _CurrentWidget extends GetView<InitTransactionController> {
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w300,
-              color: AppColors.black,
             ),
           ),
           SizedBox(
@@ -479,46 +446,45 @@ class _CurrentWidget extends GetView<InitTransactionController> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              SizedBox(
-                height: 50,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.darkGray,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: const BorderRadius.all(Radius.circular(9)),
+              Expanded(
+                child: SizedBox(
+                  height: 50,
+                  child: OutlinedButton(
+                    onPressed: () => AppRouter.go(
+                      context,
+                      PagesRoutes.historic.pattern,
                     ),
-                  ),
-                  onPressed: () => AppRouter.go(
-                    context,
-                    PagesRoutes.creditTransaction.pattern,
-                  ),
-                  child: Text(
-                    localization.newTransaction,
-                    style: TextStyle(
-                      color: AppColors.white,
-                      fontWeight: FontWeight.w300,
+                    child: Text(
+                      localization.goToHistory,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w300,
+                      ),
                     ),
                   ),
                 ),
               ),
               SizedBox(
-                height: 50,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.purple,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: const BorderRadius.all(Radius.circular(9)),
+                width: 20,
+              ),
+              Expanded(
+                child: SizedBox(
+                  height: 50,
+                  child: FilledButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(9)),
+                      ),
                     ),
-                  ),
-                  onPressed: () => AppRouter.go(
-                    context,
-                    PagesRoutes.historic.pattern,
-                  ),
-                  child: Text(
-                    localization.goToHistory,
-                    style: TextStyle(
-                      color: AppColors.white,
-                      fontWeight: FontWeight.w300,
+                    onPressed: () => AppRouter.go(
+                      context,
+                      PagesRoutes.creditTransaction.pattern,
+                    ),
+                    child: Text(
+                      localization.newTransaction,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w300,
+                      ),
                     ),
                   ),
                 ),
@@ -529,7 +495,7 @@ class _CurrentWidget extends GetView<InitTransactionController> {
       );
     }
 
-    if (controller.loadingState.value == LoadingState.processToTransfer) {
+    if (controller.loadingState.value == LoadingState.proceeded) {
       return Container(
         margin: EdgeInsets.only(top: 10),
         padding: EdgeInsets.all(10),
@@ -539,7 +505,6 @@ class _CurrentWidget extends GetView<InitTransactionController> {
           style: TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w500,
-            color: AppColors.black,
           ),
         ),
       );

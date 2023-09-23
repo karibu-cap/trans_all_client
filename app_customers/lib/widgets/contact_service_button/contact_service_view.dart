@@ -77,10 +77,8 @@ class _FloatingDraggableWidgetView extends GetView<ContactServiceModel> {
               context: context,
               icon: Icon(
                 Icons.question_mark,
-                color: AppColors.white,
                 size: 30,
               ),
-              topBackgroundColor: AppColors.darkGray,
               negativeBtnText: localization.noThank,
               positiveBtnText: localization.yes,
               positiveBtnPressed: () async {
