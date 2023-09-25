@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:clock/clock.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
@@ -38,6 +39,19 @@ Future<void> main() async {
     service: getAppConfigDefaults().remoteConfigType,
     defaults: getRemoteConfigDefaults(),
   );
+  Logger.root.level = Level.ALL;
+  Logger.root.onRecord.listen((record) {
+    if (kDebugMode && record.level == Level.SEVERE) {
+      print(
+          ' 🆘 🆘 🆘[${record.level.name}] ${record.time}: ${record.message}');
+    }
+    if (record.level == Level.INFO) {
+      print(' ✅ ✅ ✅[${record.level.name}]: ${record.message}');
+    }
+    if (record.level == Level.WARNING) {
+      print('🚸 🚸 🚸 🚸 [${record.level.name}]: ${record.message}');
+    }
+  });
   runApp(MyApp());
 }
 

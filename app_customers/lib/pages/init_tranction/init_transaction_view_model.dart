@@ -7,7 +7,6 @@ import 'package:trans_all_common_models/models.dart';
 import '../../data/repository/forfeitRepository.dart';
 import '../../data/repository/tranfersRepository.dart';
 import '../../routes/pages_routes.dart';
-import '../../util/key_internationalization.dart';
 
 enum LoadingState {
   load,
@@ -95,19 +94,12 @@ class InitTransactionViewModel {
 
   /// The init function.
   Future<void> init() async {
-    print(creditTransactionParams.amountInXaf);
     final amountFromParam = creditTransactionParams.amountInXaf;
     final buyerGatewayIdFromParam = creditTransactionParams.buyerGatewayId;
     final buyerPhoneNumberFromParam = creditTransactionParams.buyerPhoneNumber;
     final featureReferenceFromParam = creditTransactionParams.featureReference;
     final receiverPhoneNumberFromParam =
         creditTransactionParams.receiverPhoneNumber;
-    print(amountFromParam);
-    print(buyerGatewayIdFromParam);
-    print(buyerPhoneNumberFromParam);
-    print(featureReferenceFromParam);
-    print(amountFromParam);
-    print(receiverPhoneNumberFromParam);
     if (amountFromParam == null ||
         buyerGatewayIdFromParam == null ||
         buyerPhoneNumberFromParam == null ||
@@ -129,15 +121,10 @@ class InitTransactionViewModel {
       featureReference: featureReferenceFromParam,
       receiverPhoneNumber: receiverPhoneNumberFromParam,
     );
-    print(transactionIdResult.error);
-    print(transactionIdResult.transactionId);
-    final error = transactionIdResult.error;
-    if (transactionIdResult.transactionId == null && error != null) {
-      errorMessage.value = requestErrorTranslate(
-        requestError: error,
-        buyerPhoneNumber: buyerPhoneNumberFromParam,
-        receiverNumber: receiverPhoneNumberFromParam,
-      );
+    final errorMessageResponse = transactionIdResult.errorMessage;
+
+    if (errorMessageResponse != null && errorMessageResponse.isNotEmpty) {
+      errorMessage.value = errorMessageResponse;
       loadingState.value = LoadingState.failed;
 
       return null;

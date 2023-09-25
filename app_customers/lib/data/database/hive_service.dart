@@ -116,23 +116,30 @@ class HiveBoxEvent extends BoxEvent {
 }
 
 /// Backend error response.
-class ErrorResponseBody {
+class ResponseBody {
   /// The error code key [code].
   static final String keyCode = 'code';
 
   /// The error code key [errorMessage].
   static final String keyErrorMessage = 'errorMessage';
 
+  /// The error code key [errorMessage].
+  static final String keyData = 'data';
+
   /// The code of request.
   num code;
 
   /// The message of request.
-  String errorMessage;
+  String? errorMessage;
 
-  /// Constructs a new [ErrorResponseBody].
-  ErrorResponseBody.fromJson(Map<String, dynamic> json)
+  /// The response data.
+  dynamic data;
+
+  /// Constructs a new [ResponseBody].
+  ResponseBody.fromJson(Map<String, dynamic> json)
       : code = json[keyCode],
-        errorMessage = json[keyErrorMessage];
+        errorMessage = json[keyErrorMessage],
+        data = json[keyData];
 }
 
 /// The request error.
@@ -161,6 +168,15 @@ enum RequestError {
   /// Invalid feature provider.
   invalidFeatureProvider,
 
+  /// Amount is too low.
+  lowAmount,
+
+  /// Resource not found.
+  resourceNotFound,
+
+  /// Server in maintenance.
+  serverInMaintenance,
+
   /// Unknown error.
   unknown,
 }
@@ -184,6 +200,12 @@ RequestError requestErrorMessage(num statusCode) {
       return RequestError.unsupportedProvider;
     case 4001:
       return RequestError.invalidFeatureProvider;
+    case 4003:
+      return RequestError.lowAmount;
+    case 4020:
+      return RequestError.resourceNotFound;
+    case 5000:
+      return RequestError.serverInMaintenance;
     default:
       return RequestError.unknown;
   }
