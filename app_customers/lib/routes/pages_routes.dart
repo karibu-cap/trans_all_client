@@ -100,9 +100,6 @@ class CreditTransactionParams {
   /// The parameter key for [buyerGatewayId].
   static const String keyParamBuyerGatewayId = 'buyerGatewayId';
 
-  /// The parameter key for [receiverOperator].
-  static const String keyParamReceiverOperator = 'receiverOperator';
-
   /// The parameter key for [transactionId].
   static const String keyParamTransactionId = 'transactionId';
 
@@ -130,9 +127,6 @@ class CreditTransactionParams {
   /// The buyerGatewayId parameter.
   final String? buyerGatewayId;
 
-  /// The receiverOperator parameter.
-  final String? receiverOperator;
-
   /// Constructs a new instance of the orders parameters.
   CreditTransactionParams({
     this.buyerPhoneNumber,
@@ -140,7 +134,6 @@ class CreditTransactionParams {
     this.amountInXaf,
     this.buyerGatewayId,
     this.featureReference,
-    this.receiverOperator,
     this.transactionId,
     this.forfeitId,
   });
@@ -159,7 +152,6 @@ class CreditTransactionParams {
         keyParamBuyerGatewayId: buyerGatewayId,
         keyParamFeatureReference: featureReference,
         keyParamBuyerPhoneNumber: buyerPhoneNumber,
-        keyParamReceiverOperator: receiverOperator,
         keyParamTransactionId: transactionId,
         keyParamForfeitId: forfeitId,
         keyParamReceiverPhoneNumber: receiverPhoneNumber,

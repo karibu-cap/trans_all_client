@@ -71,14 +71,10 @@ class ContactWidget extends StatelessWidget {
               topRight: border,
             ),
           ),
-          builder: (context) => Builder(
-            builder: (context) {
-              return _ContactsView(
-                onPressToContact: onPressToContact,
-                contacts: contacts,
-                title: title,
-              );
-            },
+          builder: (context) => _ContactsView(
+            onPressToContact: onPressToContact,
+            contacts: contacts,
+            title: title,
           ),
         ),
         child: Row(
@@ -185,7 +181,7 @@ class _ContactsView extends StatelessWidget {
                     SizedBox(
                       height: 20,
                     ),
-                    TextButton(
+                    OutlinedButton(
                       onPressed: (() async {
                         controller.updateLoadOfContacts(true);
                         await UserContactConfig.init(
@@ -198,19 +194,8 @@ class _ContactsView extends StatelessWidget {
                           return;
                         }
                       }),
-                      style: theme.textButtonTheme.style?.copyWith(
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(9)),
-                          ),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Text(
-                          localization.allowAccess,
-                        ),
+                      child: Text(
+                        localization.allowAccess,
                       ),
                     ),
                     SizedBox(

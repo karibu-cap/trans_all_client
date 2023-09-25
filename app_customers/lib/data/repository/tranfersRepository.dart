@@ -98,7 +98,6 @@ class TransferRepository {
     required num amountToPay,
     required String buyerGatewayId,
     required String featureReference,
-    required String receiverOperator,
   }) async {
     return _hiveService.createRemoteTransaction(
       buyerPhoneNumber: buyerPhoneNumber,
@@ -106,7 +105,6 @@ class TransferRepository {
       amountToPay: amountToPay,
       buyerGatewayId: buyerGatewayId,
       featureReference: featureReference,
-      receiverOperator: receiverOperator,
     );
   }
 

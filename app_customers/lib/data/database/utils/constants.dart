@@ -12,7 +12,7 @@ class AppRoute {
       '$_appBaseUrl/api/transfer/providers/all';
 
   /// The create transfer route.
-  static final createTransferRoute = '$_appBaseUrl/api/transfer/create';
+  static final createTransferRoute = '$_appBaseUrl/api/v1/transfer/create';
 
   /// The get transaction route.
   static final getTheTransaction = '$_appBaseUrl/api/transfer';

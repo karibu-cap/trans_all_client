@@ -100,18 +100,15 @@ class FakeHiveService implements HiveService {
     required num amountToPay,
     required String buyerGatewayId,
     required String featureReference,
-    required String receiverOperator,
   }) async {
     final id = Random().nextInt(100000000).toString();
     _database[id] = TransferInfo.fromJson(json: {
       TransferInfo.keyAmountXAF: amountToPay,
-      TransferInfo.keyBuyerGateway: buyerGatewayId,
       TransferInfo.keyBuyerPhoneNumber: buyerPhoneNumber,
       TransferInfo.keyId: id,
       TransferInfo.keyCreatedAt: clock.now().toString(),
       TransferInfo.keyFeature: featureReference,
       TransferInfo.keyReason: null,
-      TransferInfo.keyReceiverOperator: receiverOperator,
       TransferInfo.keyReceiverPhoneNumber: receiverPhoneNumber,
       TransferInfo.keyStatus: TransferStatus.paymentFailed.key,
       TransferInfo.keyPayments: [

@@ -88,28 +88,34 @@ class InitTransactionViewModel {
     amountToPay.value = transfer.amount;
     receiverPhoneNumber.value = transfer.receiverPhoneNumber;
     buyerPhoneNumber.value = transfer.buyerPhoneNumber;
-    buyerGatewayId.value = transfer.buyerGateway.key;
+    buyerGatewayId.value = transfer.payments.last.gateway.key;
 
     updateLoadingState(transfer);
   }
 
   /// The init function.
   Future<void> init() async {
-    final amount = num.parse(creditTransactionParams.amountInXaf ?? '');
+    print(creditTransactionParams.amountInXaf);
+    final amountFromParam = creditTransactionParams.amountInXaf;
     final buyerGatewayIdFromParam = creditTransactionParams.buyerGatewayId;
     final buyerPhoneNumberFromParam = creditTransactionParams.buyerPhoneNumber;
     final featureReferenceFromParam = creditTransactionParams.featureReference;
-    final receiverOperatorFromParam = creditTransactionParams.receiverOperator;
     final receiverPhoneNumberFromParam =
         creditTransactionParams.receiverPhoneNumber;
-    if (buyerGatewayIdFromParam == null ||
+    print(amountFromParam);
+    print(buyerGatewayIdFromParam);
+    print(buyerPhoneNumberFromParam);
+    print(featureReferenceFromParam);
+    print(amountFromParam);
+    print(receiverPhoneNumberFromParam);
+    if (amountFromParam == null ||
+        buyerGatewayIdFromParam == null ||
         buyerPhoneNumberFromParam == null ||
         featureReferenceFromParam == null ||
-        receiverOperatorFromParam == null ||
         receiverPhoneNumberFromParam == null) {
       return;
     }
-    amountToPay.value = amount;
+    amountToPay.value = num.parse(amountFromParam);
     receiverPhoneNumber.value = receiverPhoneNumberFromParam;
     buyerPhoneNumber.value = buyerPhoneNumberFromParam;
     buyerGatewayId.value = buyerGatewayIdFromParam;
@@ -117,13 +123,14 @@ class InitTransactionViewModel {
     // Init the transaction.
     final transactionIdResult =
         await _transferRepository.createRemoteTransaction(
-      amountToPay: amount,
+      amountToPay: num.parse(amountFromParam),
       buyerGatewayId: buyerGatewayIdFromParam,
       buyerPhoneNumber: buyerPhoneNumberFromParam,
       featureReference: featureReferenceFromParam,
-      receiverOperator: receiverOperatorFromParam,
       receiverPhoneNumber: receiverPhoneNumberFromParam,
     );
+    print(transactionIdResult.error);
+    print(transactionIdResult.transactionId);
     final error = transactionIdResult.error;
     if (transactionIdResult.transactionId == null && error != null) {
       errorMessage.value = requestErrorTranslate(
@@ -141,20 +148,18 @@ class InitTransactionViewModel {
     errorMessage.value = null;
 
     final transfers = TransferInfo.fromJson(json: {
-      TransferInfo.keyAmountXAF: amount,
-      TransferInfo.keyBuyerGateway: buyerGatewayId,
-      TransferInfo.keyBuyerPhoneNumber: buyerPhoneNumber,
+      TransferInfo.keyAmountXAF: num.parse(amountFromParam),
+      TransferInfo.keyBuyerPhoneNumber: buyerPhoneNumberFromParam,
       TransferInfo.keyId: transactionId.value,
       TransferInfo.keyCreatedAt: clock.now().toString(),
       TransferInfo.keyFeature: featureReferenceFromParam,
       TransferInfo.keyReason: null,
-      TransferInfo.keyReceiverOperator: receiverOperatorFromParam,
-      TransferInfo.keyReceiverPhoneNumber: receiverPhoneNumber,
+      TransferInfo.keyReceiverPhoneNumber: receiverPhoneNumberFromParam,
       TransferInfo.keyStatus: TransferStatus.waitingRequest.key,
       TransferInfo.keyPayments: [
         {
-          TransTuPayment.keyGateway: buyerGatewayId,
-          TransTuPayment.keyPhoneNumber: buyerPhoneNumber,
+          TransTuPayment.keyGateway: buyerGatewayIdFromParam,
+          TransTuPayment.keyPhoneNumber: buyerPhoneNumberFromParam,
           TransTuPayment.keyStatus: PaymentStatus.initialized.key,
         },
       ],

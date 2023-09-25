@@ -143,7 +143,6 @@ class FormTransfer extends StatelessWidget {
             ? forfeit.value?.amountInXAF.toString()
             : controller.amountToPayTextController.value.text,
         buyerGatewayId: paymentSelected.id.key,
-        receiverOperator: currentOperation.operatorName.key,
         featureReference: currentOperation.reference.key,
       );
       AppRouter.push(

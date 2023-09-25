@@ -50,8 +50,6 @@ class HeaderTabs extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       child: Card(
         margin: EdgeInsets.all(16),
-        elevation: 8,
-        shadowColor: AppColors.darkGray,
         shape: RoundedRectangleBorder(
           borderRadius: const BorderRadius.all(Radius.circular(25)),
           side: BorderSide(color: AppColors.white, width: 2),

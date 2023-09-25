@@ -12,14 +12,12 @@ class TransferInfoAdapter extends TypeAdapter<TransferInfo> {
 
     return TransferInfo.fromJson(json: {
       TransferInfo.keyAmountXAF: data[TransferInfo.keyAmountXAF],
-      TransferInfo.keyBuyerGateway: data[TransferInfo.keyBuyerGateway],
       TransferInfo.keyBuyerPhoneNumber: data[TransferInfo.keyBuyerPhoneNumber],
       TransferInfo.keyId: data[TransferInfo.keyId],
       TransferInfo.keyCreatedAt: data[TransferInfo.keyCreatedAt].toString(),
       TransferInfo.keyUpdateAt: data[TransferInfo.keyUpdateAt].toString(),
       TransferInfo.keyFeature: data[TransferInfo.keyFeature],
       TransferInfo.keyReason: data[TransferInfo.keyReason],
-      TransferInfo.keyReceiverOperator: data[TransferInfo.keyReceiverOperator],
       TransferInfo.keyReceiverPhoneNumber:
           data[TransferInfo.keyReceiverPhoneNumber],
       TransferInfo.keyStatus: data[TransferInfo.keyStatus],

@@ -65,12 +65,14 @@ class _ListOfPendingTransfer extends StatelessWidget {
               physics: BouncingScrollPhysics(),
               itemBuilder: (context, index) {
                 final transfer = pendingTransfer[index];
-                final transferBuyerGateway = transfer.buyerGateway.key ==
-                        PaymentId.orangePaymentId.key
-                    ? 'OM'
-                    : transfer.buyerGateway.key == PaymentId.mtnPaymentId.key
-                        ? 'MOMO'
-                        : PaymentId.unknown.key;
+                final transferBuyerGateway =
+                    transfer.payments.last.gateway.key ==
+                            PaymentId.orangePaymentId.key
+                        ? 'OM'
+                        : transfer.payments.last.gateway.key ==
+                                PaymentId.mtnPaymentId.key
+                            ? 'MOMO'
+                            : PaymentId.unknown.key;
 
                 return InkWell(
                   onTap: () => AppRouter.push(
@@ -80,8 +82,7 @@ class _ListOfPendingTransfer extends StatelessWidget {
                         buyerPhoneNumber: transfer.buyerPhoneNumber,
                         receiverPhoneNumber: transfer.receiverPhoneNumber,
                         amountInXaf: transfer.amount.toString(),
-                        buyerGatewayId: transfer.buyerGateway.key,
-                        receiverOperator: transfer.receiverOperator,
+                        buyerGatewayId: transferBuyerGateway,
                         featureReference: transfer.feature.key,
                         transactionId: transfer.id,
                         forfeitId: transfer.forfeitId,

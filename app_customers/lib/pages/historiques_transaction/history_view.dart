@@ -115,6 +115,7 @@ class _HistoricTransaction extends GetView<HistoryViewController> {
   @override
   Widget build(BuildContext context) {
     final localization = Get.find<AppInternationalization>();
+    final theme = Theme.of(context);
 
     int _getDaysSinceEpoch(DateTime dateTime) {
       final dayInMilliseconds = const Duration(days: 1).inMilliseconds;
@@ -174,8 +175,7 @@ class _HistoricTransaction extends GetView<HistoryViewController> {
                   buyerPhoneNumber: transaction.buyerPhoneNumber,
                   receiverPhoneNumber: transaction.receiverPhoneNumber,
                   amountInXaf: transaction.amount.toString(),
-                  buyerGatewayId: transaction.buyerGateway.key,
-                  receiverOperator: transaction.receiverOperator,
+                  buyerGatewayId: transaction.payments.last.gateway.key,
                   featureReference: transaction.feature.key,
                   transactionId: transaction.id,
                   forfeitId: transaction.forfeitId,
@@ -221,8 +221,9 @@ class _HistoricTransaction extends GetView<HistoryViewController> {
                 return Container(
                   padding: EdgeInsets.symmetric(horizontal: 10),
                   decoration: BoxDecoration(
-                    border: const Border.fromBorderSide(
-                      BorderSide(color: AppColors.lightGray),
+                    color: theme.bottomSheetTheme.backgroundColor,
+                    border: Border.fromBorderSide(
+                      BorderSide(color: theme.primaryColor),
                     ),
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(30),
@@ -238,8 +239,8 @@ class _HistoricTransaction extends GetView<HistoryViewController> {
                         height: 5,
                         width: 50,
                         decoration: BoxDecoration(
-                          border: const Border.fromBorderSide(
-                            BorderSide(color: AppColors.lightGray),
+                          border: Border.fromBorderSide(
+                            BorderSide(color: theme.primaryColor),
                           ),
                           borderRadius: BorderRadius.all(
                             Radius.circular(100),
@@ -327,9 +328,9 @@ class _HistoryView extends StatelessWidget {
 
     final transferStatus = transfer.status.key;
     final transferBuyerGateway =
-        transfer.buyerGateway.key == PaymentId.orangePaymentId.key
+        transfer.payments.last.gateway.key == PaymentId.orangePaymentId.key
             ? 'OM'
-            : transfer.buyerGateway.key == PaymentId.mtnPaymentId.key
+            : transfer.payments.last.gateway.key == PaymentId.mtnPaymentId.key
                 ? 'MOMO'
                 : PaymentId.unknown.key;
     final paymentStatus = transfer.payments.last.status.key;
@@ -513,8 +514,8 @@ class _HistoryView extends StatelessWidget {
                               buyerPhoneNumber: transfer.buyerPhoneNumber,
                               receiverPhoneNumber: transfer.receiverPhoneNumber,
                               amountInXaf: transfer.amount.toString(),
-                              buyerGatewayId: transfer.buyerGateway.key,
-                              receiverOperator: transfer.receiverOperator,
+                              buyerGatewayId:
+                                  transfer.payments.last.gateway.key,
                               featureReference: transfer.feature.key,
                               forfeitId: transfer.forfeitId,
                             ),
