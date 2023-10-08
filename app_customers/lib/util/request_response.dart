@@ -23,12 +23,12 @@ class CreateRemoteTransactionResponse {
   final String? transactionId;
 
   /// The error type.
-  final RequestError? error;
+  final String? errorMessage;
 
   /// Constructs a new [CreateRemoteTransactionResponse].
   const CreateRemoteTransactionResponse({
     this.transactionId,
-    this.error,
+    this.errorMessage,
   });
 }
 

@@ -8,8 +8,7 @@ class AppRoute {
   static final paymentGatewaysRoute = '$_appBaseUrl/api/payment/methods/all';
 
   /// The operator gateways route.
-  static final operatorGatewaysRoute =
-      '$_appBaseUrl/api/transfer/providers/all';
+  static final operatorGatewaysRoute = '$_appBaseUrl/api/feature/unit/all';
 
   /// The create transfer route.
   static final createTransferRoute = '$_appBaseUrl/api/v1/transfer/create';

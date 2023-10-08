@@ -194,17 +194,31 @@ class HiveServiceImpl implements HiveService {
         url,
         headers: headers,
       );
-      final List<dynamic> data = jsonDecode(response.body);
-      final List<Map<String, dynamic>> convertData =
-          data.map((e) => e as Map<String, dynamic>).toList();
-      operations.addAll(
-        convertData.map<OperationGateways>(OperationGateways.fromJson).toList(),
+      final dynamic bodyResponse = jsonDecode(response.body);
+
+      final responseData = ResponseBody.fromJson(
+        bodyResponse as Map<String, dynamic>,
       );
 
-      unawaited(_databaseOperatorGateway.clear());
-      unawaited(_databaseOperatorGateway.addAll(operations));
+      if (responseData.code == 2000 || responseData.code == 2001) {
+        final data = responseData.data as List<dynamic>;
+        final List<Map<String, dynamic>> convertData =
+            data.map((e) => e as Map<String, dynamic>).toList();
+        operations.addAll(
+          convertData
+              .map<OperationGateways>(OperationGateways.fromJson)
+              .toList(),
+        );
+        unawaited(_databaseOperatorGateway.clear());
+        unawaited(_databaseOperatorGateway.addAll(operations));
 
-      return ListOperationGatewaysResponse(listOperationGateways: operations);
+        return ListOperationGatewaysResponse(listOperationGateways: operations);
+      }
+      final localOperator = _databaseOperatorGateway.values.toList();
+
+      return ListOperationGatewaysResponse(
+        listOperationGateways: localOperator,
+      );
     } catch (e) {
       _logger.severe(
         'Failed to parse the received list of operator gateway got at $url. the response body received is $e',
@@ -240,6 +254,7 @@ class HiveServiceImpl implements HiveService {
       PreferencesKeys.clientVersion: packageInfo.version,
       PreferencesKeys.acceptLanguage: localization.locale.languageCode,
     };
+
     final body = jsonEncode({
       'buyerGatewayId': buyerGatewayId,
       'amountToPay': amountToPay,
@@ -252,19 +267,24 @@ class HiveServiceImpl implements HiveService {
     );
     try {
       final response = await http.post(url, headers: headers, body: body);
-      final dynamic data = jsonDecode(response.body);
-      final Map<String, dynamic> convertData = data as Map<String, dynamic>;
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
+      final dynamic bodyResponse = jsonDecode(response.body);
+
+      final responseData = ResponseBody.fromJson(
+        bodyResponse as Map<String, dynamic>,
+      );
+      if (responseData.code == 2001 || responseData.code == 2000) {
         return CreateRemoteTransactionResponse(
-          transactionId: convertData['id'],
+          transactionId: (responseData.data as Map<String, dynamic>)['id'],
         );
       }
 
-      final ErrorResponseBody error = ErrorResponseBody.fromJson(convertData);
+      final errorCode = requestErrorMessage(responseData.code);
 
       return CreateRemoteTransactionResponse(
-        error: requestErrorMessage(error.code),
+        errorMessage: errorCode == RequestError.unknown
+            ? localization.anErrorOccurred
+            : responseData.errorMessage,
       );
     } catch (e) {
       _logger.severe(
@@ -272,10 +292,13 @@ class HiveServiceImpl implements HiveService {
       );
       if (e is SocketException) {
         return CreateRemoteTransactionResponse(
-            error: RequestError.internetError);
+          errorMessage: localization.troubleInternetConnection,
+        );
       }
 
-      return CreateRemoteTransactionResponse(error: RequestError.unknown);
+      return CreateRemoteTransactionResponse(
+        errorMessage: localization.anErrorOccurred,
+      );
     }
   }
 
