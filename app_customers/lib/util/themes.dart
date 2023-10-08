@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../themes/app_colors.dart';
 import 'preferences_keys.dart';
 
 /// The theme manager.
@@ -64,7 +65,7 @@ class ThemeManager extends GetxController {
 ThemeData darkTheme() => FlexThemeData.dark(
       scheme: FlexScheme.deepPurple,
       colors: const FlexSchemeColor(
-        primary: Color(0xfff9abff),
+        primary: AppColors.purple,
         primaryContainer: Color(0xff7b008f),
         secondary: Color(0xffe0b6ff),
         secondaryContainer: Color(0xff6b00af),
@@ -119,6 +120,11 @@ ThemeData darkTheme() => FlexThemeData.dark(
       keyColors: const FlexKeyColors(
         useSecondary: true,
         useTertiary: true,
+        keepPrimary: true,
+        keepSecondary: true,
+        keepTertiary: true,
+        keepPrimaryContainer: true,
+        keepSecondaryContainer: true,
       ),
       tones:
           FlexTones.material(Brightness.dark).onMainsUseBW().onSurfacesUseBW(),

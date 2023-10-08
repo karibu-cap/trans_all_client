@@ -231,7 +231,6 @@ class HiveServiceImpl implements HiveService {
     required num amountToPay,
     required String buyerGatewayId,
     required String featureReference,
-    required String receiverOperator,
   }) async {
     final packageInfo = await PackageInfo.fromPlatform();
     final localization = Get.find<AppInternationalization>();
@@ -247,7 +246,6 @@ class HiveServiceImpl implements HiveService {
       'buyerPhoneNumber': buyerPhoneNumber,
       'featureReference': featureReference,
       'receiverPhoneNumber': receiverPhoneNumber,
-      'receiverOperator': receiverOperator,
     });
     final url = Uri.parse(
       AppRoute.createTransferRoute,

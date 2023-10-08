@@ -32,6 +32,8 @@ class ContactButtonService extends StatelessWidget {
     final double floatingWidgetWidth = 60;
     final double floatingWidgetHeight = 60;
 
+    Get.put<ContactServiceModel>(ContactServiceModel());
+
     return _FloatingDraggableWidgetView(
       deleteWidgetAnimationDuration: deleteWidgetAnimationDuration,
       hasDeleteWidgetAnimationDuration: hasDeleteWidgetAnimationDuration,
@@ -220,7 +222,7 @@ class _FloatingDraggableWidgetView extends GetView<ContactServiceModel> {
                             onTap: confirmationBox,
                             child: SizedBox(
                               key: floatingWidgetKey,
-                              child: _FloatingButton(),
+                              child: _FloatingButton(controller),
                             ),
                           ),
                         ),
@@ -236,14 +238,17 @@ class _FloatingDraggableWidgetView extends GetView<ContactServiceModel> {
   }
 }
 
-class _FloatingButton extends GetView<ContactServiceModel> {
-  const _FloatingButton();
+class _FloatingButton extends StatelessWidget {
+  /// The contact controller model.
+  final ContactServiceModel contactController;
+
+  const _FloatingButton(this.contactController);
 
   @override
   Widget build(BuildContext context) {
     final tooltipController = JustTheController();
     final localization = Get.find<AppInternationalization>();
-    if (controller.displayTooltip) {
+    if (contactController.displayTooltip) {
       WidgetsBinding.instance.addPostFrameCallback(
         (_) =>
             Future.delayed(Duration(seconds: 2), tooltipController.showTooltip),
@@ -254,7 +259,7 @@ class _FloatingButton extends GetView<ContactServiceModel> {
       builder: (context, constraints) {
         return SizedBox(
           child: JustTheTooltip(
-            onDismiss: controller.cancelDisplayOfTooltip,
+            onDismiss: contactController.cancelDisplayOfTooltip,
             backgroundColor: AppColors.darkGray,
             controller: tooltipController,
             preferredDirection: AxisDirection.up,
@@ -271,7 +276,7 @@ class _FloatingButton extends GetView<ContactServiceModel> {
                 ),
               ],
             ),
-            content: !controller.displayTooltip
+            content: !contactController.displayTooltip
                 ? SizedBox()
                 : Padding(
                     padding: EdgeInsets.all(8.0),

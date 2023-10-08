@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:overlay_tooltip/overlay_tooltip.dart';
 
-import '../../../themes/app_colors.dart';
-
 /// Question mask view.
 class QuestionMaskView extends StatelessWidget {
   /// The index of the question overlay.
@@ -12,16 +10,18 @@ class QuestionMaskView extends StatelessWidget {
   const QuestionMaskView({required this.index});
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return SizedBox(
       height: 15,
       width: 15,
       child: InkWell(
         child: CircleAvatar(
-          backgroundColor: AppColors.purple,
+          backgroundColor: theme.primaryColor,
           child: Icon(
             size: 10,
             Icons.question_mark,
-            color: AppColors.white,
+            color: theme.scaffoldBackgroundColor,
           ),
         ),
         onTap: () =>

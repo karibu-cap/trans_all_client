@@ -345,6 +345,17 @@ class _CurrentWidget extends GetView<InitTransactionController> {
             ),
           ),
           SizedBox(
+            height: 5,
+          ),
+          Text(
+            localization.failedTransfer,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w300,
+              color: theme.colorScheme.error,
+            ),
+          ),
+          SizedBox(
             height: 10,
           ),
           if (controller.errorMessage.value != null)

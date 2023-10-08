@@ -67,10 +67,6 @@ class _GoRouterRoutesProvider {
             state.queryParameters,
             CreditTransactionParams.keyParamFeatureReference,
           );
-          final receiverOperator = getQueryParameter(
-            state.queryParameters,
-            CreditTransactionParams.keyParamReceiverOperator,
-          );
           final transferId = getQueryParameter(
             state.queryParameters,
             CreditTransactionParams.keyParamTransactionId,
@@ -84,7 +80,6 @@ class _GoRouterRoutesProvider {
             child: InitTransaction(
               creditTransactionParams: CreditTransactionParams(
                 amountInXaf: amount,
-                receiverOperator: receiverOperator,
                 buyerGatewayId: buyerGatewayId,
                 receiverPhoneNumber: receiverNumber,
                 buyerPhoneNumber: paymentNumber,
@@ -132,10 +127,6 @@ class _GoRouterRoutesProvider {
                     state.queryParameters,
                     CreditTransactionParams.keyParamFeatureReference,
                   );
-                  final receiverOperator = getQueryParameter(
-                    state.queryParameters,
-                    CreditTransactionParams.keyParamReceiverOperator,
-                  );
                   final transferId = getQueryParameter(
                     state.queryParameters,
                     CreditTransactionParams.keyParamTransactionId,
@@ -148,7 +139,6 @@ class _GoRouterRoutesProvider {
                       receiverNumber == null ||
                       amount == null ||
                       buyerGatewayId == null ||
-                      receiverOperator == null ||
                       featureReference == null) {
                     return AppPage(
                       requestContactPermission: true,
@@ -165,7 +155,6 @@ class _GoRouterRoutesProvider {
                       displayInternetMessage: true,
                       localCreditTransaction: CreditTransactionParams(
                         amountInXaf: amount,
-                        receiverOperator: receiverOperator,
                         buyerGatewayId: buyerGatewayId,
                         receiverPhoneNumber: receiverNumber,
                         buyerPhoneNumber: paymentNumber,

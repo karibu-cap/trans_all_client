@@ -77,7 +77,6 @@ abstract class HiveService {
     required num amountToPay,
     required String buyerGatewayId,
     required String featureReference,
-    required String receiverOperator,
   });
 
   /// Gets the transaction by id.

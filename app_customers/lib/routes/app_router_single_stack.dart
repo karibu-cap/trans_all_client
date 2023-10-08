@@ -51,14 +51,11 @@ class SingleStackNavigator extends StatelessWidget {
             queryParameters[CreditTransactionParams.keyParamBuyerGatewayId];
         final featureReference =
             queryParameters[CreditTransactionParams.keyParamFeatureReference];
-        final receiverOperator =
-            queryParameters[CreditTransactionParams.keyParamReceiverOperator];
 
         if (paymentNumber == null ||
             receiverNumber == null ||
             amount == null ||
             buyerGatewayId == null ||
-            receiverOperator == null ||
             featureReference == null) {
           return AppPageNotFound();
         }
@@ -67,7 +64,6 @@ class SingleStackNavigator extends StatelessWidget {
           child: InitTransaction(
             creditTransactionParams: CreditTransactionParams(
               amountInXaf: amount,
-              receiverOperator: receiverOperator,
               buyerGatewayId: buyerGatewayId,
               receiverPhoneNumber: receiverNumber,
               buyerPhoneNumber: paymentNumber,

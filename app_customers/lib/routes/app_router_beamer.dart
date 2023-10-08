@@ -46,14 +46,11 @@ class BeamerRoutesProvider {
               .queryParameters[CreditTransactionParams.keyParamBuyerGatewayId];
           final featureReference = state.queryParameters[
               CreditTransactionParams.keyParamFeatureReference];
-          final receiverOperator = state.queryParameters[
-              CreditTransactionParams.keyParamReceiverOperator];
 
           if (paymentNumber == null ||
               receiverNumber == null ||
               amount == null ||
               buyerGatewayId == null ||
-              receiverOperator == null ||
               featureReference == null) {
             return BeamPage(
               key:
@@ -91,13 +88,11 @@ class BeamerRoutesProvider {
               .queryParameters[CreditTransactionParams.keyParamBuyerGatewayId];
           final featureReference = state.queryParameters[
               CreditTransactionParams.keyParamFeatureReference];
-          final receiverOperator = state.queryParameters[
-              CreditTransactionParams.keyParamReceiverOperator];
+
           if (paymentNumber == null ||
               receiverNumber == null ||
               amount == null ||
               buyerGatewayId == null ||
-              receiverOperator == null ||
               featureReference == null) {
             return BeamPage(child: AppPageNotFound());
           }

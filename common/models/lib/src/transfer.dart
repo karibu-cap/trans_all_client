@@ -21,12 +21,6 @@ class TransferInfo extends BaseModel {
   /// The stored key ref for the [buyerPhoneNumber] property.
   static const keyBuyerPhoneNumber = 'buyerPhoneNumber';
 
-  /// The stored key ref for the [buyerGateway] property.
-  static const keyBuyerGateway = 'buyerGateway';
-
-  /// The stored key ref for the [receiverOperator] property.
-  static const keyReceiverOperator = 'receiverOperator';
-
   /// The stored key ref for the [type] property.
   static const keyType = 'type';
 
@@ -57,14 +51,8 @@ class TransferInfo extends BaseModel {
   /// The receiver phone number.
   final String receiverPhoneNumber;
 
-  /// The receiver operator.
-  final String receiverOperator;
-
   /// The buyer phone number.
   final String buyerPhoneNumber;
-
-  /// The buyer gateways.
-  final PaymentId buyerGateway;
 
   /// The type of transfer to be used.
   final String? type;
@@ -96,9 +84,7 @@ class TransferInfo extends BaseModel {
             ? null
             : DateTime.tryParse(json[keyUpdateAt])?.toLocal(),
         receiverPhoneNumber = json[keyReceiverPhoneNumber],
-        receiverOperator = json[keyReceiverOperator],
         buyerPhoneNumber = json[keyBuyerPhoneNumber],
-        buyerGateway = PaymentId.fromKey(json[keyBuyerGateway]),
         feature = OperationTransferType.fromKey(json[keyFeature]),
         amount = json[keyAmountXAF],
         status = TransferStatus.fromKey(json[keyStatus]),
@@ -120,10 +106,8 @@ class TransferInfo extends BaseModel {
         keyCreatedAt: createdAt,
         keyUpdateAt: updateAt,
         keyAmountXAF: amount,
-        keyBuyerGateway: buyerGateway.key,
         keyStatus: status.key,
         keyFeature: feature.key,
-        keyReceiverOperator: receiverOperator,
         keyReceiverPhoneNumber: receiverPhoneNumber,
         keyBuyerPhoneNumber: buyerPhoneNumber,
         keyType: type,
