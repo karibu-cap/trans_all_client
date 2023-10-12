@@ -1,5 +1,7 @@
 import 'package:animation_wrappers/animations/faded_slide_animation.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../routes/app_router.dart';
 import '../themes/app_colors.dart';
@@ -61,6 +63,7 @@ class CustomScaffold extends StatelessWidget {
               ),
             )
           : null,
+      drawer: const NavigationDrawer(),
       body: SafeArea(
         bottom: false,
         child: Center(
@@ -100,4 +103,85 @@ class CustomScaffold extends StatelessWidget {
       ),
     );
   }
+}
+
+
+class NavigationDrawer extends StatelessWidget {
+  const NavigationDrawer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => Drawer(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              buildHeader(context),
+              buildMenuItems(context),
+            ],
+          ),
+        ),
+      );
+
+  Widget buildHeader(BuildContext context) => Container(
+        padding: const EdgeInsets.only(
+          top: 100,
+          bottom: 60,
+        ),
+        child: Column(children: [
+          CircleAvatar(
+            backgroundColor: Colors.transparent,
+            radius: 70,
+            child: Image.asset(
+              'assets/icons/Frame5.png',
+            ),
+          ),
+          Container(
+             margin: const EdgeInsets.only(top: 10),
+            child: const Text(
+              'TRANSALL',
+              style: TextStyle(
+                fontSize: 37,
+                color: Colors.black,
+              ),
+            ),
+          )
+        ]),
+      );
+
+  Widget buildMenuItems(BuildContext context) => Wrap(
+        runSpacing: 20,
+        children: [
+          const Divider(
+            color: Colors.grey,
+            height: 130,
+          ),
+          const ListTile(
+            title: Text(
+              'Follow us',
+              style: TextStyle(fontSize: 25),
+            ),
+          ),
+          ListTile(
+            leading: const Icon(FontAwesomeIcons.facebook),
+            title: const Text('Facebook'),
+            onTap: () {
+              launch('https://www.facebook.com');
+            },
+          ),
+          ListTile(
+            leading: const Icon(FontAwesomeIcons.instagram),
+            title: const Text('Instagram'),
+            onTap: () {
+              launch('https://www.instagram.com');
+            },
+          ),
+          ListTile(
+            leading: const Icon(FontAwesomeIcons.twitter),
+            title: const Text('Twitter'),
+            onTap: () {
+              launch('https://www.twitter.com');
+            },
+          )
+        ],
+      );
 }
