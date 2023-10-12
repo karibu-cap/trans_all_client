@@ -105,7 +105,6 @@ class CustomScaffold extends StatelessWidget {
   }
 }
 
-
 class NavigationDrawer extends StatelessWidget {
   const NavigationDrawer({Key? key}) : super(key: key);
 
@@ -136,7 +135,7 @@ class NavigationDrawer extends StatelessWidget {
             ),
           ),
           Container(
-             margin: const EdgeInsets.only(top: 10),
+            margin: const EdgeInsets.only(top: 10),
             child: const Text(
               'TRANSALL',
               style: TextStyle(
@@ -144,7 +143,7 @@ class NavigationDrawer extends StatelessWidget {
                 color: Colors.black,
               ),
             ),
-          )
+          ),
         ]),
       );
 
