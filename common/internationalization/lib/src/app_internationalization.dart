@@ -354,6 +354,11 @@ class AppInternationalization extends Translations {
           'selectDefaultBuyerContactMessage':
               'Sélectionnez le numéro du payeur parmi les numéros de paiement enregistrés',
           'TransAll': 'TransAll',
+          'TRANSALL': 'TRANSALL',
+          'Follow us': 'Suivez nous',
+          'Facebook': 'Facebook',
+          'Instagram': 'Instagram',
+          'Twitter': 'Twitter',
         },
       };
 
@@ -1349,6 +1354,41 @@ class AppInternationalization extends Translations {
   String get transAll {
     return _stringOfLocalizedValue(
       'TransAll',
+    );
+  }
+
+  /// Returns the localized value of TRANSALL.
+  String get transALL {
+    return _stringOfLocalizedValue(
+      'TRANSALL',
+    );
+  }
+
+  /// Returns the localized value of Follow us.
+  String get follow {
+    return _stringOfLocalizedValue(
+      'Follow us',
+    );
+  }
+
+  /// Returns the localized value of facebook.
+  String get facebook {
+    return _stringOfLocalizedValue(
+      'Facebook',
+    );
+  }
+
+   /// Returns the localized value of instagram.
+  String get instagram {
+    return _stringOfLocalizedValue(
+      'Instagram',
+    );
+  }
+
+   /// Returns the localized value of twitter.
+  String get twitter {
+    return _stringOfLocalizedValue(
+      'Twitter',
     );
   }
 
