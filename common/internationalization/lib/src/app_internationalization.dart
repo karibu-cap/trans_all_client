@@ -1378,14 +1378,14 @@ class AppInternationalization extends Translations {
     );
   }
 
-   /// Returns the localized value of instagram.
+  /// Returns the localized value of instagram.
   String get instagram {
     return _stringOfLocalizedValue(
       'Instagram',
     );
   }
 
-   /// Returns the localized value of twitter.
+  /// Returns the localized value of twitter.
   String get twitter {
     return _stringOfLocalizedValue(
       'Twitter',
