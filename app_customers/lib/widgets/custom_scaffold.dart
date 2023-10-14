@@ -123,74 +123,74 @@ class NavigationDrawer extends StatelessWidget {
         ),
       );
 
-  Widget buildHeader(BuildContext context){
+  Widget buildHeader(BuildContext context) {
     final localization = Get.find<AppInternationalization>();
 
     return Container(
-        padding: const EdgeInsets.only(
-          top: 60,
-          bottom: 40,
+      padding: const EdgeInsets.only(
+        top: 60,
+        bottom: 40,
+      ),
+      child: Column(children: [
+        CircleAvatar(
+          backgroundColor: Colors.transparent,
+          radius: 70,
+          child: Image.asset(
+            'assets/icons/logo.png',
+          ),
         ),
-        child: Column(children: [
-          CircleAvatar(
-            backgroundColor: Colors.transparent,
-            radius: 70,
-            child: Image.asset(
-              'assets/icons/logo.png',
+        Container(
+          margin: const EdgeInsets.only(top: 10),
+          child: Text(
+            localization.transALL,
+            style: TextStyle(
+              fontSize: 34,
+              color: Colors.black,
             ),
           ),
-          Container(
-            margin: const EdgeInsets.only(top: 10),
-            child: Text(
-              localization.transALL,
-              style: TextStyle(
-                fontSize: 34,
-                color: Colors.black,
-              ),
-            ),
-          ),
-        ]),
-      );
-  } 
+        ),
+      ]),
+    );
+  }
 
-  Widget buildMenuItems(BuildContext context){
+  Widget buildMenuItems(BuildContext context) {
     final localization = Get.find<AppInternationalization>();
-    
+
     return Wrap(
-        runSpacing: 20,
-        children: [
-          const Divider(
-            color: Colors.grey,
-            height: 110,
+      runSpacing: 20,
+      children: [
+        const Divider(
+          color: Colors.grey,
+          height: 110,
+        ),
+        ListTile(
+          title: Text(
+            localization.follow,
+            style: TextStyle(fontSize: 25),
           ),
-          ListTile(
-            title: Text(
-              localization.follow,
-              style: TextStyle(fontSize: 25),
-            ),
-          ),
-          ListTile(
-            leading: const Icon(FontAwesomeIcons.facebook),
-            title: Text(localization.facebook),
-            onTap: () {
-              launch('https://www.facebook.com');
-            },
-          ),
-          ListTile(
-            leading: const Icon(FontAwesomeIcons.instagram),
-            title: Text(localization.instagram),
-            onTap: () {
-              launch('https://www.instagram.com');
-            },
-          ),
-          ListTile(
-            leading: const Icon(FontAwesomeIcons.twitter),
-            title: Text(localization.twitter),
-            onTap: () {
-              launch('https://www.twitter.com');
-            },
-          )
-        ],
-      );
-  } 
+        ),
+        ListTile(
+          leading: const Icon(FontAwesomeIcons.facebook),
+          title: Text(localization.facebook),
+          onTap: () {
+            launch('https://www.facebook.com');
+          },
+        ),
+        ListTile(
+          leading: const Icon(FontAwesomeIcons.instagram),
+          title: Text(localization.instagram),
+          onTap: () {
+            launch('https://www.instagram.com');
+          },
+        ),
+        ListTile(
+          leading: const Icon(FontAwesomeIcons.twitter),
+          title: Text(localization.twitter),
+          onTap: () {
+            launch('https://www.twitter.com');
+          },
+        )
+      ],
+    );
+  }
 }
