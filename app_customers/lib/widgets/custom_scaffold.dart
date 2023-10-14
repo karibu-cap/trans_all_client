@@ -2,6 +2,8 @@ import 'package:animation_wrappers/animations/faded_slide_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:get/get.dart';
+import 'package:trans_all_common_internationalization/internationalization.dart';
 
 import '../routes/app_router.dart';
 import '../themes/app_colors.dart';
@@ -121,66 +123,74 @@ class NavigationDrawer extends StatelessWidget {
         ),
       );
 
-  Widget buildHeader(BuildContext context) => Container(
+  Widget buildHeader(BuildContext context){
+    final localization = Get.find<AppInternationalization>();
+
+    return Container(
         padding: const EdgeInsets.only(
-          top: 100,
-          bottom: 60,
+          top: 60,
+          bottom: 40,
         ),
         child: Column(children: [
           CircleAvatar(
             backgroundColor: Colors.transparent,
             radius: 70,
             child: Image.asset(
-              'assets/icons/Frame5.png',
+              'assets/icons/logo.png',
             ),
           ),
           Container(
             margin: const EdgeInsets.only(top: 10),
-            child: const Text(
-              'TRANSALL',
+            child: Text(
+              localization.transALL,
               style: TextStyle(
-                fontSize: 37,
+                fontSize: 34,
                 color: Colors.black,
               ),
             ),
           ),
         ]),
       );
+  } 
 
-  Widget buildMenuItems(BuildContext context) => Wrap(
+  Widget buildMenuItems(BuildContext context){
+    final localization = Get.find<AppInternationalization>();
+    
+    return Wrap(
         runSpacing: 20,
         children: [
           const Divider(
             color: Colors.grey,
-            height: 130,
+            height: 110,
           ),
-          const ListTile(
+          ListTile(
             title: Text(
-              'Follow us',
+              localization.follow,
               style: TextStyle(fontSize: 25),
             ),
           ),
           ListTile(
             leading: const Icon(FontAwesomeIcons.facebook),
-            title: const Text('Facebook'),
+            title: Text(localization.facebook),
             onTap: () {
               launch('https://www.facebook.com');
             },
           ),
           ListTile(
             leading: const Icon(FontAwesomeIcons.instagram),
-            title: const Text('Instagram'),
+            title: Text(localization.instagram),
             onTap: () {
               launch('https://www.instagram.com');
             },
           ),
           ListTile(
             leading: const Icon(FontAwesomeIcons.twitter),
-            title: const Text('Twitter'),
+            title: Text(localization.twitter),
             onTap: () {
               launch('https://www.twitter.com');
             },
           )
         ],
       );
+  } 
 }
