@@ -9,6 +9,7 @@ Map<String, dynamic> _remoteConfigDefaultsDev = {
   RemoteConfigKeys.featureForfeitEnable: true,
   RemoteConfigKeys.featureCustomerServiceEnabled: true,
   RemoteConfigKeys.launchUrl: true,
+  RemoteConfigKeys.drawerMenu: true,
   RemoteConfigKeys.customerServiceLink: 'https://wa.me/237696404016',
   RemoteConfigKeys.launchFacebookLink: 'https://www.facebook.com',
   RemoteConfigKeys.launchInstagramLink: 'https://www.intagram.com',

@@ -7,9 +7,12 @@ class RemoteConfigKeys {
   /// Boolean to activate or deactivate the possibility for a user to
   /// make airtime transfer request by sms.
   static const userCanRequestAirtimeBySms = 'users_can_request_airtime_by_sms';
-  
+
   /// Launch facebook page.
   static const launchUrl = 'launch_page';
+
+  /// Start drawer menu.
+  static const drawerMenu = 'start_drawer_menu';
 
   /// Launch facebook page.
   static const launchFacebookLink = 'launch_facebook_page';

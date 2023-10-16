@@ -38,6 +38,9 @@ class CustomScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     final canPop = AppRouter.canPop(context);
     final theme = Theme.of(context);
+    final enableDrawerMenu = RemoteConfig().getBool(
+      RemoteConfigKeys.drawerMenu,
+    );
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -67,7 +70,7 @@ class CustomScaffold extends StatelessWidget {
               ),
             )
           : null,
-      drawer: const NavigationDrawer(),
+      drawer: enableDrawerMenu ? const NavigationDrawer() : null,
       body: SafeArea(
         bottom: false,
         child: Center(
