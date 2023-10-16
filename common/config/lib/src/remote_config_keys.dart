@@ -8,6 +8,18 @@ class RemoteConfigKeys {
   /// make airtime transfer request by sms.
   static const userCanRequestAirtimeBySms = 'users_can_request_airtime_by_sms';
 
+  /// Launch facebook page.
+  static const launchUrl = 'launch_page';
+
+  /// Launch facebook page.
+  static const launchFacebookLink = 'launch_facebook_page';
+
+  /// Launch instagram page.
+  static const launchInstagramLink = 'launch_instagram_page';
+
+  /// Launch twitter page.
+  static const launchTwitterLink = 'launch_twitter_page';
+
   /// The Orange sim number for that receives message in cas of sms transaction.
   static const orangeNumberForSmsTransaction =
       'orange_number_for_sms_transaction';

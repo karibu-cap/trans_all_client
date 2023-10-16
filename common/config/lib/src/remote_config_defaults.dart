@@ -8,7 +8,11 @@ Map<String, dynamic> _remoteConfigDefaultsDev = {
   RemoteConfigKeys.mtnNumberForSmsTransaction: '676714797',
   RemoteConfigKeys.featureForfeitEnable: true,
   RemoteConfigKeys.featureCustomerServiceEnabled: true,
+  RemoteConfigKeys.launchUrl: true,
   RemoteConfigKeys.customerServiceLink: 'https://wa.me/237696404016',
+  RemoteConfigKeys.launchFacebookLink: 'https://www.facebook.com',
+  RemoteConfigKeys.launchInstagramLink: 'https://www.facebook.com',
+  RemoteConfigKeys.launchTwitterLink: 'https://www.facebook.com',
 };
 
 Map<String, dynamic> _remoteConfigDefaultsStaging = {
@@ -17,7 +21,11 @@ Map<String, dynamic> _remoteConfigDefaultsStaging = {
   RemoteConfigKeys.mtnNumberForSmsTransaction: '676714797',
   RemoteConfigKeys.featureForfeitEnable: true,
   RemoteConfigKeys.featureCustomerServiceEnabled: true,
+  RemoteConfigKeys.launchUrl: true,
   RemoteConfigKeys.customerServiceLink: 'https://wa.me/237696404016',
+  RemoteConfigKeys.launchFacebookLink: 'https://www.facebook.com',
+  RemoteConfigKeys.launchInstagramLink: 'https://www.facebook.com',
+  RemoteConfigKeys.launchTwitterLink: 'https://www.facebook.com',
 };
 
 Map<String, dynamic> _remoteConfigDefaultsProd = {
@@ -26,7 +34,11 @@ Map<String, dynamic> _remoteConfigDefaultsProd = {
   RemoteConfigKeys.mtnNumberForSmsTransaction: '676714797',
   RemoteConfigKeys.featureForfeitEnable: false,
   RemoteConfigKeys.featureCustomerServiceEnabled: false,
+  RemoteConfigKeys.launchUrl: true,
   RemoteConfigKeys.customerServiceLink: 'https://wa.me/237696404016',
+  RemoteConfigKeys.launchFacebookLink: 'https://www.facebook.com',
+  RemoteConfigKeys.launchInstagramLink: 'https://www.facebook.com',
+  RemoteConfigKeys.launchTwitterLink: 'https://www.facebook.com',
 };
 
 /// Returns the default remote config for each environment.
