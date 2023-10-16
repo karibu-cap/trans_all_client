@@ -166,6 +166,9 @@ class NavigationDrawer extends StatelessWidget {
     final String twitterLink = RemoteConfig().getString(
       RemoteConfigKeys.launchTwitterLink,
     );
+    final enableLaunchUrl = RemoteConfig().getBool(
+          RemoteConfigKeys.launchUrl,
+        );
 
     return Wrap(
       runSpacing: 20,
@@ -184,6 +187,12 @@ class NavigationDrawer extends StatelessWidget {
           leading: const Icon(FontAwesomeIcons.facebook),
           title: Text(localization.facebook),
           onTap: () {
+            if(enableLaunchUrl){
+              launchUrl(
+              Uri.parse(facebookLink),
+              mode: LaunchMode.externalApplication,
+            );
+            }
             launchUrl(
               Uri.parse(facebookLink),
               mode: LaunchMode.externalApplication,
