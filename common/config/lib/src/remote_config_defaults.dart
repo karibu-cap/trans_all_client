@@ -11,8 +11,8 @@ Map<String, dynamic> _remoteConfigDefaultsDev = {
   RemoteConfigKeys.launchUrl: true,
   RemoteConfigKeys.customerServiceLink: 'https://wa.me/237696404016',
   RemoteConfigKeys.launchFacebookLink: 'https://www.facebook.com',
-  RemoteConfigKeys.launchInstagramLink: 'https://www.facebook.com',
-  RemoteConfigKeys.launchTwitterLink: 'https://www.facebook.com',
+  RemoteConfigKeys.launchInstagramLink: 'https://www.intagram.com',
+  RemoteConfigKeys.launchTwitterLink: 'https://www.twitter.com',
 };
 
 Map<String, dynamic> _remoteConfigDefaultsStaging = {
@@ -24,8 +24,8 @@ Map<String, dynamic> _remoteConfigDefaultsStaging = {
   RemoteConfigKeys.launchUrl: true,
   RemoteConfigKeys.customerServiceLink: 'https://wa.me/237696404016',
   RemoteConfigKeys.launchFacebookLink: 'https://www.facebook.com',
-  RemoteConfigKeys.launchInstagramLink: 'https://www.facebook.com',
-  RemoteConfigKeys.launchTwitterLink: 'https://www.facebook.com',
+  RemoteConfigKeys.launchInstagramLink: 'https://www.intagram.com',
+  RemoteConfigKeys.launchTwitterLink: 'https://www.twitter.com',
 };
 
 Map<String, dynamic> _remoteConfigDefaultsProd = {
@@ -37,8 +37,8 @@ Map<String, dynamic> _remoteConfigDefaultsProd = {
   RemoteConfigKeys.launchUrl: true,
   RemoteConfigKeys.customerServiceLink: 'https://wa.me/237696404016',
   RemoteConfigKeys.launchFacebookLink: 'https://www.facebook.com',
-  RemoteConfigKeys.launchInstagramLink: 'https://www.facebook.com',
-  RemoteConfigKeys.launchTwitterLink: 'https://www.facebook.com',
+  RemoteConfigKeys.launchInstagramLink: 'https://www.intagram.com',
+  RemoteConfigKeys.launchTwitterLink: 'https://www.twitter.com',
 };
 
 /// Returns the default remote config for each environment.
