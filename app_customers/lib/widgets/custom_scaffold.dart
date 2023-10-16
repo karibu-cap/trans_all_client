@@ -167,59 +167,61 @@ class NavigationDrawer extends StatelessWidget {
       RemoteConfigKeys.launchTwitterLink,
     );
     final enableLaunchUrl = RemoteConfig().getBool(
-          RemoteConfigKeys.launchUrl,
-        );
-
-    return Wrap(
-      runSpacing: 20,
-      children: [
-        const Divider(
-          color: Colors.grey,
-          height: 110,
-        ),
-        ListTile(
-          title: Text(
-            localization.followUs,
-            style: TextStyle(fontSize: 25),
-          ),
-        ),
-        ListTile(
-          leading: const Icon(FontAwesomeIcons.facebook),
-          title: Text(localization.facebook),
-          onTap: () {
-            if(enableLaunchUrl){
-              launchUrl(
-              Uri.parse(facebookLink),
-              mode: LaunchMode.externalApplication,
-            );
-            }
-            launchUrl(
-              Uri.parse(facebookLink),
-              mode: LaunchMode.externalApplication,
-            );
-          },
-        ),
-        ListTile(
-          leading: const Icon(FontAwesomeIcons.instagram),
-          title: Text(localization.instagram),
-          onTap: () {
-            launchUrl(
-              Uri.parse(instagramLink),
-              mode: LaunchMode.externalApplication,
-            );
-          },
-        ),
-        ListTile(
-          leading: const Icon(FontAwesomeIcons.twitter),
-          title: Text(localization.twitter),
-          onTap: () {
-            launchUrl(
-              Uri.parse(twitterLink),
-              mode: LaunchMode.externalApplication,
-            );
-          },
-        )
-      ],
+      RemoteConfigKeys.launchUrl,
     );
+
+    return enableLaunchUrl
+        ? Wrap(
+            runSpacing: 20,
+            children: [
+              const Divider(
+                color: Colors.grey,
+                height: 110,
+              ),
+              ListTile(
+                title: Text(
+                  localization.followUs,
+                  style: TextStyle(fontSize: 25),
+                ),
+              ),
+              ListTile(
+                leading: const Icon(FontAwesomeIcons.facebook),
+                title: Text(localization.facebook),
+                onTap: () {
+                  if (facebookLink != null) {
+                    launchUrl(
+                      Uri.parse(facebookLink),
+                      mode: LaunchMode.externalApplication,
+                    );
+                  }
+                },
+              ),
+              ListTile(
+                leading: const Icon(FontAwesomeIcons.instagram),
+                title: Text(localization.instagram),
+                onTap: () {
+                  if (instagramLink != null) {
+                    launchUrl(
+                      Uri.parse(instagramLink),
+                      mode: LaunchMode.externalApplication,
+                    );
+                  }
+                },
+              ),
+              ListTile(
+                leading: const Icon(FontAwesomeIcons.twitter),
+                title: Text(localization.twitter),
+                onTap: () {
+                  if (twitterLink != null) {
+                    launchUrl(
+                      Uri.parse(twitterLink),
+                      mode: LaunchMode.externalApplication,
+                    );
+                  }
+                },
+              )
+            ],
+          )
+        : Container();
   }
 }
