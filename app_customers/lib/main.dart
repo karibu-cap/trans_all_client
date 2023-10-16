@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:clock/clock.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -113,7 +112,7 @@ class _BuildApp extends StatelessWidget {
   }
 }
 
-void _streamPendingTransaction() {
+Future<void> _streamPendingTransaction() async {
   final Logger _logger = Logger('Schedule airtime transaction update');
   final TransferRepository transferRepository = Get.find<TransferRepository>();
 
@@ -123,11 +122,11 @@ void _streamPendingTransaction() {
     final pendingTransaction =
         transferRepository.getAllLocalTransaction().where(
               (value) =>
-                  (value.status.key == TransferStatus.waitingRequest.key &&
-                      value.payments.first.status.key !=
-                          PaymentStatus.failed.key) ||
-                  value.status.key == TransferStatus.requestSend.key ||
-                  value.payments.first.status.key == PaymentStatus.pending.key,
+                  value.status.key != TransferStatus.completed.key &&
+                  value.status.key != TransferStatus.succeeded.key &&
+                  value.status.key != TransferStatus.failed.key &&
+                  value.status.key != TransferStatus.paymentFailed.key &&
+                  value.payments.first.status.key != PaymentStatus.failed.key,
             );
     _logger.info(
       'There are ${pendingTransaction.length} transaction with pending status.',
@@ -135,17 +134,15 @@ void _streamPendingTransaction() {
     if (pendingTransaction.isNotEmpty) {
       for (final transaction in pendingTransaction) {
         _logger.info(
-          'the transaction id is ${transaction.id} are a '
-          'transaction status ${transaction.status.key} and '
+          'the transaction id ${transaction.id} have a '
+          'transfer status ${transaction.status.key} and '
           'payment status ${transaction.payments.first.status.key}.',
         );
 
         /// Set to failed if the transaction status is pending since 1 week.
-        final DateTime now = clock.now();
-        final DateTime oneWeekAgo = now.subtract(Duration(days: 7));
-        if (transaction.createdAt.isBefore(oneWeekAgo)) {
+        if (transaction.isOlderThanAWeek()) {
           _logger.info(
-            'the transaction id ${transaction.id} with a '
+            'the transaction id ${transaction.id} have a '
             'transaction status ${transaction.status.key} and '
             'payment status ${transaction.payments.first.status.key} is passed '
             '1 week; the transaction will be set to failed.',
@@ -159,21 +156,20 @@ void _streamPendingTransaction() {
           final remoteTransaction = await transferRepository.getTheTransaction(
             transactionId: transaction.id,
           );
-          final canUpdate =
-              (remoteTransaction?.status.key != transaction.status.key) ||
-                  !(remoteTransaction?.payments.first.status.key ==
-                          PaymentStatus.pending.key &&
-                      (transaction.payments.last.status.key ==
-                              PaymentStatus.pending.key ||
-                          transaction.payments.last.status.key ==
-                              PaymentStatus.initialized.key));
-          if (remoteTransaction != null && canUpdate) {
+
+          if (remoteTransaction != null) {
             _logger.info(
               'New update of  transaction with id ${transaction.id} is received with data: ${remoteTransaction.toJson()}',
             );
+            final newTransfer = TransferInfo.fromJson(
+              json: {
+                ...remoteTransaction.toJson(),
+                TransferInfo.keyForfeitReference: transaction.forfeitReference,
+              },
+            );
             await transferRepository.updateLocalTransaction(
               transaction.id,
-              remoteTransaction,
+              newTransfer,
             );
           }
         }

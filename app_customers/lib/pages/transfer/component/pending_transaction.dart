@@ -85,7 +85,7 @@ class _ListOfPendingTransfer extends StatelessWidget {
                         buyerGatewayId: transferBuyerGateway,
                         featureReference: transfer.feature.key,
                         transactionId: transfer.id,
-                        forfeitId: transfer.forfeitId,
+                        forfeitReference: transfer.forfeitReference,
                       ),
                     ),
                   ),
@@ -249,10 +249,7 @@ class _PendingTransferView extends StatelessWidget {
                               '${localization.status}: ',
                             ),
                             Text(
-                              getValidStatus(
-                                transfer.status,
-                                transfer.payments.last.status,
-                              ).toUpperCase(),
+                              retrieveValidStatusInternalized(transfer),
                               style: TextStyle(
                                 color: AppColors.green,
                                 fontWeight: FontWeight.bold,

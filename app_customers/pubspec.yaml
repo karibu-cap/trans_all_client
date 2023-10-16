@@ -102,6 +102,9 @@ dependencies:
   # The charts package for create stats graphic.
   syncfusion_flutter_charts: ^21.2.4
 
+  # The circular progress bar.
+  simple_circular_progress_bar: ^1.0.2
+
   # Enables In App Updates on Android using the official Android APIs.
   # https://developer.android.com/guide/app-bundle/in-app-updates
   in_app_update: 4.1.4

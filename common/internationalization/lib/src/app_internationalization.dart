@@ -66,7 +66,7 @@ class AppInternationalization extends Translations {
               'Gain efficiency and peace of mind with our transfer management solution.',
           'next': 'Next',
           'successTransaction': 'Your transaction  was successful',
-          'failedTransfer': 'Your transaction failed',
+          'failedTransferMessage': 'Your transaction failed',
           'payer': 'Payer',
           'receiver': 'Receiver',
           'waitingPaymentValidation': 'Waiting for payment validation.',
@@ -185,8 +185,22 @@ class AppInternationalization extends Translations {
               'The payment gateway is not longer supported. Please try another payment method.',
           'invalidFeatureProvider':
               'The operator choosen is not longer supported. Please try another operator.',
+          'paymentFailed': 'PAYMENT FAILED',
+          'paymentInitialized': 'PAYMENT INITIALIZED',
+          'paymentPending': 'PENDING PAYMENT',
+          'succeedTransfer': 'SUCCESSFUL TRANSFER',
+          'waitingRequest': 'TRANSFER WAITING',
+          'requestSend': 'TRANSFER PROCESSING',
+          'failedTransfer': 'TRANSFER FAILED',
         },
         'fr': {
+          'failedTransfer': 'TRAITEMENT ÉCHOUÉ',
+          'requestSend': 'TRAITEMENT DU TRANSFERT',
+          'waitingRequest': 'TRANSFERT EN COURS',
+          'succeedTransfer': 'TRANSFERT REUSSI',
+          'paymentPending': 'PAIEMENT EN COURS',
+          'paymentInitialized': 'PAIEMENT INITIALISÉ',
+          'paymentFailed': 'PAIEMENT ÉCHOUÉ',
           'invalidFeatureProvider':
               'L\' operateur choisi n\'est plus supporté. Veuillez essayer un autre operateur.',
           'unsupportedProvider':
@@ -262,7 +276,7 @@ class AppInternationalization extends Translations {
               'Gagnez en efficacité et en tranquillité d\'esprit grâce à notre solution de gestion des transferts.',
           'next': 'Suivant',
           'successTransaction': 'Votre transaction a été effectuée avec succès',
-          'failedTransfer': 'Votre transaction a échoué',
+          'failedTransferMessage': 'Votre transaction a échoué',
           'payer': 'Payeur',
           'receiver': 'Bénéficiaire',
           'waitingPaymentValidation':
@@ -344,7 +358,7 @@ class AppInternationalization extends Translations {
           'chooseNumberToSend':
               'Si oui, sélectionnez le numéro qui recevira votre demande',
           'anErrorOccurred':
-              'Une erreur survenue veillez réessayer. Si cle probleme persiste veuillez nous contacter.',
+              'Une erreur survenue veillez réessayer. Si le probleme persiste veuillez nous contacter.',
           'confirmSetAsDefault':
               "Confirmez-vous l'ajout de @number comme numéro de paiement par défaut ?",
           'contactRefreshed': 'Contact mis à jour',
@@ -370,6 +384,55 @@ class AppInternationalization extends Translations {
     String value,
   ) {
     return value.tr;
+  }
+
+  /// Returns the localized value of failedTransfer.
+  String get failedTransfer {
+    return _stringOfLocalizedValue(
+      'failedTransfer',
+    );
+  }
+
+  /// Returns the localized value of requestSend.
+  String get requestSend {
+    return _stringOfLocalizedValue(
+      'requestSend',
+    );
+  }
+
+  /// Returns the localized value of waitingRequest.
+  String get waitingRequest {
+    return _stringOfLocalizedValue(
+      'waitingRequest',
+    );
+  }
+
+  /// Returns the localized value of succeedTransfer.
+  String get succeedTransfer {
+    return _stringOfLocalizedValue(
+      'succeedTransfer',
+    );
+  }
+
+  /// Returns the localized value of paymentPending.
+  String get paymentPending {
+    return _stringOfLocalizedValue(
+      'paymentPending',
+    );
+  }
+
+  /// Returns the localized value of paymentInitialized.
+  String get paymentInitialized {
+    return _stringOfLocalizedValue(
+      'paymentInitialized',
+    );
+  }
+
+  /// Returns the localized value of paymentFailed.
+  String get paymentFailed {
+    return _stringOfLocalizedValue(
+      'paymentFailed',
+    );
   }
 
   /// Returns the localized value of invalidFeatureProvider.
@@ -1023,10 +1086,10 @@ class AppInternationalization extends Translations {
     );
   }
 
-  /// Returns the localized value of failedTransfer.
-  String get failedTransfer {
+  /// Returns the localized value of failedTransferMessage.
+  String get failedTransferMessage {
     return _stringOfLocalizedValue(
-      'failedTransfer',
+      'failedTransferMessage',
     );
   }
 

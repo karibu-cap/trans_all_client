@@ -36,8 +36,8 @@ class TransferInfo extends BaseModel {
   /// The stored key ref for the [reason] property.
   static const keyReason = 'reason';
 
-  /// The stored key ref for the [forfeitId] property.
-  static const keyForfeitId = 'forfeitId';
+  /// The stored key ref for the [forfeitReference] property.
+  static const keyForfeitReference = 'forfeitReference';
 
   /// The id of transaction.
   final String id;
@@ -72,8 +72,8 @@ class TransferInfo extends BaseModel {
   /// The transfer payment.
   final List<TransTuPayment> payments;
 
-  /// The forfeit id to transfers.
-  final String? forfeitId;
+  /// The forfeit reference.
+  final String? forfeitReference;
 
   /// Constructs a new [TransferInfo] from [Map] object.
   TransferInfo.fromJson({
@@ -89,7 +89,7 @@ class TransferInfo extends BaseModel {
         amount = json[keyAmountXAF],
         status = TransferStatus.fromKey(json[keyStatus]),
         type = json[keyType],
-        forfeitId = json[keyForfeitId],
+        forfeitReference = json[keyForfeitReference],
         reason = json[keyReason],
         payments = _getPayment(json[keyPayments]),
         super.fromJson();
@@ -102,9 +102,9 @@ class TransferInfo extends BaseModel {
   @override
   Map<String, dynamic> toJson() => <String, dynamic>{
         keyId: id,
-        keyForfeitId: forfeitId,
-        keyCreatedAt: createdAt,
-        keyUpdateAt: updateAt,
+        keyForfeitReference: forfeitReference,
+        keyCreatedAt: DateTime.now().toUtc().toIso8601String(),
+        keyUpdateAt: DateTime.now().toUtc().toIso8601String(),
         keyAmountXAF: amount,
         keyStatus: status.key,
         keyFeature: feature.key,
@@ -114,6 +114,14 @@ class TransferInfo extends BaseModel {
         keyReason: reason,
         keyPayments: payments.map((e) => e.toJson()).toList(),
       };
+
+  /// Checks if the transfer is older than a week.
+  bool isOlderThanAWeek() {
+    final DateTime now = DateTime.now();
+    final Duration difference = now.difference(createdAt);
+
+    return difference.inDays > 7;
+  }
 }
 
 /// The transfer information.

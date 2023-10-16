@@ -17,6 +17,7 @@ class TransferInfoAdapter extends TypeAdapter<TransferInfo> {
       TransferInfo.keyCreatedAt: data[TransferInfo.keyCreatedAt].toString(),
       TransferInfo.keyUpdateAt: data[TransferInfo.keyUpdateAt].toString(),
       TransferInfo.keyFeature: data[TransferInfo.keyFeature],
+      TransferInfo.keyForfeitReference: data[TransferInfo.keyForfeitReference],
       TransferInfo.keyReason: data[TransferInfo.keyReason],
       TransferInfo.keyReceiverPhoneNumber:
           data[TransferInfo.keyReceiverPhoneNumber],

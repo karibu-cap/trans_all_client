@@ -245,6 +245,7 @@ class HiveServiceImpl implements HiveService {
     required num amountToPay,
     required String buyerGatewayId,
     required String featureReference,
+    String? forfeitReference,
   }) async {
     final packageInfo = await PackageInfo.fromPlatform();
     final localization = Get.find<AppInternationalization>();
@@ -259,7 +260,7 @@ class HiveServiceImpl implements HiveService {
       'buyerGatewayId': buyerGatewayId,
       'amountToPay': amountToPay,
       'buyerPhoneNumber': buyerPhoneNumber,
-      'featureReference': featureReference,
+      'featureReference': forfeitReference ?? featureReference,
       'receiverPhoneNumber': receiverPhoneNumber,
     });
     final url = Uri.parse(

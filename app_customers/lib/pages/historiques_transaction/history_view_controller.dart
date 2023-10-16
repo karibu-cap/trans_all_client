@@ -103,13 +103,16 @@ class HistoryViewController extends GetxController {
   }
 
   /// Retrieves the current forfeit.
-  Forfeit? getCurrentForfeit(
-    String? forfeitId,
-  ) {
-    if (forfeitId == null || forfeitId.isEmpty) {
+  Future<Forfeit?> getCurrentForfeit(
+    String? forfeitReference,
+  ) async {
+    if (forfeitReference == null || forfeitReference.isEmpty) {
       return null;
     }
+    final listOfForfeit = await _forfeitRepository.getAllForfeit();
 
-    return _forfeitRepository.getForfeitById(forfeitId);
+    return listOfForfeit?.firstWhereOrNull(
+      (element) => element.reference == forfeitReference,
+    );
   }
 }

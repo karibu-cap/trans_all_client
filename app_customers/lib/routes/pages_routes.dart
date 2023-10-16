@@ -97,20 +97,17 @@ class CreditTransactionParams {
   /// The parameter key for [featureReference].
   static const String keyParamFeatureReference = 'featureReference';
 
+  /// The parameter key for [forfeitReference].
+  static const String keyParamForfeitReference = 'forfeitReference';
+
   /// The parameter key for [buyerGatewayId].
   static const String keyParamBuyerGatewayId = 'buyerGatewayId';
 
   /// The parameter key for [transactionId].
   static const String keyParamTransactionId = 'transactionId';
 
-  /// The parameter key for [forfeitId].
-  static const String keyParamForfeitId = 'forfeitId';
-
   /// The transaction id.
   final String? transactionId;
-
-  /// The forfeitId id.
-  final String? forfeitId;
 
   /// The buyerPhoneNumber parameter.
   final String? buyerPhoneNumber;
@@ -124,6 +121,9 @@ class CreditTransactionParams {
   /// The featureReference parameter.
   final String? featureReference;
 
+  /// The forfeit reference.
+  final String? forfeitReference;
+
   /// The buyerGatewayId parameter.
   final String? buyerGatewayId;
 
@@ -134,8 +134,8 @@ class CreditTransactionParams {
     this.amountInXaf,
     this.buyerGatewayId,
     this.featureReference,
+    this.forfeitReference,
     this.transactionId,
-    this.forfeitId,
   });
 
   /// The encode parameters to a string.
@@ -153,7 +153,7 @@ class CreditTransactionParams {
         keyParamFeatureReference: featureReference,
         keyParamBuyerPhoneNumber: buyerPhoneNumber,
         keyParamTransactionId: transactionId,
-        keyParamForfeitId: forfeitId,
         keyParamReceiverPhoneNumber: receiverPhoneNumber,
+        keyParamForfeitReference: forfeitReference,
       };
 }

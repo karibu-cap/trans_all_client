@@ -67,13 +67,13 @@ class _GoRouterRoutesProvider {
             state.queryParameters,
             CreditTransactionParams.keyParamFeatureReference,
           );
+          final forfeitReference = getQueryParameter(
+            state.queryParameters,
+            CreditTransactionParams.keyParamForfeitReference,
+          );
           final transferId = getQueryParameter(
             state.queryParameters,
             CreditTransactionParams.keyParamTransactionId,
-          );
-          final forfeitId = getQueryParameter(
-            state.queryParameters,
-            CreditTransactionParams.keyParamForfeitId,
           );
 
           return AppPage(
@@ -84,8 +84,8 @@ class _GoRouterRoutesProvider {
                 receiverPhoneNumber: receiverNumber,
                 buyerPhoneNumber: paymentNumber,
                 featureReference: featureReference,
+                forfeitReference: forfeitReference,
                 transactionId: transferId,
-                forfeitId: forfeitId,
               ),
             ),
           );
@@ -127,13 +127,13 @@ class _GoRouterRoutesProvider {
                     state.queryParameters,
                     CreditTransactionParams.keyParamFeatureReference,
                   );
+                  final forfeitReference = getQueryParameter(
+                    state.queryParameters,
+                    CreditTransactionParams.keyParamForfeitReference,
+                  );
                   final transferId = getQueryParameter(
                     state.queryParameters,
                     CreditTransactionParams.keyParamTransactionId,
-                  );
-                  final forfeitId = getQueryParameter(
-                    state.queryParameters,
-                    CreditTransactionParams.keyParamForfeitId,
                   );
                   if (paymentNumber == null ||
                       receiverNumber == null ||
@@ -143,7 +143,6 @@ class _GoRouterRoutesProvider {
                     return AppPage(
                       requestContactPermission: true,
                       child: TransfersView(
-                        forfeitId: forfeitId,
                         displayInternetMessage: true,
                       ),
                     );
@@ -159,8 +158,8 @@ class _GoRouterRoutesProvider {
                         receiverPhoneNumber: receiverNumber,
                         buyerPhoneNumber: paymentNumber,
                         featureReference: featureReference,
+                        forfeitReference: forfeitReference,
                         transactionId: transferId,
-                        forfeitId: forfeitId,
                       ),
                     ),
                   );

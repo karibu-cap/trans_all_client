@@ -17,6 +17,7 @@ import '../../themes/app_colors.dart';
 import '../../themes/app_text_styles.dart';
 import '../../util/constant.dart';
 import '../../util/format_date_time.dart';
+import '../../util/get_client_status.dart';
 import '../../util/operator_name.dart';
 import '../../widgets/custom_scaffold.dart';
 import '../../widgets/oparator_icon.dart';
@@ -178,7 +179,7 @@ class _HistoricTransaction extends GetView<HistoryViewController> {
                   buyerGatewayId: transaction.payments.last.gateway.key,
                   featureReference: transaction.feature.key,
                   transactionId: transaction.id,
-                  forfeitId: transaction.forfeitId,
+                  forfeitReference: transaction.forfeitReference,
                 ),
               ),
             ),
@@ -325,6 +326,7 @@ class _HistoryView extends StatelessWidget {
   Widget build(BuildContext context) {
     final localization = Get.find<AppInternationalization>();
     final controller = Get.find<HistoryViewController>();
+    final theme = Theme.of(context);
 
     final transferStatus = transfer.status.key;
     final transferBuyerGateway =
@@ -342,7 +344,6 @@ class _HistoryView extends StatelessWidget {
 
     final buyerName = controller.getUserName(transfer.buyerPhoneNumber);
     final receiverName = controller.getUserName(transfer.receiverPhoneNumber);
-    final forfeit = controller.getCurrentForfeit(transfer.forfeitId);
 
     return Card(
       elevation: 0,
@@ -397,114 +398,69 @@ class _HistoryView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        '${localization.buyerPhoneNumber}: ',
-                      ),
-                      Text(
-                        buyerName == null
+                      _HistoricData(
+                        label: localization.buyerPhoneNumber,
+                        value: buyerName == null
                             ? transfer.buyerPhoneNumber
                             : '$buyerName (${transfer.buyerPhoneNumber})',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
                       ),
                       SizedBox(
                         height: 8,
                       ),
-                      Text(
-                        '${localization.receiverNumber}: ',
-                      ),
-                      Text(
-                        receiverName == null
+                      _HistoricData(
+                        label: localization.receiverNumber,
+                        value: receiverName == null
                             ? transfer.receiverPhoneNumber
                             : '$receiverName (${transfer.receiverPhoneNumber})',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
                       ),
                       SizedBox(
                         height: 5,
                       ),
-                      Text(
-                        '${localization.paymentOperator}: ',
-                      ),
-                      Text(
-                        transferBuyerGateway,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      if (forfeit != null)
-                        SizedBox(
-                          child: Column(
-                            children: [
-                              Text(
-                                '${localization.forfeit}: ',
-                              ),
-                              Text(
-                                forfeit.name,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  width: 30,
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Text(
-                      '${localization.amount}: ',
-                    ),
-                    FittedBox(
-                      child: Text(
-                        Currency.formatWithCurrency(
+                      _HistoricData(
+                        label: localization.amount,
+                        value: Currency.formatWithCurrency(
                           price: transfer.amount,
                           locale: localization.locale,
                           currencyCodeAlpha3: DefaultCurrency.xaf,
                         ),
-                        style: TextStyle(
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      _HistoricData(
+                        label: localization.paymentOperator,
+                        value: transferBuyerGateway,
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      FutureBuilder(
+                        future: controller
+                            .getCurrentForfeit(transfer.forfeitReference),
+                        builder: (context, snapshot) {
+                          final forfeit = snapshot.data;
+                          if (forfeit == null) {
+                            return SizedBox.shrink();
+                          }
+
+                          return _HistoricData(
+                            label: localization.forfeit,
+                            value: forfeit.name,
+                          );
+                        },
+                      ),
+                      _HistoricData(
+                        label: localization.status,
+                        value: retrieveValidStatusInternalized(transfer),
+                        labelStyle: theme.textTheme.labelMedium?.copyWith(
                           fontWeight: FontWeight.bold,
+                          color: theme.primaryColor,
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Text(timeFormatted(transfer.createdAt)),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    SizedBox(
-                      height: 30,
-                      child: FilledButton(
-                        style: TextButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(9),
-                            ),
-                          ),
-                        ),
+                      FilledButton(
                         child: FittedBox(
                           child: Text(
-                            localization.clone.toUpperCase(),
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 10,
-                            ),
+                            localization.clone,
                           ),
                         ),
                         onPressed: () => AppRouter.go(
@@ -517,18 +473,51 @@ class _HistoryView extends StatelessWidget {
                               buyerGatewayId:
                                   transfer.payments.last.gateway.key,
                               featureReference: transfer.feature.key,
-                              forfeitId: transfer.forfeitId,
+                              forfeitReference: transfer.forfeitReference,
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _HistoricData extends StatelessWidget {
+  final String label;
+  final String value;
+  final TextStyle? labelStyle;
+
+  const _HistoricData({
+    Key? key,
+    required this.label,
+    required this.value,
+    this.labelStyle,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FittedBox(
+      child: Row(
+        children: [
+          Text(
+            '$label: ',
+          ),
+          Text(
+            value,
+            style: labelStyle ??
+                TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+        ],
       ),
     );
   }
