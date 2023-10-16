@@ -39,7 +39,7 @@ class CustomScaffold extends StatelessWidget {
     final canPop = AppRouter.canPop(context);
     final theme = Theme.of(context);
     final enableDrawerMenu = RemoteConfig().getBool(
-      RemoteConfigKeys.drawerMenu,
+      RemoteConfigKeys.displayDrawerMenuEnabled,
     );
 
     return Scaffold(
@@ -161,16 +161,16 @@ class NavigationDrawer extends StatelessWidget {
   Widget buildMenuItems(BuildContext context) {
     final localization = Get.find<AppInternationalization>();
     final String facebookLink = RemoteConfig().getString(
-      RemoteConfigKeys.launchFacebookLink,
+      RemoteConfigKeys.linkFacebookPage,
     );
     final String instagramLink = RemoteConfig().getString(
-      RemoteConfigKeys.launchInstagramLink,
+      RemoteConfigKeys.linkInstagramPage,
     );
     final String twitterLink = RemoteConfig().getString(
-      RemoteConfigKeys.launchTwitterLink,
+      RemoteConfigKeys.linkTwitterPage,
     );
     final enableLaunchUrl = RemoteConfig().getBool(
-      RemoteConfigKeys.launchUrl,
+      RemoteConfigKeys.followUsEnabled,
     );
 
     return enableLaunchUrl

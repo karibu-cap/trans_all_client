@@ -9,19 +9,19 @@ class RemoteConfigKeys {
   static const userCanRequestAirtimeBySms = 'users_can_request_airtime_by_sms';
 
   /// Launch facebook page.
-  static const launchUrl = 'launch_page';
+  static const followUsEnabled = 'follow_us_enabled';
 
-  /// Start drawer menu.
-  static const drawerMenu = 'start_drawer_menu';
+  /// Enable drawer menu.
+  static const displayDrawerMenuEnabled = 'display_drawer_menu_enabled';
 
-  /// Launch facebook page.
-  static const launchFacebookLink = 'launch_facebook_page';
+  /// Link for facebook page.
+  static const linkFacebookPage = 'link_facebook_page';
 
-  /// Launch instagram page.
-  static const launchInstagramLink = 'launch_instagram_page';
+  /// Link for instagram page.
+  static const linkInstagramPage = 'link_instagram_page';
 
-  /// Launch twitter page.
-  static const launchTwitterLink = 'launch_twitter_page';
+  /// Link for twitter page.
+  static const linkTwitterPage = 'link_twitter_page';
 
   /// The Orange sim number for that receives message in cas of sms transaction.
   static const orangeNumberForSmsTransaction =

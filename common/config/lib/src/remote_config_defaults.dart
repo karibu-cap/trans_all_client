@@ -8,12 +8,12 @@ Map<String, dynamic> _remoteConfigDefaultsDev = {
   RemoteConfigKeys.mtnNumberForSmsTransaction: '676714797',
   RemoteConfigKeys.featureForfeitEnable: true,
   RemoteConfigKeys.featureCustomerServiceEnabled: true,
-  RemoteConfigKeys.launchUrl: true,
-  RemoteConfigKeys.drawerMenu: true,
+  RemoteConfigKeys.followUsEnabled: true,
+  RemoteConfigKeys.displayDrawerMenuEnabled: true,
   RemoteConfigKeys.customerServiceLink: 'https://wa.me/237696404016',
-  RemoteConfigKeys.launchFacebookLink: 'https://www.facebook.com',
-  RemoteConfigKeys.launchInstagramLink: 'https://www.intagram.com',
-  RemoteConfigKeys.launchTwitterLink: 'https://www.twitter.com',
+  RemoteConfigKeys.linkFacebookPage: 'https://www.facebook.com',
+  RemoteConfigKeys.linkInstagramPage: 'https://www.intagram.com',
+  RemoteConfigKeys.linkTwitterPage: 'https://www.twitter.com',
 };
 
 Map<String, dynamic> _remoteConfigDefaultsStaging = {
@@ -22,11 +22,12 @@ Map<String, dynamic> _remoteConfigDefaultsStaging = {
   RemoteConfigKeys.mtnNumberForSmsTransaction: '676714797',
   RemoteConfigKeys.featureForfeitEnable: true,
   RemoteConfigKeys.featureCustomerServiceEnabled: true,
-  RemoteConfigKeys.launchUrl: true,
+  RemoteConfigKeys.followUsEnabled: true,
+  RemoteConfigKeys.displayDrawerMenuEnabled: true,
   RemoteConfigKeys.customerServiceLink: 'https://wa.me/237696404016',
-  RemoteConfigKeys.launchFacebookLink: 'https://www.facebook.com',
-  RemoteConfigKeys.launchInstagramLink: 'https://www.intagram.com',
-  RemoteConfigKeys.launchTwitterLink: 'https://www.twitter.com',
+  RemoteConfigKeys.linkFacebookPage: 'https://www.facebook.com',
+  RemoteConfigKeys.linkInstagramPage: 'https://www.intagram.com',
+  RemoteConfigKeys.linkTwitterPage: 'https://www.twitter.com',
 };
 
 Map<String, dynamic> _remoteConfigDefaultsProd = {
@@ -35,11 +36,12 @@ Map<String, dynamic> _remoteConfigDefaultsProd = {
   RemoteConfigKeys.mtnNumberForSmsTransaction: '676714797',
   RemoteConfigKeys.featureForfeitEnable: false,
   RemoteConfigKeys.featureCustomerServiceEnabled: false,
-  RemoteConfigKeys.launchUrl: true,
+  RemoteConfigKeys.followUsEnabled: true,
+  RemoteConfigKeys.displayDrawerMenuEnabled: true,
   RemoteConfigKeys.customerServiceLink: 'https://wa.me/237696404016',
-  RemoteConfigKeys.launchFacebookLink: 'https://www.facebook.com',
-  RemoteConfigKeys.launchInstagramLink: 'https://www.intagram.com',
-  RemoteConfigKeys.launchTwitterLink: 'https://www.twitter.com',
+  RemoteConfigKeys.linkFacebookPage: 'https://www.facebook.com',
+  RemoteConfigKeys.linkInstagramPage: 'https://www.intagram.com',
+  RemoteConfigKeys.linkTwitterPage: 'https://www.twitter.com',
 };
 
 /// Returns the default remote config for each environment.
