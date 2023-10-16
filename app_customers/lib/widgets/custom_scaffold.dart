@@ -1,6 +1,8 @@
 import 'package:animation_wrappers/animations/faded_slide_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:karibu_capital_core_remote_config/remote_config.dart';
+import 'package:trans_all_common_config/config.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:get/get.dart';
 import 'package:trans_all_common_internationalization/internationalization.dart';
@@ -142,7 +144,7 @@ class NavigationDrawer extends StatelessWidget {
         Container(
           margin: const EdgeInsets.only(top: 10),
           child: Text(
-            localization.transALL,
+            localization.transAll.toUpperCase(),
             style: TextStyle(
               fontSize: 34,
               color: Colors.black,
@@ -155,6 +157,15 @@ class NavigationDrawer extends StatelessWidget {
 
   Widget buildMenuItems(BuildContext context) {
     final localization = Get.find<AppInternationalization>();
+    final String facebookLink = RemoteConfig().getString(
+      RemoteConfigKeys.launchFacebookLink,
+    );
+    final String instagramLink = RemoteConfig().getString(
+      RemoteConfigKeys.launchInstagramLink,
+    );
+    final String twitterLink = RemoteConfig().getString(
+      RemoteConfigKeys.launchTwitterLink,
+    );
 
     return Wrap(
       runSpacing: 20,
@@ -165,7 +176,7 @@ class NavigationDrawer extends StatelessWidget {
         ),
         ListTile(
           title: Text(
-            localization.follow,
+            localization.followUs,
             style: TextStyle(fontSize: 25),
           ),
         ),
@@ -173,21 +184,30 @@ class NavigationDrawer extends StatelessWidget {
           leading: const Icon(FontAwesomeIcons.facebook),
           title: Text(localization.facebook),
           onTap: () {
-            launch('https://www.facebook.com');
+            launchUrl(
+              Uri.parse(facebookLink),
+              mode: LaunchMode.externalApplication,
+            );
           },
         ),
         ListTile(
           leading: const Icon(FontAwesomeIcons.instagram),
           title: Text(localization.instagram),
           onTap: () {
-            launch('https://www.instagram.com');
+            launchUrl(
+              Uri.parse(instagramLink),
+              mode: LaunchMode.externalApplication,
+            );
           },
         ),
         ListTile(
           leading: const Icon(FontAwesomeIcons.twitter),
           title: Text(localization.twitter),
           onTap: () {
-            launch('https://www.twitter.com');
+            launchUrl(
+              Uri.parse(twitterLink),
+              mode: LaunchMode.externalApplication,
+            );
           },
         )
       ],
