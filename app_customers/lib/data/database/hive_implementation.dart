@@ -143,11 +143,14 @@ class HiveServiceImpl implements HiveService {
     final url = Uri.parse(
       AppRoute.paymentGatewaysRoute,
     );
+
     try {
-      final response = await http.get(
-        url,
-        headers: headers,
-      );
+      final response = await http
+          .get(
+            url,
+            headers: headers,
+          )
+          .timeout(Duration(seconds: 8));
 
       final List<dynamic> data = jsonDecode(response.body);
       final List<Map<String, dynamic>> convertData =
@@ -179,6 +182,8 @@ class HiveServiceImpl implements HiveService {
 
   @override
   Future<ListOperationGatewaysResponse> listOperationGateways() async {
+    final client = HttpClient();
+    client.connectionTimeout = const Duration(seconds: 10);
     final List<OperationGateways> operations = [];
     final packageInfo = await PackageInfo.fromPlatform();
     final localization = Get.find<AppInternationalization>();
@@ -186,14 +191,19 @@ class HiveServiceImpl implements HiveService {
       PreferencesKeys.clientVersion: packageInfo.version,
       PreferencesKeys.acceptLanguage: localization.locale.languageCode,
     };
+
     final url = Uri.parse(
       AppRoute.operatorGatewaysRoute,
     );
+
     try {
-      final response = await http.get(
-        url,
-        headers: headers,
-      );
+      final response = await http
+          .get(
+            url,
+            headers: headers,
+          )
+          .timeout(Duration(seconds: 5));
+
       final dynamic bodyResponse = jsonDecode(response.body);
 
       final responseData = ResponseBody.fromJson(
