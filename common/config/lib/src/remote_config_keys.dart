@@ -8,7 +8,7 @@ class RemoteConfigKeys {
   /// make airtime transfer request by sms.
   static const userCanRequestAirtimeBySms = 'users_can_request_airtime_by_sms';
 
-  /// Launch facebook page.
+  /// Feature follow us enabled
   static const followUsEnabled = 'follow_us_enabled';
 
   /// Enable drawer menu.

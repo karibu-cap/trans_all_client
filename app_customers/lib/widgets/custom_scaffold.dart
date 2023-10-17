@@ -169,11 +169,11 @@ class NavigationDrawer extends StatelessWidget {
     final String twitterLink = RemoteConfig().getString(
       RemoteConfigKeys.linkTwitterPage,
     );
-    final enableLaunchUrl = RemoteConfig().getBool(
+    final followUsEnabled = RemoteConfig().getBool(
       RemoteConfigKeys.followUsEnabled,
     );
 
-    return enableLaunchUrl
+    return followUsEnabled
         ? Wrap(
             runSpacing: 20,
             children: [
