@@ -36,8 +36,11 @@ class TransferInfo extends BaseModel {
   /// The stored key ref for the [reason] property.
   static const keyReason = 'reason';
 
-  /// The stored key ref for the [forfeitId] property.
-  static const keyForfeitId = 'forfeitId';
+  /// The stored key ref for the [category] property.
+  static const keyCategory = 'category';
+
+  /// The stored key ref for the [operatorName] property.
+  static const keyOperatorName = 'operatorName';
 
   /// The id of transaction.
   final String id;
@@ -64,7 +67,7 @@ class TransferInfo extends BaseModel {
   final TransferStatus status;
 
   /// The operator gateway.
-  final OperationTransferType feature;
+  final String feature;
 
   /// The reason in cas of failed transaction.
   final String? reason;
@@ -72,8 +75,11 @@ class TransferInfo extends BaseModel {
   /// The transfer payment.
   final List<TransTuPayment> payments;
 
-  /// The forfeit id to transfers.
-  final String? forfeitId;
+  /// The category operation.
+  final Category category;
+
+  /// The operator name.
+  final Operator operatorName;
 
   /// Constructs a new [TransferInfo] from [Map] object.
   TransferInfo.fromJson({
@@ -85,11 +91,12 @@ class TransferInfo extends BaseModel {
             : DateTime.tryParse(json[keyUpdateAt])?.toLocal(),
         receiverPhoneNumber = json[keyReceiverPhoneNumber],
         buyerPhoneNumber = json[keyBuyerPhoneNumber],
-        feature = OperationTransferType.fromKey(json[keyFeature]),
+        operatorName = Operator.fromKey(json[keyOperatorName]),
+        category = Category.fromKey(json[keyCategory]),
+        feature = json[keyFeature],
         amount = json[keyAmountXAF],
         status = TransferStatus.fromKey(json[keyStatus]),
         type = json[keyType],
-        forfeitId = json[keyForfeitId],
         reason = json[keyReason],
         payments = _getPayment(json[keyPayments]),
         super.fromJson();
@@ -102,18 +109,27 @@ class TransferInfo extends BaseModel {
   @override
   Map<String, dynamic> toJson() => <String, dynamic>{
         keyId: id,
-        keyForfeitId: forfeitId,
-        keyCreatedAt: createdAt,
-        keyUpdateAt: updateAt,
+        keyCreatedAt: DateTime.now().toUtc().toIso8601String(),
+        keyUpdateAt: DateTime.now().toUtc().toIso8601String(),
         keyAmountXAF: amount,
         keyStatus: status.key,
-        keyFeature: feature.key,
+        keyFeature: feature,
+        keyOperatorName: operatorName.key,
+        keyCategory: category.key,
         keyReceiverPhoneNumber: receiverPhoneNumber,
         keyBuyerPhoneNumber: buyerPhoneNumber,
         keyType: type,
         keyReason: reason,
         keyPayments: payments.map((e) => e.toJson()).toList(),
       };
+
+  /// Checks if the transfer is older than a week.
+  bool isOlderThanAWeek() {
+    final DateTime now = DateTime.now();
+    final Duration difference = now.difference(createdAt);
+
+    return difference.inDays > 7;
+  }
 }
 
 /// The transfer information.

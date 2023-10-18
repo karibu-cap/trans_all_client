@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:trans_all_common_models/models.dart';
 
-import '../../data/repository/tranfersRepository.dart';
+import '../../data/repository/tranferRepository.dart';
 
 /// The [MoneyTransferViewModel].
 class MoneyTransferViewModel {

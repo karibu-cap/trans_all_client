@@ -46,8 +46,7 @@ class CustomScaffold extends StatelessWidget {
                     color: theme.appBarTheme.backgroundColor,
                     border: Border.fromBorderSide(
                       BorderSide(
-                        color:
-                            theme.textTheme.titleSmall?.color ?? AppColors.gray,
+                        color: AppColors.gray,
                       ),
                     ),
                     borderRadius: BorderRadius.all(Radius.circular(9)),

@@ -80,6 +80,7 @@ class _FloatingDraggableWidgetView extends GetView<ContactServiceModel> {
               icon: Icon(
                 Icons.question_mark,
                 size: 30,
+                color: AppColors.white,
               ),
               negativeBtnText: localization.noThank,
               positiveBtnText: localization.yes,

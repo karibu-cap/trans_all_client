@@ -205,4 +205,9 @@ class AppRouterBeamer extends AppRouterSubsystem {
   @override
   RouteInformationProvider? get routeInformationProvider =>
       throw UnimplementedError();
+
+  @override
+  void replace(BuildContext context, String uri, {Object? extra}) {
+    context.beamToReplacementNamed(uri, data: extra);
+  }
 }

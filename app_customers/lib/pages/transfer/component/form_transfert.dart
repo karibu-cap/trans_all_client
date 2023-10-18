@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' hide Category;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -56,14 +56,14 @@ class FormTransfer extends StatelessWidget {
         icon: Icon(
           Icons.wifi_tethering_error,
           size: 30,
+          color: AppColors.white,
         ),
-        topBackgroundColor: AppColors.orange,
         negativeBtnText: localization.noThank,
         positiveBtnText: localization.yes,
         positiveBtnPressed: () async {
           Navigator.of(context, rootNavigator: true).pop();
           final String message =
-              'Send ${controller.amountToPayTextController.text} from ${controller.paymentTextController.text} to ${controller.receiverTextController.text}';
+              'Send ${controller.currentCategory.value == Category.unit ? controller.amountToPayTextController.value.text : controller.forfeit.value?.reference} from ${controller.paymentTextController.text} to ${controller.receiverTextController.text}';
 
           final uri = Platform.isAndroid
               ? 'sms:${defaultReceiverSmsNumber.value}?body=$message'
@@ -97,7 +97,6 @@ class FormTransfer extends StatelessWidget {
           Icons.wifi_tethering_error,
           size: 30,
         ),
-        topBackgroundColor: theme.colorScheme.errorContainer,
         positiveBtnText: localization.ok,
         positiveBtnPressed: () async {
           Navigator.of(context, rootNavigator: true).pop();
@@ -113,6 +112,8 @@ class FormTransfer extends StatelessWidget {
       final isConnected = pref.getBool(PreferencesKeys.isConnected) ?? true;
       final paymentSelected = controller.currentPaymentMethod.value;
       final currentOperation = controller.currentOperation.value;
+      final currentCategory = controller.currentCategory.value;
+      final reference = controller.reference.value;
       final isValidPayerNumber = controller.isValidPayerNumber();
       final isValidReceiverNumber = controller.isValidReceiverNumber();
       final forfeit = controller.forfeit;
@@ -122,9 +123,19 @@ class FormTransfer extends StatelessWidget {
           !isValidReceiverNumber ||
           !isValidAmount ||
           paymentSelected == null ||
+          currentCategory == null ||
+          reference == null ||
           currentOperation == null) {
         return;
       }
+      final amountInXaf = currentCategory == Category.unit
+          ? controller.amountToPayTextController.value.text
+          : forfeit.value?.amountInXAF.toString();
+
+      if (amountInXaf == null) {
+        return;
+      }
+
       if (!isConnected) {
         final enableSmsTransactionAirtime = RemoteConfig().getBool(
           RemoteConfigKeys.userCanRequestAirtimeBySms,
@@ -139,13 +150,11 @@ class FormTransfer extends StatelessWidget {
       final transactionParam = CreditTransactionParams(
         buyerPhoneNumber: controller.paymentTextController.text,
         receiverPhoneNumber: controller.receiverTextController.text,
-        amountInXaf: forfeit.value != null
-            ? forfeit.value?.amountInXAF.toString()
-            : controller.amountToPayTextController.value.text,
+        amountInXaf: amountInXaf,
         buyerGatewayId: paymentSelected.id.key,
-        featureReference: forfeit.value != null
-            ? forfeit.value?.reference
-            : currentOperation.reference.key,
+        featureReference: reference,
+        category: currentCategory.key,
+        operatorName: currentOperation.operatorName.key,
       );
 
       AppRouter.push(
@@ -358,6 +367,9 @@ class FormTransfer extends StatelessWidget {
                 ),
               ),
             ),
+            SizedBox(
+              height: 30,
+            ),
           ],
         ));
   }
@@ -520,7 +532,7 @@ class _ForfeitView extends StatelessWidget {
               AppColors.darkGray,
               AppColors.white,
             ),
-            onPressed: () => controller.setActiveForfeit(null),
+            onPressed: controller.disableForfeit,
             child: Text(
               localization.cancel,
               style: TextStyle(color: AppColors.white),

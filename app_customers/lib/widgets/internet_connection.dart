@@ -70,9 +70,11 @@ class InternetConnectivityView extends StatelessWidget {
 
         if (connectionStatus == InternetConnectionStatus.connected) {
           WidgetsBinding.instance.addPostFrameCallback((_) async {
-            _widgetSwitcher.value = connectionRestored;
-
             final pref = await SharedPreferences.getInstance();
+            final previousStatus = pref.getBool(PreferencesKeys.isConnected);
+            if (previousStatus != null && !previousStatus) {
+              _widgetSwitcher.value = connectionRestored;
+            }
             await pref.setBool(PreferencesKeys.isConnected, true);
             Future.delayed(Duration(seconds: 5), () {
               _widgetSwitcher.value = defaultWidget;
@@ -82,10 +84,14 @@ class InternetConnectivityView extends StatelessWidget {
         if (connectionStatus == InternetConnectionStatus.disconnected) {
           WidgetsBinding.instance.addPostFrameCallback((_) async {
             final pref = await SharedPreferences.getInstance();
-            await pref.setBool(PreferencesKeys.isConnected, false);
-            Future.delayed(Duration(seconds: 5), () {
-              _widgetSwitcher.value = noConnection;
-            });
+            final previousStatus = pref.getBool(PreferencesKeys.isConnected);
+            if (previousStatus == null || previousStatus) {
+              await pref.setBool(PreferencesKeys.isConnected, false);
+
+              Future.delayed(Duration(seconds: 5), () {
+                _widgetSwitcher.value = noConnection;
+              });
+            }
           });
         }
 

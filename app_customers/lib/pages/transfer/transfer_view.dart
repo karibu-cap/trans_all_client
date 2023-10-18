@@ -10,7 +10,7 @@ import 'package:trans_all_common_models/models.dart';
 
 import '../../data/repository/contactRepository.dart';
 import '../../data/repository/forfeitRepository.dart';
-import '../../data/repository/tranfersRepository.dart';
+import '../../data/repository/tranferRepository.dart';
 import '../../routes/pages_routes.dart';
 import '../../themes/app_colors.dart';
 import '../../util/constant.dart';
@@ -30,17 +30,17 @@ class TransfersView extends StatelessWidget {
   /// Local transaction param.
   final CreditTransactionParams? localCreditTransaction;
 
-  /// The forfeit id.
-  final String? forfeitId;
-
   /// Check if we can display internet message of the app bar.
   final bool? displayInternetMessage;
+
+  /// The active page.
+  final int? activePageIndex;
 
   /// Constructs a new [TransfersView].
   const TransfersView({
     this.localCreditTransaction,
     this.displayInternetMessage,
-    this.forfeitId,
+    this.activePageIndex,
   });
 
   @override
@@ -61,7 +61,7 @@ class TransfersView extends StatelessWidget {
         forfeitRepository: forfeitRepository,
         transfersViewModel: transfersViewModel,
         localCreditTransaction: localCreditTransaction,
-        forfeitId: forfeitId,
+        jumpToIndex: activePageIndex,
       ),
     );
 

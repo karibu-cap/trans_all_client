@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'app_router_beamer.dart';
 import 'app_router_gorouter.dart';
-import 'app_router_hybrid.dart';
-import 'app_router_single_stack.dart';
 
 /// The supported routing types.
 enum AppRouterType {
@@ -12,14 +10,6 @@ enum AppRouterType {
 
   /// GoRouter as routing subsystem.
   gorouter,
-
-  /// Single-stack navigator (Navigator 1.0).
-  singleStack,
-
-  /// Hybrid of Beamer and Single-stack navigator.
-  /// Beamer handles the deeplinking.
-  /// Single-stack handles the internal navigation.
-  hybrid,
 }
 
 /// Interface for our routing subsystems.
@@ -55,7 +45,14 @@ abstract class AppRouterSubsystem {
     Object? extra,
   });
 
-  /// Retusns the current routing location.
+  /// Replace the current route with a route to the navigator stack.
+  void replace(
+    BuildContext context,
+    String uri, {
+    Object? extra,
+  });
+
+  /// Returns the current routing location.
   String getCurrentLocation(BuildContext context);
 
   /// Updates the routing information (displayed in the browser url bar).
@@ -80,12 +77,6 @@ class AppRouter {
       case AppRouterType.gorouter:
         subsystem = AppRouterGoRouter();
         break;
-      case AppRouterType.singleStack:
-        subsystem = AppRouterSingleStack();
-        break;
-      case AppRouterType.hybrid:
-        subsystem = AppRouterHybrid();
-        break;
     }
 
     return subsystem.init();
@@ -99,6 +90,11 @@ class AppRouter {
   /// Replaces the navigator stack with the specified route.
   static void go(BuildContext context, String uri, {Object? extra}) {
     return subsystem.go(context, uri, extra: extra);
+  }
+
+  /// Replaces the navigator .
+  static void replace(BuildContext context, String uri, {Object? extra}) {
+    return subsystem.replace(context, uri, extra: extra);
   }
 
   /// Adds a route to the navigator stack.

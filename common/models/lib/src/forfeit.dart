@@ -1,4 +1,3 @@
-import '../models.dart';
 import 'base_model.dart';
 
 /// Model of forfeit.
@@ -194,6 +193,7 @@ class Category {
     sms.key: sms,
     data.key: data,
     call.key: call,
+    unit.key: unit,
     unknown.key: unknown,
   };
 
@@ -205,6 +205,9 @@ class Category {
 
   /// The call forfeit.
   static const call = Category._('call');
+
+  /// The call forfeit.
+  static const unit = Category._('unit');
 
   /// The unknown operator.
   static const unknown = Category._('unknown');

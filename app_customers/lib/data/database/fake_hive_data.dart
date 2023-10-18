@@ -44,7 +44,7 @@ final fakeForfeits = {
       Forfeit.keyName: 'Blue Mo M(Cool)',
       Forfeit.keyValidity: Validity.day.key,
       Forfeit.keyOperatorName: 'Mtn',
-      Forfeit.keyReference: 'Blue-Mo-L',
+      Forfeit.keyReference: 'Blue-Mo-LL',
       Forfeit.keyExactMatchRegex: '^((\\+)?237)?(69\\d{7}\$|65[5-9]\\d{6}\$)',
       Forfeit.keyTolerantRegex: '^((\\+)?237)?(69\\d{0,7}\$|65[5-9]\\d{0,6}\$)',
     }),
@@ -59,7 +59,7 @@ final fakeForfeits = {
       Forfeit.keyName: 'Surf Day 250',
       Forfeit.keyValidity: Validity.day.key,
       Forfeit.keyOperatorName: 'Camtel',
-      Forfeit.keyReference: 'Blue-Mo-L',
+      Forfeit.keyReference: 'Blue-Mo-LA',
       Forfeit.keyExactMatchRegex: '^((\\+)?237)?(69\\d{7}\$|65[5-9]\\d{6}\$)',
       Forfeit.keyTolerantRegex: '^((\\+)?237)?(69\\d{0,7}\$|65[5-9]\\d{0,6}\$)',
     }),
@@ -74,7 +74,7 @@ final fakeForfeits = {
       Forfeit.keyName: 'Blue One L',
       Forfeit.keyValidity: Validity.month.key,
       Forfeit.keyOperatorName: 'Camtel',
-      Forfeit.keyReference: 'Blue-Mo-L',
+      Forfeit.keyReference: 'Blue-Mo',
       Forfeit.keyExactMatchRegex: '^((\\+)?237)?(69\\d{7}\$|65[5-9]\\d{6}\$)',
       Forfeit.keyTolerantRegex: '^((\\+)?237)?(69\\d{0,7}\$|65[5-9]\\d{0,6}\$)',
     }),
@@ -89,7 +89,7 @@ final fakeForfeits = {
       Forfeit.keyName: '30 Jours Nuit',
       Forfeit.keyValidity: Validity.month.key,
       Forfeit.keyOperatorName: 'Camtel',
-      Forfeit.keyReference: 'Blue-Mo-L',
+      Forfeit.keyReference: 'Blue-Mo-L1',
       Forfeit.keyExactMatchRegex: '^((\\+)?237)?(69\\d{7}\$|65[5-9]\\d{6}\$)',
       Forfeit.keyTolerantRegex: '^((\\+)?237)?(69\\d{0,7}\$|65[5-9]\\d{0,6}\$)',
     }),
@@ -103,10 +103,12 @@ final fakeTransactions = {
     TransferInfo.keyAmountXAF: 5000,
     TransferInfo.keyBuyerPhoneNumber: '697783748',
     TransferInfo.keyCreatedAt: '2022-10-12 15:30:00Z',
-    TransferInfo.keyFeature: OperationTransferType.camtelUnitTransfer.key,
+    TransferInfo.keyFeature: 'camtelUnitTransfer',
     TransferInfo.keyReason: null,
     TransferInfo.keyReceiverPhoneNumber: '673729299',
     TransferInfo.keyStatus: TransferStatus.waitingRequest.key,
+    TransferInfo.keyCategory: 'unit',
+    TransferInfo.keyOperatorName: 'Camtel',
     TransferInfo.keyPayments: [
       {
         TransTuPayment.keyGateway: PaymentId.mtnPaymentId.key,
@@ -119,11 +121,13 @@ final fakeTransactions = {
     TransferInfo.keyAmountXAF: 500,
     TransferInfo.keyBuyerPhoneNumber: '696689073',
     TransferInfo.keyCreatedAt: '2022-10-12 15:30:00Z',
-    TransferInfo.keyFeature: OperationTransferType.mtnUnitTransfer.key,
+    TransferInfo.keyFeature: 'mtnUnitTransfer',
     TransferInfo.keyReason: null,
     TransferInfo.keyReceiverPhoneNumber: '673729217',
     TransferInfo.keyStatus: TransferStatus.completed.key,
     TransferInfo.keyId: 'cc7c33c5-ec6d-4b1f-9f10-8c8c1c7c0afb',
+    TransferInfo.keyCategory: 'unit',
+    TransferInfo.keyOperatorName: 'Mtn',
     TransferInfo.keyPayments: [
       {
         TransTuPayment.keyGateway: PaymentId.mtnPaymentId.key,
@@ -132,15 +136,36 @@ final fakeTransactions = {
       },
     ],
   }),
+  'cc7c33c5-ec6d-4b1f-9f10-8c8c1c7c0af1': TransferInfo.fromJson(json: {
+    TransferInfo.keyAmountXAF: 500,
+    TransferInfo.keyBuyerPhoneNumber: '696689073',
+    TransferInfo.keyCreatedAt: '2022-10-12 15:30:00Z',
+    TransferInfo.keyFeature: 'Blue-Mo-M',
+    TransferInfo.keyReason: null,
+    TransferInfo.keyReceiverPhoneNumber: '620209501',
+    TransferInfo.keyStatus: TransferStatus.paymentFailed.key,
+    TransferInfo.keyId: 'cc7c33c5-ec6d-4b1f-9f10-8c8c1c7c0af1',
+    TransferInfo.keyCategory: 'data',
+    TransferInfo.keyOperatorName: 'Camtel',
+    TransferInfo.keyPayments: [
+      {
+        TransTuPayment.keyGateway: PaymentId.mtnPaymentId.key,
+        TransTuPayment.keyPhoneNumber: '687768765',
+        TransTuPayment.keyStatus: PaymentStatus.failed.key,
+      },
+    ],
+  }),
   '5f3c9b61-e7f3-4c0e-9f3f-9f5f8d4c4b4c': TransferInfo.fromJson(json: {
     TransferInfo.keyAmountXAF: 9000,
     TransferInfo.keyBuyerPhoneNumber: '697783748',
     TransferInfo.keyCreatedAt: '2022-10-18 15:30:00Z',
-    TransferInfo.keyFeature: OperationTransferType.camtelUnitTransfer.key,
+    TransferInfo.keyFeature: 'mtnUnitTransfer',
     TransferInfo.keyReason: null,
     TransferInfo.keyReceiverPhoneNumber: '67372922',
     TransferInfo.keyStatus: TransferStatus.requestSend.key,
     TransferInfo.keyId: '5f3c9b61-e7f3-4c0e-9f3f-9f5f8d4c4b4c',
+    TransferInfo.keyCategory: 'unit',
+    TransferInfo.keyOperatorName: 'Mtn',
     TransferInfo.keyPayments: [
       {
         TransTuPayment.keyGateway: PaymentId.mtnPaymentId.key,
@@ -153,11 +178,13 @@ final fakeTransactions = {
     TransferInfo.keyAmountXAF: 59000,
     TransferInfo.keyBuyerPhoneNumber: '697783748',
     TransferInfo.keyCreatedAt: '2022-10-13 15:30:00Z',
-    TransferInfo.keyFeature: OperationTransferType.mtnUnitTransfer.key,
+    TransferInfo.keyFeature: 'mtnUnitTransfer',
     TransferInfo.keyReason: null,
     TransferInfo.keyReceiverPhoneNumber: '673729217',
     TransferInfo.keyStatus: TransferStatus.waitingRequest.key,
     TransferInfo.keyId: '4b3f3f02-0e6b-4c3c-8c4e-3b5e5cdec50b',
+    TransferInfo.keyCategory: 'unit',
+    TransferInfo.keyOperatorName: 'Mtn',
     TransferInfo.keyPayments: [
       {
         TransTuPayment.keyGateway: PaymentId.mtnPaymentId.key,
@@ -194,8 +221,8 @@ final List<OperationGateways> fakeOperatorGateWays = [
   OperationGateways.fromJson(
     {
       OperationGateways.keyOperatorName: 'Orange',
-      OperationGateways.keyReference:
-          OperationTransferType.orangeUnitTransfer.key,
+      OperationGateways.keyCategory: Category.unit.key,
+      OperationGateways.keyReference: 'orangeUnitTransfer',
       OperationGateways.keyExactMatchRegex:
           '^((\\+)?237)?(69\\d{7}\$|65[5-9]\\d{6}\$)',
       OperationGateways.keyTolerantRegex:
@@ -205,7 +232,8 @@ final List<OperationGateways> fakeOperatorGateWays = [
   OperationGateways.fromJson(
     {
       OperationGateways.keyOperatorName: 'Mtn',
-      OperationGateways.keyReference: OperationTransferType.mtnUnitTransfer.key,
+      OperationGateways.keyCategory: Category.unit.key,
+      OperationGateways.keyReference: 'mtnUnitTransfer',
       OperationGateways.keyExactMatchRegex:
           '^((\\+)?237)?(67\\d{7}\$|68\\d{7}\$|65[0-4]\\d{6}\$)',
       OperationGateways.keyTolerantRegex:
@@ -215,8 +243,8 @@ final List<OperationGateways> fakeOperatorGateWays = [
   OperationGateways.fromJson(
     {
       OperationGateways.keyOperatorName: 'Camtel',
-      OperationGateways.keyReference:
-          OperationTransferType.camtelUnitTransfer.key,
+      OperationGateways.keyCategory: Category.unit.key,
+      OperationGateways.keyReference: 'camtelUnitTransfer',
       OperationGateways.keyExactMatchRegex:
           '^((\\+)?237)?(67\\d{7}\$|68\\d{7}\$|65[0-4]\\d{6}\$)',
       OperationGateways.keyTolerantRegex:
@@ -226,8 +254,8 @@ final List<OperationGateways> fakeOperatorGateWays = [
   OperationGateways.fromJson(
     {
       OperationGateways.keyOperatorName: 'Camtel',
-      OperationGateways.keyReference:
-          OperationTransferType.camtelUnitTransfer.key,
+      OperationGateways.keyCategory: Category.unit.key,
+      OperationGateways.keyReference: 'camtelUnitTransfer',
       OperationGateways.keyExactMatchRegex:
           '^((\\+)?237)?(67\\d{7}\$|68\\d{7}\$|65[0-4]\\d{6}\$)',
       OperationGateways.keyTolerantRegex:

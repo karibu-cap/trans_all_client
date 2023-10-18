@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -29,6 +30,7 @@ class HiveServiceImpl implements HiveService {
       Hive.box<PaymentGateways>(Constant.paymentGatewaysTable);
 
   final _databaseContact = Hive.box<Contact>(Constant.contactTable);
+
   final _forfeitRow = Hive.box<Forfeit>(Constant.forfeitTable);
 
   final _databaseDefaultBuyerContacts =
@@ -132,6 +134,13 @@ class HiveServiceImpl implements HiveService {
 
   @override
   Future<ListPaymentGatewaysResponse> listPaymentGateways() async {
+    final localPaymentGateways = _databasePaymentGateways.values.toList();
+
+    if (localPaymentGateways.isNotEmpty) {
+      return ListPaymentGatewaysResponse(
+        listPaymentGateways: localPaymentGateways,
+      );
+    }
     final packageInfo = await PackageInfo.fromPlatform();
     final localization = Get.find<AppInternationalization>();
 
@@ -144,10 +153,12 @@ class HiveServiceImpl implements HiveService {
       AppRoute.paymentGatewaysRoute,
     );
     try {
-      final response = await http.get(
-        url,
-        headers: headers,
-      );
+      final response = await http
+          .get(
+            url,
+            headers: headers,
+          )
+          .timeout(Duration(seconds: 7));
 
       final List<dynamic> data = jsonDecode(response.body);
       final List<Map<String, dynamic>> convertData =
@@ -167,7 +178,7 @@ class HiveServiceImpl implements HiveService {
       final localOperator = _databasePaymentGateways.values.toList();
 
       if (localOperator.isEmpty) {
-        if (e is SocketException) {
+        if (e is SocketException || e is TimeoutException) {
           return ListPaymentGatewaysResponse(error: RequestError.internetError);
         }
         return ListPaymentGatewaysResponse(listPaymentGateways: []);
@@ -179,6 +190,12 @@ class HiveServiceImpl implements HiveService {
 
   @override
   Future<ListOperationGatewaysResponse> listOperationGateways() async {
+    final localOperator = _databaseOperatorGateway.values.toList();
+    if (localOperator.isNotEmpty) {
+      return ListOperationGatewaysResponse(
+        listOperationGateways: localOperator,
+      );
+    }
     final List<OperationGateways> operations = [];
     final packageInfo = await PackageInfo.fromPlatform();
     final localization = Get.find<AppInternationalization>();
@@ -190,10 +207,12 @@ class HiveServiceImpl implements HiveService {
       AppRoute.operatorGatewaysRoute,
     );
     try {
-      final response = await http.get(
-        url,
-        headers: headers,
-      );
+      final response = await http
+          .get(
+            url,
+            headers: headers,
+          )
+          .timeout(Duration(seconds: 7));
       final dynamic bodyResponse = jsonDecode(response.body);
 
       final responseData = ResponseBody.fromJson(
@@ -226,7 +245,7 @@ class HiveServiceImpl implements HiveService {
       final localOperator = _databaseOperatorGateway.values.toList();
 
       if (localOperator.isEmpty) {
-        if (e is SocketException) {
+        if (e is SocketException || e is TimeoutException) {
           return ListOperationGatewaysResponse(
               error: RequestError.internetError);
         }
@@ -290,7 +309,7 @@ class HiveServiceImpl implements HiveService {
       _logger.severe(
         'Failed to create remote credit transaction with status code $e',
       );
-      if (e is SocketException) {
+      if (e is SocketException || e is TimeoutException) {
         return CreateRemoteTransactionResponse(
           errorMessage: localization.troubleInternetConnection,
         );
@@ -357,10 +376,12 @@ class HiveServiceImpl implements HiveService {
       AppRoute.listOfForfeit,
     );
     try {
-      final response = await http.get(
-        url,
-        headers: headers,
-      );
+      final response = await http
+          .get(
+            url,
+            headers: headers,
+          )
+          .timeout(Duration(seconds: 10));
 
       final result = jsonDecode(response.body);
 
@@ -371,8 +392,8 @@ class HiveServiceImpl implements HiveService {
         convertData.map<Forfeit>(Forfeit.fromJson).toList(),
       );
 
-      unawaited(_forfeitRow.clear());
-      unawaited(_forfeitRow.addAll(forfeits));
+      await _forfeitRow.clear();
+      await _forfeitRow.addAll([...forfeits]);
 
       return forfeits;
     } catch (e) {
@@ -390,5 +411,11 @@ class HiveServiceImpl implements HiveService {
   }
 
   @override
-  Forfeit? getForfeitById(String id) => _forfeitRow.get(id);
+  Forfeit? getForfeitByReference(String reference) {
+    final localForfeit = _forfeitRow.values.toList();
+
+    return localForfeit.toList().firstWhereOrNull(
+          (element) => element.reference == reference,
+        );
+  }
 }
