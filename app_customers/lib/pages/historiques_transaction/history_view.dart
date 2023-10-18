@@ -10,18 +10,18 @@ import 'package:trans_all_common_models/models.dart';
 
 import '../../data/repository/contactRepository.dart';
 import '../../data/repository/forfeitRepository.dart';
-import '../../data/repository/tranfersRepository.dart';
+import '../../data/repository/tranferRepository.dart';
 import '../../routes/app_router.dart';
 import '../../routes/pages_routes.dart';
 import '../../themes/app_colors.dart';
 import '../../themes/app_text_styles.dart';
+import '../../util/check_transaction.dart';
 import '../../util/constant.dart';
 import '../../util/format_date_time.dart';
 import '../../util/get_client_status.dart';
-import '../../util/operator_name.dart';
 import '../../widgets/custom_scaffold.dart';
 import '../../widgets/oparator_icon.dart';
-import 'history_view_controller.dart';
+import 'history_controller.dart';
 import 'history_view_model.dart';
 
 /// The historic page view.
@@ -39,7 +39,7 @@ class HistoryView extends StatelessWidget {
     final contactRepository = Get.find<ContactRepository>();
     final forfeitRepository = Get.find<ForfeitRepository>();
     Get.put(
-      HistoryViewController(
+      HistoryController(
         transferRepository: transferRepository,
         forfeitRepository: forfeitRepository,
         historyModel: HistoryViewModel(
@@ -52,7 +52,7 @@ class HistoryView extends StatelessWidget {
     return CustomScaffold(
       displayInternetMessage: false,
       title: localization.airtimeHistory,
-      child: GetBuilder<HistoryViewController>(
+      child: GetBuilder<HistoryController>(
         builder: (controller) => Column(children: [
           FutureBuilder<PackageInfo>(
             future: PackageInfo.fromPlatform(),
@@ -110,7 +110,7 @@ class HistoryView extends StatelessWidget {
   }
 }
 
-class _HistoricTransaction extends GetView<HistoryViewController> {
+class _HistoricTransaction extends GetView<HistoryController> {
   const _HistoricTransaction();
 
   @override
@@ -177,9 +177,10 @@ class _HistoricTransaction extends GetView<HistoryViewController> {
                   receiverPhoneNumber: transaction.receiverPhoneNumber,
                   amountInXaf: transaction.amount.toString(),
                   buyerGatewayId: transaction.payments.last.gateway.key,
-                  featureReference: transaction.feature.key,
+                  featureReference: transaction.feature,
                   transactionId: transaction.id,
-                  forfeitReference: transaction.forfeitReference,
+                  category: transaction.category.key,
+                  operatorName: transaction.operatorName.key,
                 ),
               ),
             ),
@@ -224,7 +225,7 @@ class _HistoricTransaction extends GetView<HistoryViewController> {
                   decoration: BoxDecoration(
                     color: theme.bottomSheetTheme.backgroundColor,
                     border: Border.fromBorderSide(
-                      BorderSide(color: theme.primaryColor),
+                      BorderSide(color: AppColors.lightBlack),
                     ),
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(30),
@@ -241,7 +242,7 @@ class _HistoricTransaction extends GetView<HistoryViewController> {
                         width: 50,
                         decoration: BoxDecoration(
                           border: Border.fromBorderSide(
-                            BorderSide(color: theme.primaryColor),
+                            BorderSide(color: AppColors.lightBlack),
                           ),
                           borderRadius: BorderRadius.all(
                             Radius.circular(100),
@@ -283,8 +284,6 @@ class _TransactionDateHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
       child: Column(
@@ -302,7 +301,7 @@ class _TransactionDateHeader extends StatelessWidget {
             height: 4,
           ),
           DottedLine(
-            dashColor: theme.colorScheme.secondary,
+            dashColor: AppColors.lightBlack,
             lineThickness: 3,
           ),
         ],
@@ -325,7 +324,7 @@ class _HistoryView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localization = Get.find<AppInternationalization>();
-    final controller = Get.find<HistoryViewController>();
+    final controller = Get.find<HistoryController>();
     final theme = Theme.of(context);
 
     final transferStatus = transfer.status.key;
@@ -344,6 +343,9 @@ class _HistoryView extends StatelessWidget {
 
     final buyerName = controller.getUserName(transfer.buyerPhoneNumber);
     final receiverName = controller.getUserName(transfer.receiverPhoneNumber);
+    final forfeit = transfer.category != Category.unit
+        ? controller.getCurrentForfeit(transfer.feature)
+        : null;
 
     return Card(
       elevation: 0,
@@ -382,7 +384,7 @@ class _HistoryView extends StatelessWidget {
                   children: [
                     SizedBox(
                       child: OperatorIcon(
-                        operatorType: retrieveOperatorName(transfer.feature),
+                        operatorType: transfer.operatorName.key,
                       ),
                     ),
                     SizedBox(
@@ -434,46 +436,51 @@ class _HistoryView extends StatelessWidget {
                       SizedBox(
                         height: 5,
                       ),
-                      FutureBuilder(
-                        future: controller
-                            .getCurrentForfeit(transfer.forfeitReference),
-                        builder: (context, snapshot) {
-                          final forfeit = snapshot.data;
-                          if (forfeit == null) {
-                            return SizedBox.shrink();
-                          }
-
-                          return _HistoricData(
-                            label: localization.forfeit,
-                            value: forfeit.name,
-                          );
-                        },
-                      ),
+                      if (forfeit != null)
+                        _HistoricData(
+                          label: localization.forfeit,
+                          value: forfeit.name,
+                        ),
                       _HistoricData(
                         label: localization.status,
                         value: retrieveValidStatusInternalized(transfer),
                         labelStyle: theme.textTheme.labelMedium?.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: theme.primaryColor,
+                          color: isSuccessTransaction(transfer)
+                              ? AppColors.lightGreen
+                              : isFailedTransaction(transfer)
+                                  ? AppColors.red2
+                                  : theme.primaryColor,
                         ),
                       ),
-                      FilledButton(
-                        child: FittedBox(
-                          child: Text(
-                            localization.clone,
-                          ),
-                        ),
-                        onPressed: () => AppRouter.go(
-                          context,
-                          PagesRoutes.creditTransaction.create(
-                            CreditTransactionParams(
-                              buyerPhoneNumber: transfer.buyerPhoneNumber,
-                              receiverPhoneNumber: transfer.receiverPhoneNumber,
-                              amountInXaf: transfer.amount.toString(),
-                              buyerGatewayId:
-                                  transfer.payments.last.gateway.key,
-                              featureReference: transfer.feature.key,
-                              forfeitReference: transfer.forfeitReference,
+                      SizedBox(
+                        height: 5,
+                      ),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: 300),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: FilledButton(
+                            child: FittedBox(
+                              child: Text(
+                                localization.clone,
+                              ),
+                            ),
+                            onPressed: () => AppRouter.go(
+                              context,
+                              PagesRoutes.creditTransaction.create(
+                                CreditTransactionParams(
+                                  buyerPhoneNumber: transfer.buyerPhoneNumber,
+                                  receiverPhoneNumber:
+                                      transfer.receiverPhoneNumber,
+                                  amountInXaf: transfer.amount.toString(),
+                                  buyerGatewayId:
+                                      transfer.payments.last.gateway.key,
+                                  featureReference: transfer.feature,
+                                  category: transfer.category.key,
+                                  operatorName: transfer.operatorName.key,
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -504,6 +511,8 @@ class _HistoricData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return FittedBox(
       child: Row(
         children: [
@@ -513,7 +522,7 @@ class _HistoricData extends StatelessWidget {
           Text(
             value,
             style: labelStyle ??
-                TextStyle(
+                theme.textTheme.labelLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
           ),

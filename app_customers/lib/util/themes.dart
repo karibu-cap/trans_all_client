@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -42,23 +43,44 @@ class ThemeManager extends GetxController {
     Get.changeThemeMode(
       _themeMode.value == ThemeMode.dark ? ThemeMode.dark : ThemeMode.light,
     );
+    _updateSystemNavTheme(_themeMode.value);
   }
 
-  ///
+  /// Updates the current theme mode.
   void updateCurrentTheme(ThemeMode themeMode) {
-    unawaited(Future.microtask(() async {
-      final instance = await SharedPreferences.getInstance();
-      await instance.setString(
-        PreferencesKeys.currentThemeData,
-        themeMode.name,
-      );
-    }));
+    unawaited(
+      Future.microtask(
+        () async {
+          final instance = await SharedPreferences.getInstance();
+          await instance.setString(
+            PreferencesKeys.currentThemeData,
+            themeMode.name,
+          );
+          _updateSystemNavTheme(themeMode);
+        },
+      ),
+    );
 
     _themeMode.value = themeMode;
     Get.changeThemeMode(
       themeMode == ThemeMode.dark ? ThemeMode.dark : ThemeMode.light,
     );
   }
+}
+
+void _updateSystemNavTheme(ThemeMode themeMode) {
+  final statusIconStyle =
+      themeMode == ThemeMode.dark ? Brightness.light : Brightness.dark;
+  final statusBarStyle =
+      themeMode == ThemeMode.dark ? AppColors.darkGray : AppColors.white;
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle(
+      statusBarColor: statusBarStyle,
+      statusBarIconBrightness: statusIconStyle,
+      systemNavigationBarColor: statusBarStyle,
+      systemNavigationBarIconBrightness: statusIconStyle,
+    ),
+  );
 }
 
 /// The dark theme.

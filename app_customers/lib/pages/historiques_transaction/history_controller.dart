@@ -2,11 +2,11 @@ import 'package:get/get.dart';
 import 'package:trans_all_common_models/models.dart';
 
 import '../../data/repository/forfeitRepository.dart';
-import '../../data/repository/tranfersRepository.dart';
+import '../../data/repository/tranferRepository.dart';
 import 'history_view_model.dart';
 
 /// The history view controller.
-class HistoryViewController extends GetxController {
+class HistoryController extends GetxController {
   final HistoryViewModel _historyModel;
   final TransferRepository _transferRepository;
   final ForfeitRepository _forfeitRepository;
@@ -21,7 +21,7 @@ class HistoryViewController extends GetxController {
   Rx<List<TransferStat>> get listOfStats => _historyModel.listOfStats;
 
   /// Constructs the new  history view controller.
-  HistoryViewController({
+  HistoryController({
     required HistoryViewModel historyModel,
     required TransferRepository transferRepository,
     required ForfeitRepository forfeitRepository,
@@ -40,21 +40,6 @@ class HistoryViewController extends GetxController {
       _historyModel.updateTransactionStat(allTransaction);
     });
     update();
-  }
-
-  /// Gets the asset payment image.
-  String? getAssetPaymentImage(String featureReference) {
-    if (featureReference == OperationTransferType.mtnUnitTransfer.key) {
-      return 'assets/icons/payment_mtn_icon.png';
-    }
-    if (featureReference == OperationTransferType.orangeUnitTransfer.key) {
-      return 'assets/icons/payment_orange_icon.png';
-    }
-    if (featureReference == OperationTransferType.camtelUnitTransfer.key) {
-      return 'assets/icons/camtel.png';
-    }
-
-    return null;
   }
 
   /// Gets the user name.
@@ -103,16 +88,9 @@ class HistoryViewController extends GetxController {
   }
 
   /// Retrieves the current forfeit.
-  Future<Forfeit?> getCurrentForfeit(
-    String? forfeitReference,
-  ) async {
-    if (forfeitReference == null || forfeitReference.isEmpty) {
-      return null;
-    }
-    final listOfForfeit = await _forfeitRepository.getAllForfeit();
-
-    return listOfForfeit?.firstWhereOrNull(
-      (element) => element.reference == forfeitReference,
-    );
+  Forfeit? getCurrentForfeit(
+    String forfeitReference,
+  ) {
+    return _forfeitRepository.getForfeitByReference(forfeitReference);
   }
 }

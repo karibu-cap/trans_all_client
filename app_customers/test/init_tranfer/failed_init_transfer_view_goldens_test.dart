@@ -1,7 +1,7 @@
 import 'package:app_customer/data/database/hive_service.dart';
 import 'package:app_customer/data/repository/contactRepository.dart';
 import 'package:app_customer/data/repository/forfeitRepository.dart';
-import 'package:app_customer/data/repository/tranfersRepository.dart';
+import 'package:app_customer/data/repository/tranferRepository.dart';
 import 'package:app_customer/pages/init_tranction/init_transaction.dart';
 import 'package:app_customer/routes/pages_routes.dart';
 import 'package:flutter/material.dart';
@@ -23,8 +23,16 @@ class InitTransferViewWidget extends StatelessWidget {
     Get.create(() => ForfeitRepository(HiveService(HiveServiceType.fake)));
 
     return InitTransaction(
-      creditTransactionParams:
-          CreditTransactionParams(transactionId: transferId),
+      creditTransactionParams: CreditTransactionParams(
+        transactionId: transferId,
+        amountInXaf: '500',
+        buyerGatewayId: 'OM',
+        buyerPhoneNumber: '696689073',
+        category: 'unit',
+        featureReference: 'mtnUnitTransfer',
+        operatorName: 'Mtn',
+        receiverPhoneNumber: '672419098',
+      ),
       isTesting: true,
     );
   }

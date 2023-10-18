@@ -97,8 +97,11 @@ class CreditTransactionParams {
   /// The parameter key for [featureReference].
   static const String keyParamFeatureReference = 'featureReference';
 
-  /// The parameter key for [forfeitReference].
-  static const String keyParamForfeitReference = 'forfeitReference';
+  /// The parameter key for [category].
+  static const String keyParamCategory = 'category';
+
+  /// The parameter key for [category].
+  static const String keyParamOperatorName = 'operatorName';
 
   /// The parameter key for [buyerGatewayId].
   static const String keyParamBuyerGatewayId = 'buyerGatewayId';
@@ -110,31 +113,35 @@ class CreditTransactionParams {
   final String? transactionId;
 
   /// The buyerPhoneNumber parameter.
-  final String? buyerPhoneNumber;
+  final String buyerPhoneNumber;
 
   /// The receiverNumber parameter.
-  final String? receiverPhoneNumber;
+  final String receiverPhoneNumber;
 
   /// The amountToPay parameter.
-  final String? amountInXaf;
+  final String amountInXaf;
 
   /// The featureReference parameter.
-  final String? featureReference;
+  final String featureReference;
 
-  /// The forfeit reference.
-  final String? forfeitReference;
+  /// The transaction operator name.
+  final String operatorName;
+
+  /// The transaction category name.
+  final String category;
 
   /// The buyerGatewayId parameter.
-  final String? buyerGatewayId;
+  final String buyerGatewayId;
 
   /// Constructs a new instance of the orders parameters.
   CreditTransactionParams({
-    this.buyerPhoneNumber,
-    this.receiverPhoneNumber,
-    this.amountInXaf,
-    this.buyerGatewayId,
-    this.featureReference,
-    this.forfeitReference,
+    required this.buyerPhoneNumber,
+    required this.receiverPhoneNumber,
+    required this.amountInXaf,
+    required this.buyerGatewayId,
+    required this.featureReference,
+    required this.category,
+    required this.operatorName,
     this.transactionId,
   });
 
@@ -154,6 +161,7 @@ class CreditTransactionParams {
         keyParamBuyerPhoneNumber: buyerPhoneNumber,
         keyParamTransactionId: transactionId,
         keyParamReceiverPhoneNumber: receiverPhoneNumber,
-        keyParamForfeitReference: forfeitReference,
+        keyParamCategory: category,
+        keyParamOperatorName: operatorName,
       };
 }

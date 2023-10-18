@@ -9,6 +9,11 @@ Map<String, dynamic> _remoteConfigDefaultsDev = {
   RemoteConfigKeys.featureForfeitEnable: true,
   RemoteConfigKeys.featureCustomerServiceEnabled: true,
   RemoteConfigKeys.customerServiceLink: 'https://wa.me/237696404016',
+  RemoteConfigKeys.orangeMoneyGatewayEnabled: true,
+  RemoteConfigKeys.orangeOperatorEnabled: true,
+  RemoteConfigKeys.mtnMomoGatewayEnabled: true,
+  RemoteConfigKeys.mtnOperatorEnabled: true,
+  RemoteConfigKeys.camtelOperatorEnabled: true,
 };
 
 Map<String, dynamic> _remoteConfigDefaultsStaging = {
@@ -18,6 +23,11 @@ Map<String, dynamic> _remoteConfigDefaultsStaging = {
   RemoteConfigKeys.featureForfeitEnable: true,
   RemoteConfigKeys.featureCustomerServiceEnabled: true,
   RemoteConfigKeys.customerServiceLink: 'https://wa.me/237696404016',
+  RemoteConfigKeys.orangeMoneyGatewayEnabled: true,
+  RemoteConfigKeys.orangeOperatorEnabled: true,
+  RemoteConfigKeys.mtnMomoGatewayEnabled: true,
+  RemoteConfigKeys.mtnOperatorEnabled: true,
+  RemoteConfigKeys.camtelOperatorEnabled: true,
 };
 
 Map<String, dynamic> _remoteConfigDefaultsProd = {
@@ -27,6 +37,11 @@ Map<String, dynamic> _remoteConfigDefaultsProd = {
   RemoteConfigKeys.featureForfeitEnable: false,
   RemoteConfigKeys.featureCustomerServiceEnabled: false,
   RemoteConfigKeys.customerServiceLink: 'https://wa.me/237696404016',
+  RemoteConfigKeys.orangeMoneyGatewayEnabled: true,
+  RemoteConfigKeys.orangeOperatorEnabled: true,
+  RemoteConfigKeys.mtnMomoGatewayEnabled: true,
+  RemoteConfigKeys.mtnOperatorEnabled: true,
+  RemoteConfigKeys.camtelOperatorEnabled: true,
 };
 
 /// Returns the default remote config for each environment.

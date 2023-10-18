@@ -109,7 +109,6 @@ class FakeHiveService implements HiveService {
       TransferInfo.keyId: id,
       TransferInfo.keyCreatedAt: clock.now().toString(),
       TransferInfo.keyFeature: featureReference,
-      TransferInfo.keyForfeitReference: forfeitReference,
       TransferInfo.keyReason: null,
       TransferInfo.keyReceiverPhoneNumber: receiverPhoneNumber,
       TransferInfo.keyStatus: TransferStatus.paymentFailed.key,
@@ -182,6 +181,6 @@ class FakeHiveService implements HiveService {
   }
 
   @override
-  Forfeit? getForfeitById(String id) =>
+  Forfeit? getForfeitByReference(String id) =>
       fakeForfeits['data']?.firstWhere((element) => element.reference == id);
 }

@@ -7,7 +7,7 @@ import 'package:logging/logging.dart';
 import 'package:trans_all_common_models/models.dart';
 
 import '../../data/repository/forfeitRepository.dart';
-import '../../data/repository/tranfersRepository.dart';
+import '../../data/repository/tranferRepository.dart';
 import '../../routes/pages_routes.dart';
 
 /// The transaction loading state.
@@ -68,18 +68,23 @@ class InitTransactionViewModel {
     required ForfeitRepository forfeitRepository,
   })  : _transferRepository = transferRepository,
         _forfeitRepository = forfeitRepository {
-    _initTransfer().then((_) => transferCompleter.complete());
+    _initTransferData().then((_) {
+      transferCompleter.complete();
+      _initTransfer();
+    });
+  }
+
+  Future<void> _initTransferData() async {
+    if (creditTransactionParams.category != Category.unit.key) {
+      forfeit.value = _forfeitRepository.getForfeitByReference(
+        creditTransactionParams.featureReference,
+      );
+    }
+
+    return;
   }
 
   Future<void> _initTransfer() async {
-    final listOfForfeit = await _forfeitRepository.getAllForfeit();
-
-    final currentForfeit = listOfForfeit?.firstWhereOrNull(
-      (element) =>
-          element.reference == creditTransactionParams.forfeitReference,
-    );
-    forfeit.value = currentForfeit;
-
     final transactionId = creditTransactionParams.transactionId;
     watchTransaction();
 
@@ -88,8 +93,6 @@ class InitTransactionViewModel {
     } else {
       await initTransfer();
     }
-
-    return;
   }
 
   /// Retrieves transaction.
@@ -111,22 +114,17 @@ class InitTransactionViewModel {
     final buyerGatewayIdFromParam = creditTransactionParams.buyerGatewayId;
     final buyerPhoneNumberFromParam = creditTransactionParams.buyerPhoneNumber;
     final featureReferenceFromParam = creditTransactionParams.featureReference;
-    final forfeitReferenceFromParam = creditTransactionParams.forfeitReference;
+    final operatorNameFromParam = creditTransactionParams.operatorName;
+    final categoryFromParam = creditTransactionParams.category;
     final receiverPhoneNumberFromParam =
         creditTransactionParams.receiverPhoneNumber;
-    if (amountFromParam == null ||
-        buyerGatewayIdFromParam == null ||
-        buyerPhoneNumberFromParam == null ||
-        featureReferenceFromParam == null ||
-        receiverPhoneNumberFromParam == null) {
-      return;
-    }
+
     amountToPay.value = num.parse(amountFromParam);
     receiverPhoneNumber.value = receiverPhoneNumberFromParam;
     buyerPhoneNumber.value = buyerPhoneNumberFromParam;
     buyerGatewayId.value = buyerGatewayIdFromParam;
 
-    // Init the transaction.
+    // Initiate the transaction.
     final transactionIdResult =
         await _transferRepository.createRemoteTransaction(
       amountToPay: num.parse(amountFromParam),
@@ -134,7 +132,6 @@ class InitTransactionViewModel {
       buyerPhoneNumber: buyerPhoneNumberFromParam,
       featureReference: featureReferenceFromParam,
       receiverPhoneNumber: receiverPhoneNumberFromParam,
-      forfeitReference: forfeitReferenceFromParam,
     );
     final errorMessageResponse = transactionIdResult.errorMessage;
 
@@ -155,7 +152,8 @@ class InitTransactionViewModel {
       TransferInfo.keyId: transactionId.value,
       TransferInfo.keyCreatedAt: clock.now().toString(),
       TransferInfo.keyFeature: featureReferenceFromParam,
-      TransferInfo.keyForfeitReference: forfeitReferenceFromParam,
+      TransferInfo.keyCategory: categoryFromParam,
+      TransferInfo.keyOperatorName: operatorNameFromParam,
       TransferInfo.keyReason: null,
       TransferInfo.keyReceiverPhoneNumber: receiverPhoneNumberFromParam,
       TransferInfo.keyStatus: TransferStatus.waitingRequest.key,
@@ -177,7 +175,7 @@ class InitTransactionViewModel {
     return;
   }
 
-  /// Watch the transaction with id.
+  /// Watches the transaction with id.
   void watchTransaction() {
     _transferRepository.streamAllLocalTransaction().listen((event) async {
       final transfertId = transactionId.value;
@@ -203,7 +201,7 @@ class InitTransactionViewModel {
     return;
   }
 
-  /// Update the transfer progression.
+  /// Updates the transfer progression.
   void updateTransferProgression(TransferInfo transfer) {
     final paymentStatus = transfer.payments.last.status;
     final transferStatus = transfer.status;
@@ -216,8 +214,14 @@ class InitTransactionViewModel {
 
       return;
     }
-    if (paymentStatus == PaymentStatus.pending ||
-        paymentStatus == PaymentStatus.initialized) {
+    if (paymentStatus == PaymentStatus.pending) {
+      if (transferProgress.value < 50) {
+        transferProgress.value = 50;
+      }
+
+      return;
+    }
+    if (paymentStatus == PaymentStatus.initialized) {
       if (transferProgress.value < 12) {
         transferProgress.value = 12;
       }
@@ -233,12 +237,12 @@ class InitTransactionViewModel {
     }
     if (transferStatus == TransferStatus.waitingRequest && isPaymentSuccess) {
       progressiveTimer.cancel();
-      if (transferProgress.value < 50) {
-        transferProgress.value = 50;
+      if (transferProgress.value < 75) {
+        transferProgress.value = 75;
       }
 
       progressiveTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-        if (transferProgress.value >= 73) {
+        if (transferProgress.value >= 90) {
           progressiveTimer.cancel();
         } else {
           transferProgress.value += 0.5;
@@ -249,13 +253,12 @@ class InitTransactionViewModel {
     }
     if (transferStatus == TransferStatus.requestSend && isPaymentSuccess) {
       progressiveTimer.cancel();
-      transferProgress.value = 75;
-      if (transferProgress.value < 75) {
-        transferProgress.value = 75;
+      if (transferProgress.value < 90) {
+        transferProgress.value = 90;
       }
 
       progressiveTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-        if (transferProgress.value >= 92) {
+        if (transferProgress.value >= 98) {
           progressiveTimer.cancel();
         } else {
           transferProgress.value += 0.5;
@@ -272,7 +275,7 @@ class InitTransactionViewModel {
     }
   }
 
-  /// Update the loading state depending on transfer.
+  /// Updates the loading state depending on transfer.
   void updateLoadingState(TransferInfo transfer) {
     final newPaymentTransactionStatus = transfer.payments.last.status;
     final newTransferStatus = transfer.status;

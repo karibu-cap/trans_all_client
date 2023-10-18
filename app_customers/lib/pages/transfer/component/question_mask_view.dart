@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:overlay_tooltip/overlay_tooltip.dart';
 
+import '../../../themes/app_colors.dart';
+
 /// Question mask view.
 class QuestionMaskView extends StatelessWidget {
   /// The index of the question overlay.
@@ -18,11 +20,7 @@ class QuestionMaskView extends StatelessWidget {
       child: InkWell(
         child: CircleAvatar(
           backgroundColor: theme.primaryColor,
-          child: Icon(
-            size: 10,
-            Icons.question_mark,
-            color: theme.scaffoldBackgroundColor,
-          ),
+          child: Icon(size: 10, Icons.question_mark, color: AppColors.white),
         ),
         onTap: () =>
             OverlayTooltipScaffold.of(context)?.controller.start(index),

@@ -17,9 +17,10 @@ class TransfersController extends GetxController {
   final TransfersViewModel _transfersViewModel;
   final AppInternationalization _localization;
   final CreditTransactionParams? _localCreditTransaction;
+  final ForfeitRepository _forfeitRepository;
 
-  /// The page controller.
-  PageController pageController = PageController(initialPage: 0);
+  final PageController _pageController;
+  final Rx<int> _activePageIndex;
 
   /// The total pageCount.
   final int pageCount = 2;
@@ -53,6 +54,12 @@ class TransfersController extends GetxController {
   /// The amount of the payment text controller.
   TextEditingController amountToPayTextController;
 
+  /// The current reference.
+  Rx<String?> reference = Rx<String?>(null);
+
+  /// The current transaction category.
+  Rx<Category?> currentCategory = Rx<Category?>(null);
+
   /// The current operator.
   Rx<OperationGateways?> currentOperation = Rx<OperationGateways?>(null);
 
@@ -72,7 +79,10 @@ class TransfersController extends GetxController {
   Rx<String> amountErrorMessage = Rx<String>('');
 
   /// The active page index.
-  Rx<int> activePageIndex = Rx<int>(0);
+  Rx<int> get activePageIndex => _activePageIndex;
+
+  /// The page controller.
+  PageController get pageController => _pageController;
 
   /// Stream the transfer.
   BehaviorSubject<List<TransferInfo>> get streamPendingTransferInfo =>
@@ -110,7 +120,7 @@ class TransfersController extends GetxController {
     required ForfeitRepository forfeitRepository,
     required TransfersViewModel transfersViewModel,
     CreditTransactionParams? localCreditTransaction,
-    String? forfeitId,
+    int? jumpToIndex,
   })  : paymentTextController = TextEditingController(
           text: localCreditTransaction?.buyerPhoneNumber,
         ),
@@ -123,16 +133,44 @@ class TransfersController extends GetxController {
               : localCreditTransaction?.amountInXaf.toString(),
         ),
         _localization = localization,
+        _forfeitRepository = forfeitRepository,
         _transfersViewModel = transfersViewModel,
-        _localCreditTransaction = localCreditTransaction {
-    activePageIndex.value = forfeitId == null ? 0 : 1;
-    pageController = PageController(initialPage: forfeitId == null ? 0 : 1);
-  }
+        _localCreditTransaction = localCreditTransaction,
+        _activePageIndex = Rx(jumpToIndex ?? 0),
+        _pageController = PageController(initialPage: jumpToIndex ?? 0);
 
   @override
   void onClose() {
     super.onClose();
     cleanForm();
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) async {
+      if (pageController.hasClients &&
+          pageController.position.maxScrollExtent > 0) {
+        pageController.jumpToPage(activePageIndex.value);
+      }
+
+      final creditTransaction = localCreditTransaction;
+      if (creditTransaction != null) {
+        if (creditTransaction.category != Category.unit.key) {
+          final forfeit = _forfeitRepository
+              .getForfeitByReference(creditTransaction.featureReference);
+          setActiveForfeit(forfeit);
+        } else {
+          currentCategory.value = Category.unit;
+          buttonToPayTextAmount.value = creditTransaction.amountInXaf;
+          reference.value = creditTransaction.featureReference;
+          forfeit.value = null;
+        }
+      } else {
+        disableForfeit();
+      }
+    });
   }
 
   /// Set the active page on the screen.
@@ -150,9 +188,21 @@ class TransfersController extends GetxController {
     }
   }
 
-  /// Set the current forfeit.
+  /// Sets the current forfeit.
   void setActiveForfeit(Forfeit? currentForfeit) {
+    currentCategory.value = currentForfeit?.category;
+    reference.value = currentForfeit?.reference;
+    amountToPayTextController.clear();
+    buttonToPayTextAmount.value = currentForfeit?.amountInXAF.toString() ?? '';
     forfeit.value = currentForfeit;
+  }
+
+  /// Disables the current forfeit.
+  void disableForfeit() {
+    currentCategory.value = Category.unit;
+    buttonToPayTextAmount.value = '';
+    reference.value = null;
+    forfeit.value = null;
   }
 
   /// Checks if the payer number is valid.
@@ -264,6 +314,7 @@ class TransfersController extends GetxController {
         receiverTextController.text == '6') {
       receiverNumberErrorMessage.value = '';
       currentOperation.value = null;
+      reference.value = null;
 
       return;
     }
@@ -275,6 +326,7 @@ class TransfersController extends GetxController {
       );
       if (RegExp(validOperator.tolerantRegex).hasMatch(number)) {
         currentOperation.value = validOperator;
+        reference.value = validOperator.reference;
         receiverNumberErrorMessage.value = '';
 
         return null;
@@ -289,18 +341,21 @@ class TransfersController extends GetxController {
       if (RegExp(operation.tolerantRegex).hasMatch(number)) {
         if (operation.operatorName == Operator.orange) {
           currentOperation.value = operation;
+          reference.value = operation.reference;
           receiverNumberErrorMessage.value = '';
 
           return;
         }
         if (operation.operatorName == Operator.mtn) {
           currentOperation.value = operation;
+          reference.value = operation.reference;
           receiverNumberErrorMessage.value = '';
 
           return;
         }
         if (operation.operatorName == Operator.camtel) {
           currentOperation.value = operation;
+          reference.value = operation.reference;
           receiverNumberErrorMessage.value = '';
 
           return;
@@ -313,6 +368,7 @@ class TransfersController extends GetxController {
       }
     }
     currentOperation.value = null;
+    reference.value = null;
 
     return null;
   }
@@ -488,6 +544,9 @@ class TransfersController extends GetxController {
     buttonToPayTextAmount.value = '';
     currentOperation.value = null;
     currentPaymentMethod.value = null;
+    currentCategory.value = null;
+    reference.value = null;
+    forfeit.value = null;
   }
 
   /// Retry the transfer.

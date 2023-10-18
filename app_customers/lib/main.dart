@@ -9,7 +9,6 @@ import 'package:karibu_capital_core_remote_config/remote_config.dart';
 import 'package:logging/logging.dart';
 import 'package:trans_all_common_config/config.dart';
 import 'package:trans_all_common_internationalization/internationalization.dart';
-import 'package:trans_all_common_models/models.dart';
 import 'package:trans_all_common_utils/utils.dart';
 
 import 'config/config.dart';
@@ -17,8 +16,9 @@ import 'config/environement_conf.dart';
 import 'data/database/hive_service.dart';
 import 'data/repository/contactRepository.dart';
 import 'data/repository/forfeitRepository.dart';
-import 'data/repository/tranfersRepository.dart';
+import 'data/repository/tranferRepository.dart';
 import 'routes/app_router.dart';
+import 'util/check_transaction.dart';
 import 'util/themes.dart';
 import 'util/user_contact.dart';
 import 'widgets/contact_service_button/contact_service_model.dart';
@@ -78,7 +78,7 @@ class MyApp extends StatelessWidget {
     }
 
     _initGetProviders();
-    _streamPendingTransaction();
+    streamPendingTransaction();
 
     return _BuildApp();
   }
@@ -110,70 +110,4 @@ class _BuildApp extends StatelessWidget {
       ),
     );
   }
-}
-
-Future<void> _streamPendingTransaction() async {
-  final Logger _logger = Logger('Schedule airtime transaction update');
-  final TransferRepository transferRepository = Get.find<TransferRepository>();
-
-  /// Schedule every 15 seconds.
-  Timer.periodic(Duration(seconds: 15), (timer) async {
-    /// Retrieve the pending  airtime transaction.
-    final pendingTransaction =
-        transferRepository.getAllLocalTransaction().where(
-              (value) =>
-                  value.status.key != TransferStatus.completed.key &&
-                  value.status.key != TransferStatus.succeeded.key &&
-                  value.status.key != TransferStatus.failed.key &&
-                  value.status.key != TransferStatus.paymentFailed.key &&
-                  value.payments.first.status.key != PaymentStatus.failed.key,
-            );
-    _logger.info(
-      'There are ${pendingTransaction.length} transaction with pending status.',
-    );
-    if (pendingTransaction.isNotEmpty) {
-      for (final transaction in pendingTransaction) {
-        _logger.info(
-          'the transaction id ${transaction.id} have a '
-          'transfer status ${transaction.status.key} and '
-          'payment status ${transaction.payments.first.status.key}.',
-        );
-
-        /// Set to failed if the transaction status is pending since 1 week.
-        if (transaction.isOlderThanAWeek()) {
-          _logger.info(
-            'the transaction id ${transaction.id} have a '
-            'transaction status ${transaction.status.key} and '
-            'payment status ${transaction.payments.first.status.key} is passed '
-            '1 week; the transaction will be set to failed.',
-          );
-          await transferRepository.updateLocalTransactionStatus(
-            transaction.id,
-            TransferStatus.failed.key,
-            false,
-          );
-        } else {
-          final remoteTransaction = await transferRepository.getTheTransaction(
-            transactionId: transaction.id,
-          );
-
-          if (remoteTransaction != null) {
-            _logger.info(
-              'New update of  transaction with id ${transaction.id} is received with data: ${remoteTransaction.toJson()}',
-            );
-            final newTransfer = TransferInfo.fromJson(
-              json: {
-                ...remoteTransaction.toJson(),
-                TransferInfo.keyForfeitReference: transaction.forfeitReference,
-              },
-            );
-            await transferRepository.updateLocalTransaction(
-              transaction.id,
-              newTransfer,
-            );
-          }
-        }
-      }
-    }
-  });
 }

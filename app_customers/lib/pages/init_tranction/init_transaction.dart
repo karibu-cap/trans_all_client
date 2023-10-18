@@ -1,15 +1,16 @@
+import 'package:dashed_circular_progress_bar/dashed_circular_progress_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:karibu_capital_core_utils/utils.dart';
 import 'package:lottie/lottie.dart';
 import 'package:simple_animations/simple_animations.dart';
-import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
 import 'package:trans_all_common_internationalization/internationalization.dart';
 import 'package:trans_all_common_models/models.dart';
 
 import '../../data/repository/contactRepository.dart';
 import '../../data/repository/forfeitRepository.dart';
-import '../../data/repository/tranfersRepository.dart';
+import '../../data/repository/tranferRepository.dart';
 import '../../routes/app_router.dart';
 import '../../routes/pages_routes.dart';
 import '../../util/constant.dart';
@@ -346,19 +347,46 @@ class _ImageStatus extends GetView<InitTransactionController> {
 
         return Opacity(
           opacity: value,
-          child: SimpleCircularProgressBar(
-            valueNotifier: controller.transferProgress,
-            size: 220,
-            mergeMode: true,
-            onGetText: ((value) {
-              return Text(
-                '${value.toInt()}%',
-                style: theme.textTheme.labelMedium?.copyWith(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
+          child: ValueListenableBuilder(
+            valueListenable: controller.transferProgress,
+            builder: (context, value, child) {
+              return DashedCircularProgressBar.aspectRatio(
+                aspectRatio: 2,
+                progress: value,
+                startAngle: 225,
+                sweepAngle: 270,
+                foregroundColor: theme.primaryColor,
+                backgroundColor: theme.primaryColor.withOpacity(0.2),
+                foregroundStrokeWidth: 15,
+                backgroundStrokeWidth: 15,
+                animation: true,
+                seekSize: 6,
+                seekColor: const Color(0xffeeeeee),
+                child: Center(
+                  child: SizedBox(
+                    width: 180,
+                    height: 180,
+                    child: Stack(
+                      clipBehavior: Clip.antiAlias,
+                      children: [
+                        SpinKitPulse(
+                          size: 150.0,
+                          color: theme.primaryColor,
+                        ),
+                        Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            '${value.toInt()}%',
+                            style: theme.textTheme.headlineLarge
+                                ?.copyWith(fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               );
-            }),
+            },
           ),
         );
       },
@@ -379,6 +407,8 @@ class _CurrentWidget extends GetView<InitTransactionController> {
 
     if (controller.loadingState.value == LoadingState.failed) {
       return Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             localization.ooops,
@@ -390,26 +420,30 @@ class _CurrentWidget extends GetView<InitTransactionController> {
           SizedBox(
             height: 5,
           ),
-          Text(
-            localization.failedTransferMessage,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w300,
-              color: theme.colorScheme.error,
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          if (controller.errorMessage.value != null)
-            Text(
-              controller.errorMessage.value ?? localization.anErrorOccurred,
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w300,
-                color: theme.colorScheme.error,
-              ),
-            ),
+          controller.errorMessage.value == null
+              ? Center(
+                  child: Text(
+                    localization.failedTransferMessage,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w300,
+                      color: theme.colorScheme.error,
+                    ),
+                  ),
+                )
+              : Center(
+                  child: Text(
+                    controller.errorMessage.value ??
+                        localization.anErrorOccurred,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w300,
+                      color: theme.colorScheme.error,
+                    ),
+                  ),
+                ),
           SizedBox(
             height: 30,
           ),

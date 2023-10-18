@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:trans_all_common_models/models.dart';
 
@@ -10,7 +9,6 @@ import '../data/database/hive_model/forfeit_info.dart';
 import '../data/database/hive_model/operator_info.dart';
 import '../data/database/hive_model/payment_gateway_info.dart';
 import '../data/database/hive_model/transfert_info.dart';
-import '../themes/app_colors.dart';
 import '../util/constant.dart';
 
 /// The app config function.
@@ -28,10 +26,4 @@ Future<void> appConfig() async {
   await Hive.openBox<OperationGateways>(Constant.operatorTable);
   await Hive.openBox<PaymentGateways>(Constant.paymentGatewaysTable);
   await Hive.openBox<Forfeit>(Constant.forfeitTable);
-  SystemChrome.setSystemUIOverlayStyle(
-    SystemUiOverlayStyle(
-      systemNavigationBarColor: AppColors.black,
-      systemNavigationBarIconBrightness: Brightness.light,
-    ),
-  );
 }

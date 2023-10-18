@@ -15,8 +15,11 @@ class OperationGateways extends BaseModel {
   /// The stored key ref for the [tolerantRegex] property.
   static const keyTolerantRegex = 'tolerantRegex';
 
+  /// The stored key ref for the [category] property.
+  static const keyCategory = 'category';
+
   /// The reference.
-  final OperationTransferType reference;
+  final String reference;
 
   /// The operator name.
   final Operator operatorName;
@@ -27,60 +30,25 @@ class OperationGateways extends BaseModel {
   /// The tolerantRegex.
   final String tolerantRegex;
 
+  /// The category operation.
+  final Category category;
+
   /// Constructs a new [OperationGateways] from [Map] object.
   OperationGateways.fromJson(
     Map<String, dynamic> json,
   )   : exactMatchRegex = json[keyExactMatchRegex],
         operatorName = Operator.fromKey(json[keyOperatorName]),
+        category = Category.fromKey(json[keyCategory]),
         tolerantRegex = json[keyTolerantRegex],
-        reference = OperationTransferType.fromKey(json[keyReference]),
+        reference = json[keyReference],
         super.fromJson();
 
   @override
   Map<String, dynamic> toJson() => <String, dynamic>{
         keyExactMatchRegex: exactMatchRegex,
         keyOperatorName: operatorName.key,
-        keyReference: reference.key,
+        keyCategory: category.key,
+        keyReference: reference,
         keyTolerantRegex: tolerantRegex,
       };
-}
-
-/// Represents the available operator of transfer.
-class OperationTransferType {
-  /// The available OperationTransfer.
-  static final _data = <String, OperationTransferType>{
-    orangeUnitTransfer.key: orangeUnitTransfer,
-    camtelUnitTransfer.key: camtelUnitTransfer,
-    mtnUnitTransfer.key: mtnUnitTransfer,
-    yoomeeUnitTransfer.key: yoomeeUnitTransfer,
-    unknown.key: unknown,
-  };
-
-  /// The orange unit transfer.
-  static const orangeUnitTransfer =
-      OperationTransferType._('orangeUnitTransfer');
-
-  /// The camtel unit transfer.
-  static const camtelUnitTransfer =
-      OperationTransferType._('camtelUnitTransfer');
-
-  /// The mtn unit transfer.
-  static const mtnUnitTransfer = OperationTransferType._('mtnUnitTransfer');
-
-  /// The yoomee unit transfer.
-  static const yoomeeUnitTransfer =
-      OperationTransferType._('yoomeeUnitTransfer');
-
-  /// The unknown operator.
-  static const unknown = OperationTransferType._('unknown');
-
-  /// The operator key.
-  final String key;
-
-  const OperationTransferType._(this.key);
-
-  /// Constructs a new [OperationTransferType] form [key].
-  factory OperationTransferType.fromKey(String key) {
-    return _data[key] ?? unknown;
-  }
 }

@@ -41,7 +41,7 @@ class AppInternationalization extends Translations {
           'from': 'From',
           'to': 'To',
           'status': 'Status',
-          'noTransferHistory': 'No history found',
+          'noTransferHistory': 'You don\'t have any transaction',
           'raison': 'Raison',
           'retry': 'Try Again',
           'since': 'Since',
@@ -194,13 +194,13 @@ class AppInternationalization extends Translations {
           'failedTransfer': 'TRANSFER FAILED',
         },
         'fr': {
-          'failedTransfer': 'TRAITEMENT ÉCHOUÉ',
+          'failedTransfer': 'ÉCHEC DU TRANSFERT',
           'requestSend': 'TRAITEMENT DU TRANSFERT',
           'waitingRequest': 'TRANSFERT EN COURS',
           'succeedTransfer': 'TRANSFERT REUSSI',
           'paymentPending': 'PAIEMENT EN COURS',
           'paymentInitialized': 'PAIEMENT INITIALISÉ',
-          'paymentFailed': 'PAIEMENT ÉCHOUÉ',
+          'paymentFailed': 'ÉCHEC DU PAIEMENT ',
           'invalidFeatureProvider':
               'L\' operateur choisi n\'est plus supporté. Veuillez essayer un autre operateur.',
           'unsupportedProvider':
@@ -251,7 +251,7 @@ class AppInternationalization extends Translations {
           'from': 'De',
           'to': 'Vers',
           'status': 'Status',
-          'noTransferHistory': 'Pas d\'historique trouvé',
+          'noTransferHistory': 'Vous n\'avez pas de transaction',
           'raison': 'Raison',
           'retry': 'Réessayer',
           'since': "Il y'a",

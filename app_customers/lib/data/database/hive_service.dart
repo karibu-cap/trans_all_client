@@ -77,7 +77,6 @@ abstract class HiveService {
     required num amountToPay,
     required String buyerGatewayId,
     required String featureReference,
-    String? forfeitReference,
   });
 
   /// Gets the transaction by id.
@@ -88,8 +87,8 @@ abstract class HiveService {
   /// Lists all local forfeit.
   Future<List<Forfeit>?> getAllForfeit();
 
-  /// Lists all local forfeit.
-  Forfeit? getForfeitById(String forfeitId);
+  /// Retrieves the forfeit by reference.
+  Forfeit? getForfeitByReference(String reference);
 
   /// Gets contact list.
   Set<Contact> getAllLocalContact();
