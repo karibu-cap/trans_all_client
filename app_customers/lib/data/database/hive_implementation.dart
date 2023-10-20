@@ -167,8 +167,8 @@ class HiveServiceImpl implements HiveService {
         convertData.map<PaymentGateways>(PaymentGateways.fromJson).toList(),
       );
 
-      unawaited(_databasePaymentGateways.clear());
-      unawaited(_databasePaymentGateways.addAll(payments));
+      await _databasePaymentGateways.clear();
+      await _databasePaymentGateways.addAll(payments);
 
       return ListPaymentGatewaysResponse(listPaymentGateways: payments);
     } catch (e) {
@@ -228,8 +228,8 @@ class HiveServiceImpl implements HiveService {
               .map<OperationGateways>(OperationGateways.fromJson)
               .toList(),
         );
-        unawaited(_databaseOperatorGateway.clear());
-        unawaited(_databaseOperatorGateway.addAll(operations));
+        await _databaseOperatorGateway.clear();
+        await _databaseOperatorGateway.addAll(operations);
 
         return ListOperationGatewaysResponse(listOperationGateways: operations);
       }

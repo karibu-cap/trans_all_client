@@ -74,21 +74,28 @@ class _ListOfPendingTransfer extends StatelessWidget {
                             : PaymentId.unknown.key;
 
                 return InkWell(
-                  onTap: () => AppRouter.push(
-                    context,
-                    PagesRoutes.initTransaction.create(
-                      CreditTransactionParams(
-                        buyerPhoneNumber: transfer.buyerPhoneNumber,
-                        receiverPhoneNumber: transfer.receiverPhoneNumber,
-                        amountInXaf: transfer.amount.toString(),
-                        buyerGatewayId: transferBuyerGateway,
-                        featureReference: transfer.feature,
-                        transactionId: transfer.id,
-                        category: transfer.category.key,
-                        operatorName: transfer.operatorName.key,
+                  onTap: (() {
+                    final category = transfer.category?.key;
+                    final operatorName = transfer.category?.key;
+                    if (category == null || operatorName == null) {
+                      return;
+                    }
+                    AppRouter.push(
+                      context,
+                      PagesRoutes.initTransaction.create(
+                        CreditTransactionParams(
+                          buyerPhoneNumber: transfer.buyerPhoneNumber,
+                          receiverPhoneNumber: transfer.receiverPhoneNumber,
+                          amountInXaf: transfer.amount.toString(),
+                          buyerGatewayId: transferBuyerGateway,
+                          featureReference: transfer.feature,
+                          transactionId: transfer.id,
+                          category: category,
+                          operatorName: operatorName,
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  }),
                   child: _PendingTransferView(
                     transfer: transfer,
                     localization: localization,
@@ -143,7 +150,8 @@ class _PendingTransferView extends StatelessWidget {
                       height: 30,
                       width: 30,
                       child: OperatorIcon(
-                        operatorType: transfer.operatorName.key,
+                        operatorType: transfer.operatorName?.key ??
+                            getOperatorNameByReference(transfer.feature),
                       ),
                     ),
                   ],

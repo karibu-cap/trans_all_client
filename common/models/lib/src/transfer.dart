@@ -42,6 +42,9 @@ class TransferInfo extends BaseModel {
   /// The stored key ref for the [operatorName] property.
   static const keyOperatorName = 'operatorName';
 
+  /// The stored key ref for the [forfeitId] property.
+  static const keyForfeitId = 'forfeitId';
+
   /// The id of transaction.
   final String id;
 
@@ -76,10 +79,13 @@ class TransferInfo extends BaseModel {
   final List<TransTuPayment> payments;
 
   /// The category operation.
-  final Category category;
+  final Category? category;
 
   /// The operator name.
-  final Operator operatorName;
+  final Operator? operatorName;
+
+  /// The forfeit id to transfers.
+  final String? forfeitId;
 
   /// Constructs a new [TransferInfo] from [Map] object.
   TransferInfo.fromJson({
@@ -91,13 +97,18 @@ class TransferInfo extends BaseModel {
             : DateTime.tryParse(json[keyUpdateAt])?.toLocal(),
         receiverPhoneNumber = json[keyReceiverPhoneNumber],
         buyerPhoneNumber = json[keyBuyerPhoneNumber],
-        operatorName = Operator.fromKey(json[keyOperatorName]),
-        category = Category.fromKey(json[keyCategory]),
+        operatorName = json[keyOperatorName] == null
+            ? null
+            : Operator.fromKey(json[keyOperatorName]),
+        category = json[keyCategory] == null
+            ? null
+            : Category.fromKey(json[keyCategory]),
         feature = json[keyFeature],
         amount = json[keyAmountXAF],
         status = TransferStatus.fromKey(json[keyStatus]),
         type = json[keyType],
         reason = json[keyReason],
+        forfeitId = json[keyForfeitId],
         payments = _getPayment(json[keyPayments]),
         super.fromJson();
 
@@ -109,13 +120,14 @@ class TransferInfo extends BaseModel {
   @override
   Map<String, dynamic> toJson() => <String, dynamic>{
         keyId: id,
+        keyForfeitId: forfeitId,
         keyCreatedAt: DateTime.now().toUtc().toIso8601String(),
         keyUpdateAt: DateTime.now().toUtc().toIso8601String(),
         keyAmountXAF: amount,
         keyStatus: status.key,
         keyFeature: feature,
-        keyOperatorName: operatorName.key,
-        keyCategory: category.key,
+        keyOperatorName: operatorName?.key,
+        keyCategory: category?.key,
         keyReceiverPhoneNumber: receiverPhoneNumber,
         keyBuyerPhoneNumber: buyerPhoneNumber,
         keyType: type,
