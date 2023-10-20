@@ -38,3 +38,19 @@ String retrieveValidStatusInternalized(
 
   return '';
 }
+
+/// Retrieve the operator Name by reference for.
+/// Specially for all version where operatorName can't exit.
+String getOperatorNameByReference(String reference) {
+  if (reference == 'orangeUnitTransfer') {
+    return Operator.orange.key;
+  }
+  if (reference == 'camtelUnitTransfer') {
+    return Operator.camtel.key;
+  }
+  if (reference == 'mtnUnitTransfer') {
+    return Operator.mtn.key;
+  }
+
+  return Operator.unknown.key;
+}

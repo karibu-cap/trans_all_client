@@ -22,6 +22,8 @@ Future<void> appConfig() async {
   Hive.registerAdapter(DefaultBuyerContactAdapter());
   Hive.registerAdapter(ForfeitAdapter());
 
+  await Hive.close();
+
   try {
     await Hive.openBox<PaymentGateways>(Constant.paymentGatewaysTable);
   } catch (e) {

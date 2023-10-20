@@ -31,14 +31,16 @@ class OperationGateways extends BaseModel {
   final String tolerantRegex;
 
   /// The category operation.
-  final Category category;
+  final Category? category;
 
   /// Constructs a new [OperationGateways] from [Map] object.
   OperationGateways.fromJson(
     Map<String, dynamic> json,
   )   : exactMatchRegex = json[keyExactMatchRegex],
         operatorName = Operator.fromKey(json[keyOperatorName]),
-        category = Category.fromKey(json[keyCategory]),
+        category = json[keyCategory] == null
+            ? null
+            : Category.fromKey(json[keyCategory]),
         tolerantRegex = json[keyTolerantRegex],
         reference = json[keyReference],
         super.fromJson();
@@ -47,7 +49,7 @@ class OperationGateways extends BaseModel {
   Map<String, dynamic> toJson() => <String, dynamic>{
         keyExactMatchRegex: exactMatchRegex,
         keyOperatorName: operatorName.key,
-        keyCategory: category.key,
+        keyCategory: category?.key,
         keyReference: reference,
         keyTolerantRegex: tolerantRegex,
       };

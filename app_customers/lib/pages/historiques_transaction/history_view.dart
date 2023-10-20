@@ -169,21 +169,28 @@ class _HistoricTransaction extends GetView<HistoryController> {
         }
         children.add(
           InkWell(
-            onTap: () => AppRouter.push(
-              context,
-              PagesRoutes.initTransaction.create(
-                CreditTransactionParams(
-                  buyerPhoneNumber: transaction.buyerPhoneNumber,
-                  receiverPhoneNumber: transaction.receiverPhoneNumber,
-                  amountInXaf: transaction.amount.toString(),
-                  buyerGatewayId: transaction.payments.last.gateway.key,
-                  featureReference: transaction.feature,
-                  transactionId: transaction.id,
-                  category: transaction.category.key,
-                  operatorName: transaction.operatorName.key,
+            onTap: (() {
+              final category = transaction.category?.key;
+              final operatorName = transaction.category?.key;
+              if (category == null || operatorName == null) {
+                return;
+              }
+              AppRouter.push(
+                context,
+                PagesRoutes.initTransaction.create(
+                  CreditTransactionParams(
+                    buyerPhoneNumber: transaction.buyerPhoneNumber,
+                    receiverPhoneNumber: transaction.receiverPhoneNumber,
+                    amountInXaf: transaction.amount.toString(),
+                    buyerGatewayId: transaction.payments.last.gateway.key,
+                    featureReference: transaction.feature,
+                    transactionId: transaction.id,
+                    category: category,
+                    operatorName: operatorName,
+                  ),
                 ),
-              ),
-            ),
+              );
+            }),
             child: _HistoryView(transfer: transaction),
           ),
         );
@@ -384,7 +391,8 @@ class _HistoryView extends StatelessWidget {
                   children: [
                     SizedBox(
                       child: OperatorIcon(
-                        operatorType: transfer.operatorName.key,
+                        operatorType: transfer.operatorName?.key ??
+                            getOperatorNameByReference(transfer.feature),
                       ),
                     ),
                     SizedBox(
@@ -466,22 +474,29 @@ class _HistoryView extends StatelessWidget {
                                 localization.clone,
                               ),
                             ),
-                            onPressed: () => AppRouter.go(
-                              context,
-                              PagesRoutes.creditTransaction.create(
-                                CreditTransactionParams(
-                                  buyerPhoneNumber: transfer.buyerPhoneNumber,
-                                  receiverPhoneNumber:
-                                      transfer.receiverPhoneNumber,
-                                  amountInXaf: transfer.amount.toString(),
-                                  buyerGatewayId:
-                                      transfer.payments.last.gateway.key,
-                                  featureReference: transfer.feature,
-                                  category: transfer.category.key,
-                                  operatorName: transfer.operatorName.key,
+                            onPressed: (() {
+                              final category = transfer.category?.key;
+                              final operatorName = transfer.category?.key;
+                              if (category == null || operatorName == null) {
+                                return;
+                              }
+                              AppRouter.go(
+                                context,
+                                PagesRoutes.creditTransaction.create(
+                                  CreditTransactionParams(
+                                    buyerPhoneNumber: transfer.buyerPhoneNumber,
+                                    receiverPhoneNumber:
+                                        transfer.receiverPhoneNumber,
+                                    amountInXaf: transfer.amount.toString(),
+                                    buyerGatewayId:
+                                        transfer.payments.last.gateway.key,
+                                    featureReference: transfer.feature,
+                                    category: category,
+                                    operatorName: operatorName,
+                                  ),
                                 ),
-                              ),
-                            ),
+                              );
+                            }),
                           ),
                         ),
                       ),
