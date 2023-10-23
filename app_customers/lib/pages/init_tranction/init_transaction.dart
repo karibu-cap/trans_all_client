@@ -597,6 +597,20 @@ class _CurrentWidget extends GetView<InitTransactionController> {
         ),
       );
     }
+    if (controller.loadingState.value == LoadingState.retryTransfer) {
+      return Container(
+        margin: EdgeInsets.only(top: 10),
+        padding: EdgeInsets.all(10),
+        child: Text(
+          localization.retryLaterRequestMessage,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      );
+    }
 
     return SizedBox();
   }
