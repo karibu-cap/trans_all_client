@@ -32,6 +32,10 @@ String retrieveValidStatusInternalized(
   if (transferStatus == TransferStatus.requestSend.key && isPaymentSuccess) {
     return localization.requestSend;
   }
+  if (transferStatus == TransferStatus.retryLaterRequest.key &&
+      isPaymentSuccess) {
+    return localization.retryLaterRequest;
+  }
   if (transferStatus == TransferStatus.failed.key && isPaymentSuccess) {
     return localization.failedTransfer;
   }

@@ -173,6 +173,13 @@ class TransfersController extends GetxController {
     });
   }
 
+  /// Retrieves the current forfeit.
+  Forfeit? getCurrentForfeit(
+    String forfeitReference,
+  ) {
+    return _forfeitRepository.getForfeitByReference(forfeitReference);
+  }
+
   /// Set the active page on the screen.
   void setActivePage(int index) {
     if (index != 0 && index != 1) {
@@ -314,7 +321,6 @@ class TransfersController extends GetxController {
         receiverTextController.text == '6') {
       receiverNumberErrorMessage.value = '';
       currentOperation.value = null;
-      reference.value = null;
 
       return;
     }
@@ -326,7 +332,6 @@ class TransfersController extends GetxController {
       );
       if (RegExp(validOperator.tolerantRegex).hasMatch(number)) {
         currentOperation.value = validOperator;
-        reference.value = validOperator.reference;
         receiverNumberErrorMessage.value = '';
 
         return null;
@@ -367,6 +372,7 @@ class TransfersController extends GetxController {
                 : '';
       }
     }
+
     currentOperation.value = null;
     reference.value = null;
 
@@ -544,7 +550,7 @@ class TransfersController extends GetxController {
     buttonToPayTextAmount.value = '';
     currentOperation.value = null;
     currentPaymentMethod.value = null;
-    currentCategory.value = null;
+    currentCategory.value = Category.unit;
     reference.value = null;
     forfeit.value = null;
   }

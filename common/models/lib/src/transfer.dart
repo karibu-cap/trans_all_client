@@ -185,6 +185,8 @@ class TransferStatus {
   /// The available OperationTransfer.
   static final _data = <String, TransferStatus>{
     waitingRequest.key: waitingRequest,
+    retryLaterRequest.key: retryLaterRequest,
+    waitingForfeitRequest.key: waitingForfeitRequest,
     requestSend.key: requestSend,
     completed.key: completed,
     succeeded.key: succeeded,
@@ -195,6 +197,14 @@ class TransferStatus {
 
   /// Waiting completion of payment.
   static const waitingRequest = TransferStatus._('waiting_request');
+
+  /// The unit transfer was proceed but ussd system disturb right now so,
+  /// we have to retry later.
+  static const retryLaterRequest = TransferStatus._('retry_later_request');
+
+  /// The unit transfer was send and we wait for forfeit request.
+  static const waitingForfeitRequest =
+      TransferStatus._('waiting_forfeit_request');
 
   /// The request was send.
   static const requestSend = TransferStatus._('request_send');

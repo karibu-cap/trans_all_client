@@ -192,8 +192,14 @@ class AppInternationalization extends Translations {
           'waitingRequest': 'TRANSFER WAITING',
           'requestSend': 'TRANSFER PROCESSING',
           'failedTransfer': 'TRANSFER FAILED',
+          'retryLaterRequestMessage':
+              'A problem has occurred, please wait, we will retry your transaction in a few minutes.',
+          'retryLaterRequest': 'WAITING FOR RETRY',
         },
         'fr': {
+          'retryLaterRequestMessage':
+              "Un problème s'est produit, veuillez patienter, nous allons réessayer votre transaction dans quelques minutes.",
+          'retryLaterRequest': 'EN ATTENTE DE RÉESSAI',
           'failedTransfer': 'ÉCHEC DU TRANSFERT',
           'requestSend': 'TRAITEMENT DU TRANSFERT',
           'waitingRequest': 'TRANSFERT EN COURS',
@@ -386,10 +392,24 @@ class AppInternationalization extends Translations {
     return value.tr;
   }
 
+  /// Returns the localized value of retryLaterRequest.
+  String get retryLaterRequest {
+    return _stringOfLocalizedValue(
+      'retryLaterRequest',
+    );
+  }
+
   /// Returns the localized value of failedTransfer.
   String get failedTransfer {
     return _stringOfLocalizedValue(
       'failedTransfer',
+    );
+  }
+
+  /// Returns the localized value of retryLaterRequest.
+  String get retryLaterRequestMessage {
+    return _stringOfLocalizedValue(
+      'retryLaterRequest',
     );
   }
 

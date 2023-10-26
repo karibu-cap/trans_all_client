@@ -17,6 +17,7 @@ enum LoadingState {
   proceeded,
   failed,
   succeeded,
+  retryTransfer,
 }
 
 /// The InitTransaction view model.
@@ -251,7 +252,9 @@ class InitTransactionViewModel {
 
       return;
     }
-    if (transferStatus == TransferStatus.requestSend && isPaymentSuccess) {
+    if ((transferStatus == TransferStatus.requestSend ||
+            transferStatus == TransferStatus.retryLaterRequest) &&
+        isPaymentSuccess) {
       progressiveTimer.cancel();
       if (transferProgress.value < 90) {
         transferProgress.value = 90;
@@ -295,6 +298,11 @@ class InitTransactionViewModel {
     }
     if (transfer.status.key == TransferStatus.requestSend.key) {
       loadingState.value = LoadingState.proceeded;
+
+      return;
+    }
+    if (transfer.status.key == TransferStatus.retryLaterRequest.key) {
+      loadingState.value = LoadingState.retryTransfer;
 
       return;
     }
