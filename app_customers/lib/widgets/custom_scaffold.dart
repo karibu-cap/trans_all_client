@@ -1,15 +1,28 @@
+import 'dart:math';
+
 import 'package:animation_wrappers/animations/faded_slide_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:karibu_capital_core_remote_config/remote_config.dart';
 import 'package:trans_all_common_config/config.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:get/get.dart';
 import 'package:trans_all_common_internationalization/internationalization.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../routes/app_router.dart';
 import '../themes/app_colors.dart';
+import '../util/themes.dart';
 import 'internet_connection.dart';
+
+///
+class Controller extends GetxController {
+  Rx<int> value = Rx<int>(0);
+
+  ///
+  void updateValue(double delta) {
+    value.value = (delta > 0 ? 1 : 0);
+  }
+}
 
 /// The custom scaffold widget.
 class CustomScaffold extends StatelessWidget {
@@ -36,130 +49,6 @@ class CustomScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final canPop = AppRouter.canPop(context);
-    final theme = Theme.of(context);
-    final enableDrawerMenu = RemoteConfig().getBool(
-      RemoteConfigKeys.displayDrawerMenuEnabled,
-    );
-
-    return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
-      appBar: canPop
-          ? AppBar(
-              backgroundColor: theme.appBarTheme.backgroundColor,
-              elevation: 0.0,
-              leading: InkWell(
-                child: Container(
-                  margin: EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: theme.appBarTheme.backgroundColor,
-                    border: Border.fromBorderSide(
-                      BorderSide(
-                        color:
-                            theme.textTheme.titleSmall?.color ?? AppColors.gray,
-                      ),
-                    ),
-                    borderRadius: BorderRadius.all(Radius.circular(9)),
-                  ),
-                  child: Icon(
-                    size: 15,
-                    Icons.arrow_back_ios,
-                  ),
-                ),
-                onTap: () => Navigator.of(context).pop(),
-              ),
-            )
-          : null,
-      drawer: enableDrawerMenu ? const NavigationDrawer() : null,
-      body: SafeArea(
-        bottom: false,
-        child: Center(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 750),
-            child: Column(
-              children: [
-                if (displayInternetMessage)
-                  FadedSlideAnimation(
-                    beginOffset: Offset(0, -0.3),
-                    endOffset: Offset(0, 0),
-                    slideCurve: Curves.linearToEaseOut,
-                    child: displayInternetMessage
-                        ? InternetConnectivityView()
-                        : SizedBox.shrink(),
-                  ),
-                title != null
-                    ? Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Text(
-                          title ?? '',
-                          style: TextStyle(
-                            color: theme.appBarTheme.titleTextStyle?.color,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      )
-                    : SizedBox.shrink(),
-                Expanded(
-                  child: child,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class NavigationDrawer extends StatelessWidget {
-  const NavigationDrawer({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) => Drawer(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              buildHeader(context),
-              buildMenuItems(context),
-            ],
-          ),
-        ),
-      );
-
-  Widget buildHeader(BuildContext context) {
-    final localization = Get.find<AppInternationalization>();
-
-    return Container(
-      padding: const EdgeInsets.only(
-        top: 60,
-        bottom: 40,
-      ),
-      child: Column(children: [
-        CircleAvatar(
-          backgroundColor: Colors.transparent,
-          radius: 70,
-          child: Image.asset(
-            'assets/icons/logo.png',
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.only(top: 10),
-          child: Text(
-            localization.transAll.toUpperCase(),
-            style: TextStyle(
-              fontSize: 34,
-              color: Colors.black,
-            ),
-          ),
-        ),
-      ]),
-    );
-  }
-
-  Widget buildMenuItems(BuildContext context) {
-    final localization = Get.find<AppInternationalization>();
     final String facebookLink = RemoteConfig().getString(
       RemoteConfigKeys.linkFacebookPage,
     );
@@ -173,58 +62,287 @@ class NavigationDrawer extends StatelessWidget {
       RemoteConfigKeys.followUsEnabled,
     );
 
+    final localization = Get.find<AppInternationalization>();
+    final addThemeData = Get.find<ThemeManager>();
+    final canPop = AppRouter.canPop(context);
+    final theme = Theme.of(context);
+    final Controller c = Get.put(Controller());
+
     return followUsEnabled
-        ? Wrap(
-            runSpacing: 20,
-            children: [
-              const Divider(
-                color: Colors.grey,
-                height: 110,
-              ),
-              ListTile(
-                title: Text(
-                  localization.followUs,
-                  style: TextStyle(fontSize: 25),
+        ? Scaffold(
+            body: Stack(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: addThemeData.themeMode == ThemeMode.dark
+                          ? [Colors.transparent, Colors.transparent]
+                          : [Colors.white, Colors.white],
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                    ),
+                  ),
+                ),
+                SafeArea(
+                  child: Container(
+                    padding: const EdgeInsets.only(
+                      top: 30,
+                    ),
+                    width: 200.0,
+                    child: Column(
+                      children: [
+                        DrawerHeader(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CircleAvatar(
+                                backgroundColor: Colors.transparent,
+                                radius: 45,
+                                child: Image.asset(
+                                  addThemeData.themeMode != ThemeMode.dark
+                                      ? 'assets/icons/logo.png'
+                                      : 'assets/icons/transTu_white_icon.png',
+                                ),
+                              ),
+                              const SizedBox(height: 5.0),
+                              Text(
+                                localization.transAll.toUpperCase(),
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color:
+                                      addThemeData.themeMode == ThemeMode.dark
+                                          ? Colors.white
+                                          : Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: ListView(
+                            padding: const EdgeInsets.only(
+                              top: 290,
+                            ),
+                            children: [
+                              ListTile(
+                                title: Text(
+                                  localization.followUs,
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              ),
+                              ListTile(
+                                leading: const Icon(
+                                  FontAwesomeIcons.facebook,
+                                  color: Colors.blueAccent,
+                                ),
+                                title: Text(localization.facebook),
+                                onTap: () {
+                                  if (facebookLink != '') {
+                                    launchUrl(
+                                      Uri.parse(facebookLink),
+                                      mode: LaunchMode.externalApplication,
+                                    );
+                                  }
+                                },
+                              ),
+                              ListTile(
+                                leading: const Icon(
+                                  FontAwesomeIcons.instagram,
+                                  color: Color.fromARGB(255, 170, 96, 197),
+                                ),
+                                title: Text(localization.instagram),
+                                onTap: () {
+                                  if (instagramLink != '') {
+                                    launchUrl(
+                                      Uri.parse(instagramLink),
+                                      mode: LaunchMode.externalApplication,
+                                    );
+                                  }
+                                },
+                              ),
+                              ListTile(
+                                leading: const Icon(
+                                  FontAwesomeIcons.twitter,
+                                  color: Color.fromARGB(255, 101, 186, 255),
+                                ),
+                                title: Text(localization.twitter),
+                                onTap: () {
+                                  if (twitterLink != '') {
+                                    launchUrl(
+                                      Uri.parse(twitterLink),
+                                      mode: LaunchMode.externalApplication,
+                                    );
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Obx(
+                  () => TweenAnimationBuilder(
+                    tween: Tween<double>(begin: 0, end: c.value.toDouble()),
+                    duration: const Duration(milliseconds: 500),
+                    builder: (_, val, __) {
+                      return Transform(
+                        alignment: Alignment.center,
+                        transform: Matrix4.identity()
+                          ..setEntry(3, 2, 0.001)
+                          ..setEntry(0, 3, val * 200)
+                          ..rotateY((pi / 6) * val),
+                        child: Scaffold(
+                          backgroundColor: theme.scaffoldBackgroundColor,
+                          appBar: canPop
+                              ? AppBar(
+                                  backgroundColor:
+                                      theme.appBarTheme.backgroundColor,
+                                  elevation: 0.0,
+                                  leading: InkWell(
+                                    child: Container(
+                                      margin: EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        color:
+                                            theme.appBarTheme.backgroundColor,
+                                        border: Border.fromBorderSide(
+                                          BorderSide(
+                                            color: theme.textTheme.titleSmall
+                                                    ?.color ??
+                                                AppColors.gray,
+                                          ),
+                                        ),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(9)),
+                                      ),
+                                      child: Icon(
+                                        size: 15,
+                                        Icons.arrow_back_ios,
+                                      ),
+                                    ),
+                                    onTap: () => Navigator.of(context).pop(),
+                                  ),
+                                )
+                              : null,
+                          body: SafeArea(
+                            bottom: false,
+                            child: Center(
+                              child: ConstrainedBox(
+                                constraints: BoxConstraints(maxWidth: 750),
+                                child: Column(
+                                  children: [
+                                    if (displayInternetMessage)
+                                      FadedSlideAnimation(
+                                        beginOffset: Offset(0, -0.3),
+                                        endOffset: Offset(0, 0),
+                                        slideCurve: Curves.linearToEaseOut,
+                                        child: displayInternetMessage
+                                            ? InternetConnectivityView()
+                                            : SizedBox.shrink(),
+                                      ),
+                                    title != null
+                                        ? Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 8.0),
+                                            child: Text(
+                                              title ?? '',
+                                              style: TextStyle(
+                                                color: theme.appBarTheme
+                                                    .titleTextStyle?.color,
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          )
+                                        : SizedBox.shrink(),
+                                    Expanded(
+                                      child: child,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                GestureDetector(
+                  onHorizontalDragUpdate: (e) {
+                    c.updateValue(e.delta.dx);
+                  },
+                ),
+              ],
+            ),
+          )
+        : Scaffold(
+            backgroundColor: theme.scaffoldBackgroundColor,
+            appBar: canPop
+                ? AppBar(
+                    backgroundColor: theme.appBarTheme.backgroundColor,
+                    elevation: 0.0,
+                    leading: InkWell(
+                      child: Container(
+                        margin: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: theme.appBarTheme.backgroundColor,
+                          border: Border.fromBorderSide(
+                            BorderSide(
+                              color: theme.textTheme.titleSmall?.color ??
+                                  AppColors.gray,
+                            ),
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(9)),
+                        ),
+                        child: Icon(
+                          size: 15,
+                          Icons.arrow_back_ios,
+                        ),
+                      ),
+                      onTap: () => Navigator.of(context).pop(),
+                    ),
+                  )
+                : null,
+            body: SafeArea(
+              bottom: false,
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: 750),
+                  child: Column(
+                    children: [
+                      if (displayInternetMessage)
+                        FadedSlideAnimation(
+                          beginOffset: Offset(0, -0.3),
+                          endOffset: Offset(0, 0),
+                          slideCurve: Curves.linearToEaseOut,
+                          child: displayInternetMessage
+                              ? InternetConnectivityView()
+                              : SizedBox.shrink(),
+                        ),
+                      title != null
+                          ? Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: Text(
+                                title ?? '',
+                                style: TextStyle(
+                                  color:
+                                      theme.appBarTheme.titleTextStyle?.color,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            )
+                          : SizedBox.shrink(),
+                      Expanded(
+                        child: child,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              ListTile(
-                leading: const Icon(FontAwesomeIcons.facebook),
-                title: Text(localization.facebook),
-                onTap: () {
-                  if (facebookLink != null) {
-                    launchUrl(
-                      Uri.parse(facebookLink),
-                      mode: LaunchMode.externalApplication,
-                    );
-                  }
-                },
-              ),
-              ListTile(
-                leading: const Icon(FontAwesomeIcons.instagram),
-                title: Text(localization.instagram),
-                onTap: () {
-                  if (instagramLink != null) {
-                    launchUrl(
-                      Uri.parse(instagramLink),
-                      mode: LaunchMode.externalApplication,
-                    );
-                  }
-                },
-              ),
-              ListTile(
-                leading: const Icon(FontAwesomeIcons.twitter),
-                title: Text(localization.twitter),
-                onTap: () {
-                  if (twitterLink != null) {
-                    launchUrl(
-                      Uri.parse(twitterLink),
-                      mode: LaunchMode.externalApplication,
-                    );
-                  }
-                },
-              )
-            ],
-          )
-        : Container();
+            ),
+          );
   }
 }
