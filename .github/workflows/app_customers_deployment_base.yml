@@ -6,6 +6,10 @@ on:
         required: true
         type: string
         description: "Environment to deploy to (dev, staging or prod)"
+      APP_BASE_ADDRESS:
+        required: true
+        type: string
+        description: "The server address that receive the request"
       TRANSTU_APP_NAME_PLACE_CUSTOMERS:
         required: true
         type: string
@@ -100,6 +104,7 @@ jobs:
           TRANSTU_APP_NAME: ${{ inputs.TRANSTU_APP_NAME_PLACE_CUSTOMERS }}
           TRANSTU_USE_ANDROID_APP_BUNDLE: ${{ inputs.TRANSTU_USE_ANDROID_APP_BUNDLE }}
           TRANSTU_APP_BUILD_NUMBER: ${{ env.TRANSTU_APP_BUILD_NUMBER }}
+          APP_BASE_ADDRESS: ${{ env.APP_BASE_ADDRESS }}
 
       # Deploy the Android apps.
       - name: Deploy Android Customers

@@ -6,7 +6,7 @@ on:
 
 # Ensure that only one staging workflow runs at a time.
 concurrency:
-  group:  app-customer-deployment-staging
+  group: app-customer-deployment-staging
   cancel-in-progress: true
 
 jobs:
@@ -15,6 +15,7 @@ jobs:
     with:
       TRANSTU_APP_ENVIRONMENT: staging
       TRANSTU_APP_NAME_PLACE_CUSTOMERS: TransAll.STAGING
+      APP_BASE_ADDRESS: http://144.91.117.101:8310
       UPLOAD_TO_PLAY_STORE_CUSTOMERS: false
       TRANSTU_ANDROID_APP_ID_CUSTOMERS: 1:210743853862:android:7dc9e6f3c606a4b9c977e7
       TRANSTU_USE_ANDROID_APP_BUNDLE: false
