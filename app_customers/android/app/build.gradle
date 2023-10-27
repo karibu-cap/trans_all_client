@@ -25,7 +25,6 @@ if (flutterVersionName == null) {
 def dartEnvironmentVariables = [
     TRANSTU_APP_ENVIRONMENT: 'dev',
     TRANSTU_APP_NAME: 'TransTu.DEV',
-    APP_BASE_ADDRESS: '144.91.117.101:8301'
 ];
 
 // Parse the dart-defines given as input ('flutter run --dart-define=XXX') and
