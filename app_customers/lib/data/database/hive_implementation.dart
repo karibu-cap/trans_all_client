@@ -158,7 +158,7 @@ class HiveServiceImpl implements HiveService {
             url,
             headers: headers,
           )
-          .timeout(Duration(seconds: 7));
+          .timeout(Duration(seconds: 10));
 
       final List<dynamic> data = jsonDecode(response.body);
       final List<Map<String, dynamic>> convertData =
@@ -212,7 +212,7 @@ class HiveServiceImpl implements HiveService {
             url,
             headers: headers,
           )
-          .timeout(Duration(seconds: 7));
+          .timeout(Duration(seconds: 10));
       final dynamic bodyResponse = jsonDecode(response.body);
 
       final responseData = ResponseBody.fromJson(
