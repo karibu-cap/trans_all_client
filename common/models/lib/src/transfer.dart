@@ -36,6 +36,12 @@ class TransferInfo extends BaseModel {
   /// The stored key ref for the [reason] property.
   static const keyReason = 'reason';
 
+  /// The stored key ref for the [category] property.
+  static const keyCategory = 'category';
+
+  /// The stored key ref for the [operatorName] property.
+  static const keyOperatorName = 'operatorName';
+
   /// The stored key ref for the [forfeitId] property.
   static const keyForfeitId = 'forfeitId';
 
@@ -64,13 +70,19 @@ class TransferInfo extends BaseModel {
   final TransferStatus status;
 
   /// The operator gateway.
-  final OperationTransferType feature;
+  final String feature;
 
   /// The reason in cas of failed transaction.
   final String? reason;
 
   /// The transfer payment.
   final List<TransTuPayment> payments;
+
+  /// The category operation.
+  final Category? category;
+
+  /// The operator name.
+  final Operator? operatorName;
 
   /// The forfeit id to transfers.
   final String? forfeitId;
@@ -85,12 +97,18 @@ class TransferInfo extends BaseModel {
             : DateTime.tryParse(json[keyUpdateAt])?.toLocal(),
         receiverPhoneNumber = json[keyReceiverPhoneNumber],
         buyerPhoneNumber = json[keyBuyerPhoneNumber],
-        feature = OperationTransferType.fromKey(json[keyFeature]),
+        operatorName = json[keyOperatorName] == null
+            ? null
+            : Operator.fromKey(json[keyOperatorName]),
+        category = json[keyCategory] == null
+            ? null
+            : Category.fromKey(json[keyCategory]),
+        feature = json[keyFeature],
         amount = json[keyAmountXAF],
         status = TransferStatus.fromKey(json[keyStatus]),
         type = json[keyType],
-        forfeitId = json[keyForfeitId],
         reason = json[keyReason],
+        forfeitId = json[keyForfeitId],
         payments = _getPayment(json[keyPayments]),
         super.fromJson();
 
@@ -103,17 +121,27 @@ class TransferInfo extends BaseModel {
   Map<String, dynamic> toJson() => <String, dynamic>{
         keyId: id,
         keyForfeitId: forfeitId,
-        keyCreatedAt: createdAt,
-        keyUpdateAt: updateAt,
+        keyCreatedAt: DateTime.now().toUtc().toIso8601String(),
+        keyUpdateAt: DateTime.now().toUtc().toIso8601String(),
         keyAmountXAF: amount,
         keyStatus: status.key,
-        keyFeature: feature.key,
+        keyFeature: feature,
+        keyOperatorName: operatorName?.key,
+        keyCategory: category?.key,
         keyReceiverPhoneNumber: receiverPhoneNumber,
         keyBuyerPhoneNumber: buyerPhoneNumber,
         keyType: type,
         keyReason: reason,
         keyPayments: payments.map((e) => e.toJson()).toList(),
       };
+
+  /// Checks if the transfer is older than a week.
+  bool isOlderThanAWeek() {
+    final DateTime now = DateTime.now();
+    final Duration difference = now.difference(createdAt);
+
+    return difference.inDays > 7;
+  }
 }
 
 /// The transfer information.
@@ -157,6 +185,8 @@ class TransferStatus {
   /// The available OperationTransfer.
   static final _data = <String, TransferStatus>{
     waitingRequest.key: waitingRequest,
+    retryLaterRequest.key: retryLaterRequest,
+    waitingForfeitRequest.key: waitingForfeitRequest,
     requestSend.key: requestSend,
     completed.key: completed,
     succeeded.key: succeeded,
@@ -167,6 +197,14 @@ class TransferStatus {
 
   /// Waiting completion of payment.
   static const waitingRequest = TransferStatus._('waiting_request');
+
+  /// The unit transfer was proceed but ussd system disturb right now so,
+  /// we have to retry later.
+  static const retryLaterRequest = TransferStatus._('retry_later_request');
+
+  /// The unit transfer was send and we wait for forfeit request.
+  static const waitingForfeitRequest =
+      TransferStatus._('waiting_forfeit_request');
 
   /// The request was send.
   static const requestSend = TransferStatus._('request_send');

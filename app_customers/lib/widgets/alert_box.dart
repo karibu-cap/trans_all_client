@@ -126,9 +126,12 @@ class AlertBoxView extends StatelessWidget {
             height: 70,
             child: CircleAvatar(
               maxRadius: topSize ?? 40.0,
-              backgroundColor: topBackgroundColor ??
-                  theme.floatingActionButtonTheme.backgroundColor,
-              child: icon ?? Icon(Icons.message),
+              backgroundColor: theme.primaryColor,
+              child: icon ??
+                  Icon(
+                    Icons.message,
+                    color: AppColors.white,
+                  ),
             ),
           ),
         ],

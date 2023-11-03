@@ -1,4 +1,6 @@
+import 'package:dashed_circular_progress_bar/dashed_circular_progress_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:karibu_capital_core_utils/utils.dart';
 import 'package:lottie/lottie.dart';
@@ -8,7 +10,7 @@ import 'package:trans_all_common_models/models.dart';
 
 import '../../data/repository/contactRepository.dart';
 import '../../data/repository/forfeitRepository.dart';
-import '../../data/repository/tranfersRepository.dart';
+import '../../data/repository/tranferRepository.dart';
 import '../../routes/app_router.dart';
 import '../../routes/pages_routes.dart';
 import '../../util/constant.dart';
@@ -33,7 +35,6 @@ class InitTransaction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localization = Get.find<AppInternationalization>();
     final transferRepository = Get.find<TransferRepository>();
     final contactRepository = Get.find<ContactRepository>();
     final forfeitRepository = Get.find<ForfeitRepository>();
@@ -48,7 +49,6 @@ class InitTransaction extends StatelessWidget {
       InitTransactionController(
         initTransactionModel,
         contactRepository,
-        transferRepository,
       ),
     );
 
@@ -56,164 +56,197 @@ class InitTransaction extends StatelessWidget {
       displayInternetMessage: !isTesting,
       child: Builder(builder: (context) {
         final controller = Get.find<InitTransactionController>();
-        final forfeit = controller.forfeit?.value;
 
-        return Center(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ListView(
-              physics: BouncingScrollPhysics(),
-              children: [
-                Text(
-                  localization.transferOf.trParams(
-                    {
-                      Constant.amountToPay: forfeit != null
-                          ? localization.forfeit
-                          : Currency.formatWithCurrency(
-                              price: controller.amountToPay.value ?? 0,
-                              locale: localization.locale,
-                              currencyCodeAlpha3: DefaultCurrency.xaf,
-                            ),
-                    },
-                  ),
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 30,
-                  ),
-                  textAlign: TextAlign.center,
+        return FutureBuilder(
+          future: controller.transferCompleter.future,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: Lottie.asset(
+                  AnimationAsset.loading,
+                  width: 180,
+                  height: 180,
+                  fit: BoxFit.cover,
+                  repeat: !isTesting,
                 ),
-                if (forfeit != null)
-                  SizedBox(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: 10,
+              );
+            }
+
+            return _TransferWrapper(isTesting: isTesting);
+          },
+        );
+      }),
+    );
+  }
+}
+
+class _TransferWrapper extends StatelessWidget {
+  final bool isTesting;
+
+  const _TransferWrapper({
+    required this.isTesting,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final localization = Get.find<AppInternationalization>();
+    final controller = Get.find<InitTransactionController>();
+    final forfeit = controller.forfeit?.value;
+
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView(
+          physics: BouncingScrollPhysics(),
+          children: [
+            Text(
+              localization.transferOf.trParams(
+                {
+                  Constant.amountToPay: forfeit != null
+                      ? localization.forfeit
+                      : Currency.formatWithCurrency(
+                          price: controller.amountToPay.value ?? 0,
+                          locale: localization.locale,
+                          currencyCodeAlpha3: DefaultCurrency.xaf,
                         ),
-                        Text(
-                          forfeit.name,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 17,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          localization.locale.languageCode == 'en'
-                              ? forfeit.description.en
-                              : forfeit.description.fr,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                SizedBox(
-                  height: 30,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                },
+              ),
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 30,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            if (forfeit != null)
+              SizedBox(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Expanded(
-                      flex: 2,
-                      child: Card(
-                        child: Container(
-                          height: 80,
-                          child: Center(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  localization.payer,
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  ),
-                                ),
-                                Text(
-                                  controller.getUserName(
-                                    controller.buyerPhoneNumber.value ?? '',
-                                  ),
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      forfeit.name,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 17,
                       ),
                     ),
-                    Expanded(
-                      child: SizedBox(
-                        child: FittedBox(
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.forward,
-                              ),
-                              Icon(
-                                Icons.phone_android_outlined,
-                                size: 50,
-                              ),
-                              Icon(
-                                Icons.forward,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                    SizedBox(
+                      height: 5,
                     ),
-                    Expanded(
-                      flex: 2,
-                      child: Card(
-                        child: Container(
-                          height: 80,
-                          child: Center(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  localization.receiver,
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  ),
-                                ),
-                                Text(
-                                  controller.getUserName(
-                                    controller.receiverPhoneNumber.value ?? '',
-                                  ),
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                    Text(
+                      localization.locale.languageCode == 'en'
+                          ? forfeit.description.en
+                          : forfeit.description.fr,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14,
                       ),
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 10,
+              ),
+            SizedBox(
+              height: 30,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Card(
+                    child: Container(
+                      height: 80,
+                      child: Center(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              localization.payer,
+                              style: TextStyle(
+                                fontSize: 15,
+                              ),
+                            ),
+                            Text(
+                              controller.getUserName(
+                                controller.buyerPhoneNumber.value ?? '',
+                              ),
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
-                _BodyTransaction(
-                  isTesting: isTesting,
-                  buyerGatewayId: controller.buyerGatewayId.value ?? '',
+                Expanded(
+                  child: SizedBox(
+                    child: FittedBox(
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.forward,
+                          ),
+                          Icon(
+                            Icons.phone_android_outlined,
+                            size: 50,
+                          ),
+                          Icon(
+                            Icons.forward,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Card(
+                    child: Container(
+                      height: 80,
+                      child: Center(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              localization.receiver,
+                              style: TextStyle(
+                                fontSize: 15,
+                              ),
+                            ),
+                            Text(
+                              controller.getUserName(
+                                controller.receiverPhoneNumber.value ?? '',
+                              ),
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
-          ),
-        );
-      }),
+            SizedBox(
+              height: 10,
+            ),
+            _BodyTransaction(
+              isTesting: isTesting,
+              buyerGatewayId: controller.buyerGatewayId.value ?? '',
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -229,13 +262,6 @@ class _BodyTransaction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetX<InitTransactionController>(builder: ((controller) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (controller.loadingState.value != LoadingState.initiated ||
-            controller.loadingState.value != LoadingState.proceeded) {
-          controller.watchTransaction();
-        }
-      });
-
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -275,48 +301,93 @@ class _ImageStatus extends GetView<InitTransactionController> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return PlayAnimationBuilder<double>(
       tween: Tween<double>(begin: 0.0, end: 1.0),
       duration: Duration(seconds: 1),
       curve: Curves.easeOut,
       builder: (context, value, child) {
+        if (loadingState == LoadingState.succeeded) {
+          return Opacity(
+            opacity: value,
+            child: Stack(
+              fit: StackFit.loose,
+              children: [
+                Lottie.asset(
+                  AnimationAsset.successTransaction,
+                  width: 200,
+                  height: 200,
+                  fit: BoxFit.cover,
+                  repeat: !isTesting,
+                ),
+                Lottie.asset(
+                  AnimationAsset.firstSuccess,
+                  width: 200,
+                  height: 200,
+                  fit: BoxFit.cover,
+                  repeat: !isTesting,
+                ),
+              ],
+            ),
+          );
+        }
+        if (loadingState == LoadingState.failed) {
+          return Opacity(
+            opacity: value,
+            child: Lottie.asset(
+              AnimationAsset.failedTransaction,
+              width: 150,
+              height: 150,
+              fit: BoxFit.cover,
+              repeat: !isTesting,
+            ),
+          );
+        }
+
         return Opacity(
           opacity: value,
-          child: loadingState == LoadingState.succeeded
-              ? Stack(
-                  fit: StackFit.loose,
-                  children: [
-                    Lottie.asset(
-                      AnimationAsset.successTransaction,
-                      width: 200,
-                      height: 200,
-                      fit: BoxFit.cover,
-                      repeat: !isTesting,
+          child: ValueListenableBuilder(
+            valueListenable: controller.transferProgress,
+            builder: (context, value, child) {
+              return DashedCircularProgressBar.aspectRatio(
+                aspectRatio: 2,
+                progress: value,
+                startAngle: 225,
+                sweepAngle: 270,
+                foregroundColor: theme.primaryColor,
+                backgroundColor: theme.primaryColor.withOpacity(0.2),
+                foregroundStrokeWidth: 15,
+                backgroundStrokeWidth: 15,
+                animation: true,
+                seekSize: 6,
+                seekColor: const Color(0xffeeeeee),
+                child: Center(
+                  child: SizedBox(
+                    width: 180,
+                    height: 180,
+                    child: Stack(
+                      clipBehavior: Clip.antiAlias,
+                      children: [
+                        SpinKitPulse(
+                          size: 150.0,
+                          color: theme.primaryColor,
+                        ),
+                        Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            '${value.toInt()}%',
+                            style: theme.textTheme.headlineLarge
+                                ?.copyWith(fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      ],
                     ),
-                    Lottie.asset(
-                      AnimationAsset.firstSuccess,
-                      width: 200,
-                      height: 200,
-                      fit: BoxFit.cover,
-                      repeat: !isTesting,
-                    ),
-                  ],
-                )
-              : loadingState == LoadingState.failed
-                  ? Lottie.asset(
-                      AnimationAsset.failedTransaction,
-                      width: 150,
-                      height: 150,
-                      fit: BoxFit.cover,
-                      repeat: !isTesting,
-                    )
-                  : Lottie.asset(
-                      AnimationAsset.loading,
-                      width: 220,
-                      height: 220,
-                      fit: BoxFit.cover,
-                      repeat: !isTesting,
-                    ),
+                  ),
+                ),
+              );
+            },
+          ),
         );
       },
     );
@@ -336,6 +407,8 @@ class _CurrentWidget extends GetView<InitTransactionController> {
 
     if (controller.loadingState.value == LoadingState.failed) {
       return Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             localization.ooops,
@@ -347,26 +420,30 @@ class _CurrentWidget extends GetView<InitTransactionController> {
           SizedBox(
             height: 5,
           ),
-          Text(
-            localization.failedTransfer,
-            style: TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w300,
-              color: theme.colorScheme.error,
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          if (controller.errorMessage.value != null)
-            Text(
-              controller.errorMessage.value ?? localization.anErrorOccurred,
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w300,
-                color: theme.colorScheme.error,
-              ),
-            ),
+          controller.errorMessage.value == null
+              ? Center(
+                  child: Text(
+                    localization.failedTransferMessage,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w300,
+                      color: theme.colorScheme.error,
+                    ),
+                  ),
+                )
+              : Center(
+                  child: Text(
+                    controller.errorMessage.value ??
+                        localization.anErrorOccurred,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w300,
+                      color: theme.colorScheme.error,
+                    ),
+                  ),
+                ),
           SizedBox(
             height: 30,
           ),
@@ -512,6 +589,20 @@ class _CurrentWidget extends GetView<InitTransactionController> {
         padding: EdgeInsets.all(10),
         child: Text(
           localization.initializationOfTransfer,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      );
+    }
+    if (controller.loadingState.value == LoadingState.retryTransfer) {
+      return Container(
+        margin: EdgeInsets.only(top: 10),
+        padding: EdgeInsets.all(10),
+        child: Text(
+          localization.retryLaterRequestMessage,
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 15,

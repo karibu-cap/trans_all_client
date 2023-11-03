@@ -5,7 +5,7 @@ import 'package:simple_animations/animation_builder/play_animation_builder.dart'
 import 'package:trans_all_common_internationalization/internationalization.dart';
 import 'package:trans_all_common_models/models.dart';
 
-import '../../data/repository/tranfersRepository.dart';
+import '../../data/repository/tranferRepository.dart';
 import '../../themes/app_button_styles.dart';
 import '../../themes/app_colors.dart';
 import '../../themes/app_text_styles.dart';

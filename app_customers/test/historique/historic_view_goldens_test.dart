@@ -1,7 +1,7 @@
 import 'package:app_customer/data/database/hive_service.dart';
 import 'package:app_customer/data/repository/contactRepository.dart';
 import 'package:app_customer/data/repository/forfeitRepository.dart';
-import 'package:app_customer/data/repository/tranfersRepository.dart';
+import 'package:app_customer/data/repository/tranferRepository.dart';
 import 'package:app_customer/pages/historiques_transaction/history_view.dart';
 import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';

@@ -1,6 +1,6 @@
 import 'package:app_customer/data/database/hive_service.dart';
 import 'package:app_customer/data/repository/contactRepository.dart';
-import 'package:app_customer/data/repository/tranfersRepository.dart';
+import 'package:app_customer/data/repository/tranferRepository.dart';
 import 'package:app_customer/pages/welcome/welcome_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

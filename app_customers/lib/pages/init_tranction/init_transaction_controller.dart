@@ -1,11 +1,10 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:logging/logging.dart';
 import 'package:trans_all_common_models/models.dart';
 
 import '../../data/repository/contactRepository.dart';
-import '../../data/repository/tranfersRepository.dart';
 import '../../routes/pages_routes.dart';
 import 'init_transaction_view_model.dart';
 
@@ -13,8 +12,6 @@ import 'init_transaction_view_model.dart';
 class InitTransactionController extends GetxController {
   final InitTransactionViewModel _model;
   final ContactRepository _contactRepository;
-  final TransferRepository _transferRepository;
-  final _logger = Logger('InitTransactionController');
 
   /// Returns the error message.
   Rx<String?> get errorMessage => _model.errorMessage;
@@ -44,18 +41,24 @@ class InitTransactionController extends GetxController {
   /// The loading state.
   Rx<LoadingState> get loadingState => _model.loadingState;
 
+  /// The transfer progress indicator.
+  ValueNotifier<double> get transferProgress => _model.transferProgress;
+
+  /// Completes the transfer state.
+  Completer<void> get transferCompleter => _model.transferCompleter;
+
   /// Creates new [InitTransactionController].
   InitTransactionController(
     this._model,
     this._contactRepository,
-    this._transferRepository,
   );
 
   /// Initialize the transaction.
   Future<void> initializationTransaction() async {
     transactionId.value = null;
     loadingState.value = LoadingState.load;
-    await _model.init();
+    transferProgress.value = 1;
+    await _model.initTransfer();
   }
 
   /// Gets the user name.
@@ -83,37 +86,6 @@ class InitTransactionController extends GetxController {
     }
 
     return phoneNumber;
-  }
-
-  /// Watch the transaction with id.
-  void watchTransaction() {
-    final transferId = transactionId.value;
-    if (transferId == null ||
-        transferId.isEmpty ||
-        loadingState.value == LoadingState.failed ||
-        loadingState.value == LoadingState.succeeded) {
-      return;
-    }
-    _transferRepository.streamAllLocalTransaction().listen((event) async {
-      final transfertId = transactionId.value;
-      if (transfertId == null ||
-          transfertId.isEmpty ||
-          loadingState.value == LoadingState.failed ||
-          loadingState.value == LoadingState.succeeded) {
-        return;
-      }
-      final TransferInfo? transferInfo =
-          _transferRepository.getLocalTransaction(transfertId);
-      _logger.info(
-        'Transfer $transactionId retrieve with status: ${transferInfo?.status.key}',
-      );
-      if (transferInfo == null) {
-        return;
-      }
-      _model.updateLoadingState(transferInfo);
-    });
-
-    return;
   }
 }
 

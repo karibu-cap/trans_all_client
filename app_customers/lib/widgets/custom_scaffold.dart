@@ -77,6 +77,11 @@ class CustomScaffold extends StatelessWidget {
                           : [Colors.white, Colors.white],
                       begin: Alignment.bottomCenter,
                       end: Alignment.topCenter,
+                    color: theme.appBarTheme.backgroundColor,
+                    border: Border.fromBorderSide(
+                      BorderSide(
+                        color: AppColors.gray,
+                      ),
                     ),
                   ),
                 ),

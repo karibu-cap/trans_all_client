@@ -5,11 +5,9 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../pages/dashboard/dashboard_view.dart';
-import '../pages/historiques_transaction/history_view.dart';
 import '../pages/init_tranction/init_transaction.dart';
 import '../pages/init_tranction/init_transaction_controller.dart';
 import '../pages/transfer/transfer_controller_view.dart';
-import '../pages/transfer/transfer_view.dart';
 import '../pages/welcome/welcome_view.dart';
 import '../util/preferences_keys.dart';
 import 'app_page.dart';
@@ -41,6 +39,89 @@ class _GoRouterRoutesProvider {
         ),
       ),
       GoRoute(
+        path: PagesRoutes.historic.pattern,
+        builder: (context, state) => AppPage(
+          child: DashboardView(
+            dashboardPageType: DashboardPageType.historical,
+          ),
+        ),
+      ),
+      GoRoute(
+        path: PagesRoutes.creditTransaction.pattern,
+        builder: (context, state) {
+          if (Get.isRegistered<TransfersController>()) {
+            Get.delete<TransfersController>();
+          }
+          final paymentNumber = getQueryParameter(
+            state.queryParameters,
+            CreditTransactionParams.keyParamBuyerPhoneNumber,
+          );
+          final receiverNumber = getQueryParameter(
+            state.queryParameters,
+            CreditTransactionParams.keyParamReceiverPhoneNumber,
+          );
+          final amount = getQueryParameter(
+            state.queryParameters,
+            CreditTransactionParams.keyParamAmountInXaf,
+          );
+          final buyerGatewayId = getQueryParameter(
+            state.queryParameters,
+            CreditTransactionParams.keyParamBuyerGatewayId,
+          );
+          final featureReference = getQueryParameter(
+            state.queryParameters,
+            CreditTransactionParams.keyParamFeatureReference,
+          );
+          final category = getQueryParameter(
+            state.queryParameters,
+            CreditTransactionParams.keyParamCategory,
+          );
+          final operatorName = getQueryParameter(
+            state.queryParameters,
+            CreditTransactionParams.keyParamOperatorName,
+          );
+          final transferId = getQueryParameter(
+            state.queryParameters,
+            CreditTransactionParams.keyParamTransactionId,
+          );
+          if (paymentNumber == null ||
+              receiverNumber == null ||
+              amount == null ||
+              operatorName == null ||
+              category == null ||
+              buyerGatewayId == null ||
+              featureReference == null) {
+            return AppPage(
+              requestContactPermission: true,
+              child: DashboardView(
+                additionalData: AdditionalData(displayInternetMessage: true),
+                dashboardPageType: DashboardPageType.creditTransaction,
+              ),
+            );
+          }
+
+          return AppPage(
+            requestContactPermission: true,
+            child: DashboardView(
+              additionalData: AdditionalData(
+                displayInternetMessage: true,
+                localCreditTransaction: CreditTransactionParams(
+                  amountInXaf: amount,
+                  buyerGatewayId: buyerGatewayId,
+                  receiverPhoneNumber: receiverNumber,
+                  buyerPhoneNumber: paymentNumber,
+                  featureReference: featureReference,
+                  category: category,
+                  transactionId: transferId,
+                  operatorName: operatorName,
+                ),
+              ),
+              dashboardPageType: DashboardPageType.creditTransaction,
+            ),
+          );
+        },
+      ),
+      GoRoute(
         parentNavigatorKey: _rootNavigatorKey,
         path: PagesRoutes.initTransaction.pattern,
         builder: (context, state) {
@@ -67,14 +148,30 @@ class _GoRouterRoutesProvider {
             state.queryParameters,
             CreditTransactionParams.keyParamFeatureReference,
           );
+          final category = getQueryParameter(
+            state.queryParameters,
+            CreditTransactionParams.keyParamCategory,
+          );
+          final operatorName = getQueryParameter(
+            state.queryParameters,
+            CreditTransactionParams.keyParamOperatorName,
+          );
           final transferId = getQueryParameter(
             state.queryParameters,
             CreditTransactionParams.keyParamTransactionId,
           );
-          final forfeitId = getQueryParameter(
-            state.queryParameters,
-            CreditTransactionParams.keyParamForfeitId,
-          );
+
+          if (paymentNumber == null ||
+              receiverNumber == null ||
+              amount == null ||
+              operatorName == null ||
+              category == null ||
+              buyerGatewayId == null ||
+              featureReference == null) {
+            return AppPage(
+              child: AppPageNotFound(),
+            );
+          }
 
           return AppPage(
             child: InitTransaction(
@@ -85,101 +182,12 @@ class _GoRouterRoutesProvider {
                 buyerPhoneNumber: paymentNumber,
                 featureReference: featureReference,
                 transactionId: transferId,
-                forfeitId: forfeitId,
+                category: category,
+                operatorName: operatorName,
               ),
             ),
           );
         },
-      ),
-      StatefulShellRoute.indexedStack(
-        builder: (context, state, navigationShell) =>
-            DashboardView(navigationShell: navigationShell),
-        branches: <StatefulShellBranch>[
-          // The route branch for the first tab of the bottom navigation bar.
-          StatefulShellBranch(
-            navigatorKey: _shellNavigatorKey,
-            routes: <RouteBase>[
-              GoRoute(
-                // The screen to display as the root in the first tab of the
-                // bottom navigation bar.
-                path: PagesRoutes.creditTransaction.pattern,
-                builder: (context, state) {
-                  if (Get.isRegistered<TransfersController>()) {
-                    Get.delete<TransfersController>();
-                  }
-                  final paymentNumber = getQueryParameter(
-                    state.queryParameters,
-                    CreditTransactionParams.keyParamBuyerPhoneNumber,
-                  );
-                  final receiverNumber = getQueryParameter(
-                    state.queryParameters,
-                    CreditTransactionParams.keyParamReceiverPhoneNumber,
-                  );
-                  final amount = getQueryParameter(
-                    state.queryParameters,
-                    CreditTransactionParams.keyParamAmountInXaf,
-                  );
-                  final buyerGatewayId = getQueryParameter(
-                    state.queryParameters,
-                    CreditTransactionParams.keyParamBuyerGatewayId,
-                  );
-                  final featureReference = getQueryParameter(
-                    state.queryParameters,
-                    CreditTransactionParams.keyParamFeatureReference,
-                  );
-                  final transferId = getQueryParameter(
-                    state.queryParameters,
-                    CreditTransactionParams.keyParamTransactionId,
-                  );
-                  final forfeitId = getQueryParameter(
-                    state.queryParameters,
-                    CreditTransactionParams.keyParamForfeitId,
-                  );
-                  if (paymentNumber == null ||
-                      receiverNumber == null ||
-                      amount == null ||
-                      buyerGatewayId == null ||
-                      featureReference == null) {
-                    return AppPage(
-                      requestContactPermission: true,
-                      child: TransfersView(
-                        forfeitId: forfeitId,
-                        displayInternetMessage: true,
-                      ),
-                    );
-                  }
-
-                  return AppPage(
-                    requestContactPermission: true,
-                    child: TransfersView(
-                      displayInternetMessage: true,
-                      localCreditTransaction: CreditTransactionParams(
-                        amountInXaf: amount,
-                        buyerGatewayId: buyerGatewayId,
-                        receiverPhoneNumber: receiverNumber,
-                        buyerPhoneNumber: paymentNumber,
-                        featureReference: featureReference,
-                        transactionId: transferId,
-                        forfeitId: forfeitId,
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
-
-          StatefulShellBranch(
-            routes: <RouteBase>[
-              GoRoute(
-                path: PagesRoutes.historic.pattern,
-                builder: (context, state) => AppPage(
-                  child: AppPage(child: HistoryView()),
-                ),
-              ),
-            ],
-          ),
-        ],
       ),
     ],
   );
@@ -253,6 +261,11 @@ class AppRouterGoRouter extends AppRouterSubsystem {
   @override
   bool canPop(BuildContext context) {
     return GoRouter.of(context).canPop();
+  }
+
+  @override
+  void replace(BuildContext context, String uri, {Object? extra}) {
+    context.replace(uri, extra: extra);
   }
 
   @override
