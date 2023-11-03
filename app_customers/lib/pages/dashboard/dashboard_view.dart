@@ -247,14 +247,14 @@ class _DashboardBody extends StatelessWidget {
               ),
             );
           },
-            ],
-          );
-        }),
-        height: 80,
-        splashSpeedInMilliseconds: 300,
-        backgroundColor: theme.bottomAppBarTheme.color,
-        activeIndex: controller.activeIndex,
-        gapLocation: GapLocation.end,
+          ),
+          ),
+        );
+        height: 80;
+        splashSpeedInMilliseconds: 300;
+        backgroundColor: theme.bottomAppBarTheme.color;
+        activeIndex: controller.activeIndex;
+        gapLocation: GapLocation.end;
         notchSmoothness: NotchSmoothness.defaultEdge,
         onTap: controller.handlePress,
         shadow: BoxShadow(
@@ -262,9 +262,8 @@ class _DashboardBody extends StatelessWidget {
           blurRadius: 12,
           spreadRadius: 0.5,
           color: AppColors.black,
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+        );
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked;
       floatingActionButton: Obx(
         () => TweenAnimationBuilder(
           tween: Tween<double>(
@@ -292,7 +291,7 @@ class _DashboardBody extends StatelessWidget {
             );
           },
         ),
-      ),
+      );
       body: SafeArea(
         bottom: false,
         child: IndexedStack(
@@ -300,6 +299,5 @@ class _DashboardBody extends StatelessWidget {
           children: pages.map((e) => e.child).toList(),
         ),
       ),
-    );
   }
 }
