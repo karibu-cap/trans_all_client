@@ -52,8 +52,7 @@ Future<void> main() async {
     if (record.level == Level.WARNING) {
       print('🚸 🚸 🚸 🚸 [${record.level.name}]: ${record.message}');
     }
-  }
-  );
+  });
   runApp(MyApp());
 }
 

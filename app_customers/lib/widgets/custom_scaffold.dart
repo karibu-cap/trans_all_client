@@ -50,10 +50,12 @@ class CustomScaffold extends StatelessWidget {
     final String twitterLink = RemoteConfig().getString(
       RemoteConfigKeys.linkTwitterPage,
     );
+
     /// activation drawer remote config
     final displayDrawerMenuEnabled = RemoteConfig().getBool(
       RemoteConfigKeys.displayDrawerMenuEnabled,
     );
+
     /// show links remote config
     final followUsEnabled = RemoteConfig().getBool(
       RemoteConfigKeys.followUsEnabled,

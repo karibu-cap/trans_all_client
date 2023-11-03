@@ -96,6 +96,7 @@ class _DashboardBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localizations = Get.find<AppInternationalization>();
+
     /// variable for drawer control
     final customDrawerController = Get.find<CustomDrawerController>();
     void handlePress(
@@ -217,7 +218,8 @@ class _DashboardBody extends StatelessWidget {
                 ..setEntry(0, 3, val * 200)
                 ..rotateY((pi / 11) * val),
               child: FloatingActionButton(
-                backgroundColor: theme.floatingActionButtonTheme.backgroundColor,
+                backgroundColor:
+                    theme.floatingActionButtonTheme.backgroundColor,
                 child: Icon(
                   Icons.share,
                 ),

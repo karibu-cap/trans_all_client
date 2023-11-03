@@ -68,7 +68,7 @@ class _AppBarWidget extends StatelessWidget {
     final customDrawerController = Get.find<CustomDrawerController>();
     int clickCount = 0;
 
-  // function for display or close drawer with the button
+    // function for display or close drawer with the button
     void showDrawer() {
       if (clickCount == 0) {
         customDrawerController.updateValue(1);
