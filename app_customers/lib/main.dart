@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app_customer/util/drawer_controller.dart';
 import 'package:clock/clock.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +52,8 @@ Future<void> main() async {
     if (record.level == Level.WARNING) {
       print('🚸 🚸 🚸 🚸 [${record.level.name}]: ${record.message}');
     }
-  });
+  }
+  );
   runApp(MyApp());
 }
 
@@ -65,6 +67,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final hiveService = HiveService(HiveServiceType.hive);
     final appThemeData = ThemeManager();
+    final drawerController = CustomDrawerController();
 
     void _initGetProviders() {
       UserContactConfig.init();
@@ -74,6 +77,7 @@ class MyApp extends StatelessWidget {
       Get.lazyPut(() => ForfeitRepository(hiveService));
       Get.lazyPut(() => appThemeData);
       Get.lazyPut(ContactServiceModel.new);
+      Get.lazyPut(() => drawerController);
 
       return;
     }
