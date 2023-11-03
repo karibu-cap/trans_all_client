@@ -96,6 +96,7 @@ class _DashboardBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localizations = Get.find<AppInternationalization>();
+    /// variable for drawer control
     final customDrawerController = Get.find<CustomDrawerController>();
     void handlePress(
       int index,
@@ -201,33 +202,33 @@ class _DashboardBody extends StatelessWidget {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-floatingActionButton: Obx(
-  () => TweenAnimationBuilder(
-    tween: Tween<double>(
-      begin: 0,
-      end: customDrawerController.value.toDouble(),
-    ),
-    duration: const Duration(milliseconds: 500),
-    builder: (_, val, __) {
-      return Transform(
-        alignment: Alignment.center,
-        transform: Matrix4.identity()
-          ..setEntry(3, 2, 0.001)
-          ..setEntry(0, 3, val * 200)
-          ..rotateY((pi / 11) * val),
-        child: FloatingActionButton(
-          backgroundColor: theme.floatingActionButtonTheme.backgroundColor,
-          child: Icon(
-            Icons.share,
+      floatingActionButton: Obx(
+        () => TweenAnimationBuilder(
+          tween: Tween<double>(
+            begin: 0,
+            end: customDrawerController.value.toDouble(),
           ),
-          onPressed: () => Share.share(
-            '${localizations.shareTransAllLinkMessage} https://play.google.com/store/apps/details?id=com.karibu.transtu.prod',
-          ),
+          duration: const Duration(milliseconds: 500),
+          builder: (_, val, __) {
+            return Transform(
+              alignment: Alignment.center,
+              transform: Matrix4.identity()
+                ..setEntry(3, 2, 0.001)
+                ..setEntry(0, 3, val * 200)
+                ..rotateY((pi / 11) * val),
+              child: FloatingActionButton(
+                backgroundColor: theme.floatingActionButtonTheme.backgroundColor,
+                child: Icon(
+                  Icons.share,
+                ),
+                onPressed: () => Share.share(
+                  '${localizations.shareTransAllLinkMessage} https://play.google.com/store/apps/details?id=com.karibu.transtu.prod',
+                ),
+              ),
+            );
+          },
         ),
-      );
-    },
-  ),
-),
+      ),
       body: SafeArea(bottom: false, child: navigationShell),
     );
   }
