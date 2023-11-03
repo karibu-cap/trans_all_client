@@ -14,6 +14,11 @@ Map<String, dynamic> _remoteConfigDefaultsDev = {
   RemoteConfigKeys.linkFacebookPage: 'https://www.facebook.com',
   RemoteConfigKeys.linkInstagramPage: 'https://www.intagram.com',
   RemoteConfigKeys.linkTwitterPage: 'https://www.twitter.com',
+  RemoteConfigKeys.orangeMoneyGatewayEnabled: true,
+  RemoteConfigKeys.orangeOperatorEnabled: true,
+  RemoteConfigKeys.mtnMomoGatewayEnabled: true,
+  RemoteConfigKeys.mtnOperatorEnabled: true,
+  RemoteConfigKeys.camtelOperatorEnabled: true,
 };
 
 Map<String, dynamic> _remoteConfigDefaultsStaging = {
@@ -28,6 +33,11 @@ Map<String, dynamic> _remoteConfigDefaultsStaging = {
   RemoteConfigKeys.linkFacebookPage: 'https://www.facebook.com',
   RemoteConfigKeys.linkInstagramPage: 'https://www.intagram.com',
   RemoteConfigKeys.linkTwitterPage: 'https://www.twitter.com',
+  RemoteConfigKeys.orangeMoneyGatewayEnabled: true,
+  RemoteConfigKeys.orangeOperatorEnabled: true,
+  RemoteConfigKeys.mtnMomoGatewayEnabled: true,
+  RemoteConfigKeys.mtnOperatorEnabled: true,
+  RemoteConfigKeys.camtelOperatorEnabled: true,
 };
 
 Map<String, dynamic> _remoteConfigDefaultsProd = {
@@ -42,6 +52,11 @@ Map<String, dynamic> _remoteConfigDefaultsProd = {
   RemoteConfigKeys.linkFacebookPage: 'https://www.facebook.com',
   RemoteConfigKeys.linkInstagramPage: 'https://www.intagram.com',
   RemoteConfigKeys.linkTwitterPage: 'https://www.twitter.com',
+  RemoteConfigKeys.orangeMoneyGatewayEnabled: true,
+  RemoteConfigKeys.orangeOperatorEnabled: true,
+  RemoteConfigKeys.mtnMomoGatewayEnabled: true,
+  RemoteConfigKeys.mtnOperatorEnabled: true,
+  RemoteConfigKeys.camtelOperatorEnabled: true,
 };
 
 /// Returns the default remote config for each environment.

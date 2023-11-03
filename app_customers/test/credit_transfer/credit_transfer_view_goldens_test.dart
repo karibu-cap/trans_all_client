@@ -1,7 +1,7 @@
 import 'package:app_customer/data/database/hive_service.dart';
 import 'package:app_customer/data/repository/contactRepository.dart';
 import 'package:app_customer/data/repository/forfeitRepository.dart';
-import 'package:app_customer/data/repository/tranfersRepository.dart';
+import 'package:app_customer/data/repository/tranferRepository.dart';
 import 'package:app_customer/pages/transfer/transfer_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -27,6 +27,7 @@ class CreditTransferViewWidget extends StatelessWidget {
 
     return TransfersView(
       displayInternetMessage: false,
+      activePageIndex: 0,
     );
   }
 }
@@ -34,6 +35,23 @@ class CreditTransferViewWidget extends StatelessWidget {
 void main() {
   group('Goldens', () {
     testGoldens('Credit Transfer view', (tester) async {
+      final remoteConfigDefaults = getRemoteConfigDefaults();
+      remoteConfigDefaults[RemoteConfigKeys.orangeMoneyGatewayEnabled] = true;
+      remoteConfigDefaults[RemoteConfigKeys.orangeOperatorEnabled] = true;
+      remoteConfigDefaults[RemoteConfigKeys.mtnMomoGatewayEnabled] = true;
+      remoteConfigDefaults[RemoteConfigKeys.mtnOperatorEnabled] = true;
+      remoteConfigDefaults[RemoteConfigKeys.camtelOperatorEnabled] = true;
+      await RemoteConfig.init(
+        service: RemoteConfigType.fake,
+        defaults: getRemoteConfigDefaults(),
+      );
+      await RemoteConfig.init(service: RemoteConfigType.fake, defaults: {
+        RemoteConfigKeys.orangeMoneyGatewayEnabled: true,
+        RemoteConfigKeys.orangeOperatorEnabled: true,
+        RemoteConfigKeys.mtnMomoGatewayEnabled: true,
+        RemoteConfigKeys.mtnOperatorEnabled: true,
+        RemoteConfigKeys.camtelOperatorEnabled: true,
+      });
       await multiScreenMultiLocaleGolden(
         tester,
         CreditTransferViewWidget(),
@@ -44,12 +62,22 @@ void main() {
     testGoldens('Credit Transfer with forfeit view', (tester) async {
       final remoteConfigDefaults = getRemoteConfigDefaults();
       remoteConfigDefaults[RemoteConfigKeys.featureForfeitEnable] = false;
+      remoteConfigDefaults[RemoteConfigKeys.orangeMoneyGatewayEnabled] = true;
+      remoteConfigDefaults[RemoteConfigKeys.orangeOperatorEnabled] = true;
+      remoteConfigDefaults[RemoteConfigKeys.mtnMomoGatewayEnabled] = true;
+      remoteConfigDefaults[RemoteConfigKeys.mtnOperatorEnabled] = true;
+      remoteConfigDefaults[RemoteConfigKeys.camtelOperatorEnabled] = true;
       await RemoteConfig.init(
         service: RemoteConfigType.fake,
         defaults: getRemoteConfigDefaults(),
       );
       await RemoteConfig.init(service: RemoteConfigType.fake, defaults: {
         RemoteConfigKeys.featureForfeitEnable: true,
+        RemoteConfigKeys.orangeMoneyGatewayEnabled: true,
+        RemoteConfigKeys.orangeOperatorEnabled: true,
+        RemoteConfigKeys.mtnMomoGatewayEnabled: true,
+        RemoteConfigKeys.mtnOperatorEnabled: true,
+        RemoteConfigKeys.camtelOperatorEnabled: true,
       });
       await multiScreenMultiLocaleGolden(
         tester,

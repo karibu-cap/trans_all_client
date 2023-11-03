@@ -1,21 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+
+import 'dashboard_view_model.dart';
 
 /// Controller for the dashboard page.
-class DashboardController extends GetxController {
+class DashboardController extends ChangeNotifier {
+  /// The dashboard view model.
+  final DashboardViewModel dashboardViewModel;
+
   /// The duration.
   ValueNotifier<Duration> duration = ValueNotifier(
     Duration.zero,
   );
 
-  /// Returns the active navigation page index.
-  Rx<int> activeIndex = 0.obs;
-
-  /// Updates the active index.
-  void updateActiveIndex(int index) {
-    activeIndex.value = index;
-  }
+  /// Returns the active index.
+  int get activeIndex => dashboardViewModel.activeIndex;
 
   /// Constructs a new [DashboardController].
-  DashboardController();
+  DashboardController({required this.dashboardViewModel});
+
+  /// The handle press.
+  void handlePress(
+    int index,
+  ) {
+    dashboardViewModel.activeIndex = index;
+
+    notifyListeners();
+  }
 }

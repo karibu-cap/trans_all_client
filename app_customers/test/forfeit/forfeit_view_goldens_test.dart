@@ -1,7 +1,7 @@
 import 'package:app_customer/data/database/hive_service.dart';
 import 'package:app_customer/data/repository/contactRepository.dart';
 import 'package:app_customer/data/repository/forfeitRepository.dart';
-import 'package:app_customer/data/repository/tranfersRepository.dart';
+import 'package:app_customer/data/repository/tranferRepository.dart';
 import 'package:app_customer/pages/transfer/transfer_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -21,7 +21,7 @@ class ForfeitViewWidget extends StatelessWidget {
 
     return TransfersView(
       displayInternetMessage: false,
-      forfeitId: '123456',
+      activePageIndex: 1,
     );
   }
 }

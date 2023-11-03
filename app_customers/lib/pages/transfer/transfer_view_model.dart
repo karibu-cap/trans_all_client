@@ -1,12 +1,15 @@
 import 'dart:async';
 
 import 'package:get/get.dart';
+import 'package:karibu_capital_core_remote_config/remote_config.dart';
 import 'package:rxdart/rxdart.dart' hide Rx;
+import 'package:trans_all_common_config/config.dart';
 import 'package:trans_all_common_models/models.dart';
 
 import '../../data/database/hive_service.dart';
 import '../../data/repository/contactRepository.dart';
-import '../../data/repository/tranfersRepository.dart';
+import '../../data/repository/tranferRepository.dart';
+import '../../util/check_transaction.dart';
 import '../../util/user_contact.dart';
 
 /// The TransfersViewModel.
@@ -64,9 +67,10 @@ class TransfersViewModel {
       supportedTransferOperationGateway.value ??= [];
       internetError.value = true;
     } else {
-      supportedPaymentGateway.value ??= supportedPayment.listPaymentGateways;
+      supportedPaymentGateway.value ??=
+          _validPaymentGateways(supportedPayment.listPaymentGateways);
       supportedTransferOperationGateway.value ??=
-          supportedOperation.listOperationGateways;
+          _validSupportedOperator(supportedOperation.listOperationGateways);
       internetError.value = false;
     }
     updatePendingTransaction();
@@ -75,6 +79,69 @@ class TransfersViewModel {
     watchContact();
 
     return;
+  }
+
+  List<PaymentGateways>? _validPaymentGateways(
+    List<PaymentGateways>? gateways,
+  ) {
+    if (gateways == null) {
+      return null;
+    }
+    final List<PaymentGateways> newGateways = [];
+    final orangeMoneyGateWaysEnabled = RemoteConfig().getBool(
+      RemoteConfigKeys.orangeMoneyGatewayEnabled,
+    );
+    final mtnMomoGateWaysEnabled = RemoteConfig().getBool(
+      RemoteConfigKeys.mtnMomoGatewayEnabled,
+    );
+    final orangeMoney = gateways
+        .firstWhereOrNull((element) => element.id == PaymentId.orangePaymentId);
+    final mtnMomo = gateways
+        .firstWhereOrNull((element) => element.id == PaymentId.mtnPaymentId);
+    if (orangeMoney != null && orangeMoneyGateWaysEnabled) {
+      newGateways.add(orangeMoney);
+    }
+    if (mtnMomo != null && mtnMomoGateWaysEnabled) {
+      newGateways.add(mtnMomo);
+    }
+
+    return newGateways;
+  }
+
+  List<OperationGateways>? _validSupportedOperator(
+    List<OperationGateways>? operators,
+  ) {
+    if (operators == null) {
+      return null;
+    }
+    final List<OperationGateways> newSupportedOperators = [];
+    final orangeOperatorEnabled = RemoteConfig().getBool(
+      RemoteConfigKeys.orangeOperatorEnabled,
+    );
+    final mtnOperatorEnabled = RemoteConfig().getBool(
+      RemoteConfigKeys.mtnOperatorEnabled,
+    );
+    final camtelOperatorEnabled = RemoteConfig().getBool(
+      RemoteConfigKeys.camtelOperatorEnabled,
+    );
+    final orangeOperator = operators
+        .firstWhereOrNull((element) => element.operatorName == Operator.orange);
+    final mtnOperator = operators
+        .firstWhereOrNull((element) => element.operatorName == Operator.mtn);
+    final camtelOperator = operators
+        .firstWhereOrNull((element) => element.operatorName == Operator.camtel);
+
+    if (orangeOperator != null && orangeOperatorEnabled) {
+      newSupportedOperators.add(orangeOperator);
+    }
+    if (mtnOperator != null && mtnOperatorEnabled) {
+      newSupportedOperators.add(mtnOperator);
+    }
+    if (camtelOperator != null && camtelOperatorEnabled) {
+      newSupportedOperators.add(camtelOperator);
+    }
+
+    return newSupportedOperators;
   }
 
   /// Watch the list of transfer.
@@ -91,20 +158,10 @@ class TransfersViewModel {
 
   /// Updates the pending transaction.
   void updatePendingTransaction() {
-    final pendingTransfers =
-        _transferRepository.getAllLocalTransaction().where((element) {
-      if (element.status.key == TransferStatus.completed.key) {
-        return false;
-      }
-      if (element.status.key == TransferStatus.succeeded.key) {
-        return false;
-      }
-      if (element.payments.last.status.key == PaymentStatus.failed.key) {
-        return false;
-      }
-
-      return true;
-    }).toList();
+    final pendingTransfers = _transferRepository
+        .getAllLocalTransaction()
+        .where(isPendingTransaction)
+        .toList();
     streamPendingTransferInfo.add(pendingTransfers);
   }
 

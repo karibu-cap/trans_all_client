@@ -100,6 +100,7 @@ class FakeHiveService implements HiveService {
     required num amountToPay,
     required String buyerGatewayId,
     required String featureReference,
+    String? forfeitReference,
   }) async {
     final id = Random().nextInt(100000000).toString();
     _database[id] = TransferInfo.fromJson(json: {
@@ -180,6 +181,6 @@ class FakeHiveService implements HiveService {
   }
 
   @override
-  Forfeit? getForfeitById(String id) =>
+  Forfeit? getForfeitByReference(String id) =>
       fakeForfeits['data']?.firstWhere((element) => element.reference == id);
 }

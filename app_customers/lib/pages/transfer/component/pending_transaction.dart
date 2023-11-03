@@ -9,7 +9,6 @@ import '../../../routes/pages_routes.dart';
 import '../../../themes/app_colors.dart';
 import '../../../util/constant.dart';
 import '../../../util/get_client_status.dart';
-import '../../../util/operator_name.dart';
 import '../../../widgets/oparator_icon.dart';
 import '../transfer_controller_view.dart';
 
@@ -75,20 +74,28 @@ class _ListOfPendingTransfer extends StatelessWidget {
                             : PaymentId.unknown.key;
 
                 return InkWell(
-                  onTap: () => AppRouter.push(
-                    context,
-                    PagesRoutes.initTransaction.create(
-                      CreditTransactionParams(
-                        buyerPhoneNumber: transfer.buyerPhoneNumber,
-                        receiverPhoneNumber: transfer.receiverPhoneNumber,
-                        amountInXaf: transfer.amount.toString(),
-                        buyerGatewayId: transferBuyerGateway,
-                        featureReference: transfer.feature.key,
-                        transactionId: transfer.id,
-                        forfeitId: transfer.forfeitId,
+                  onTap: (() {
+                    final category = transfer.category?.key;
+                    final operatorName = transfer.category?.key;
+                    if (category == null || operatorName == null) {
+                      return;
+                    }
+                    AppRouter.push(
+                      context,
+                      PagesRoutes.initTransaction.create(
+                        CreditTransactionParams(
+                          buyerPhoneNumber: transfer.buyerPhoneNumber,
+                          receiverPhoneNumber: transfer.receiverPhoneNumber,
+                          amountInXaf: transfer.amount.toString(),
+                          buyerGatewayId: transferBuyerGateway,
+                          featureReference: transfer.feature,
+                          transactionId: transfer.id,
+                          category: category,
+                          operatorName: operatorName,
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  }),
                   child: _PendingTransferView(
                     transfer: transfer,
                     localization: localization,
@@ -119,13 +126,13 @@ class _PendingTransferView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<TransfersController>();
-    final Forfeit? forfeit = controller.forfeit.value;
+    final forfeit = transfer.category != Category.unit
+        ? controller.getCurrentForfeit(transfer.feature)
+        : null;
 
     return Center(
       child: Container(
         margin: EdgeInsets.only(right: 10),
-        //width: MediaQuery.of(context).size.width * 0.8,
-        //constraints: BoxConstraints(maxWidth: 400),
         child: Card(
           child: Padding(
             padding: const EdgeInsets.symmetric(
@@ -145,7 +152,8 @@ class _PendingTransferView extends StatelessWidget {
                       height: 30,
                       width: 30,
                       child: OperatorIcon(
-                        operatorType: retrieveOperatorName(transfer.feature),
+                        operatorType: transfer.operatorName?.key ??
+                            getOperatorNameByReference(transfer.feature),
                       ),
                     ),
                   ],
@@ -249,10 +257,7 @@ class _PendingTransferView extends StatelessWidget {
                               '${localization.status}: ',
                             ),
                             Text(
-                              getValidStatus(
-                                transfer.status,
-                                transfer.payments.last.status,
-                              ).toUpperCase(),
+                              retrieveValidStatusInternalized(transfer),
                               style: TextStyle(
                                 color: AppColors.green,
                                 fontWeight: FontWeight.bold,

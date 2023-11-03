@@ -4,7 +4,7 @@ import 'package:trans_all_common_internationalization/internationalization.dart'
 import 'package:trans_all_common_models/models.dart';
 
 import '../../data/repository/contactRepository.dart';
-import '../../data/repository/tranfersRepository.dart';
+import '../../data/repository/tranferRepository.dart';
 import '../../themes/app_colors.dart';
 
 /// The history view model.

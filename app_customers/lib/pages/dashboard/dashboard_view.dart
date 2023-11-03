@@ -4,13 +4,18 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:trans_all_common_internationalization/internationalization.dart';
 
+import '../../routes/pages_routes.dart';
 import '../../themes/app_colors.dart';
 import '../../util/drawer_controller.dart';
 import '../../widgets/custum_bottom_nav.dart';
+import '../historiques_transaction/history_view.dart';
+import '../transfer/transfer_view.dart';
+import 'dashboard_controller.dart';
+import 'dashboard_view_model.dart';
 
 /// The dashboard page types.
 enum DashboardPageType {
@@ -25,27 +30,48 @@ enum DashboardPageType {
 }
 
 class _DashboardPage {
-  final BottomNavyBarItem navigationBarItem;
   final IconData iconData;
+  final Widget child;
   final String title;
+  final DashboardPageType dashboardPageType;
 
-  _DashboardPage(
-    this.navigationBarItem,
-    this.iconData,
-    this.title,
-  );
+  _DashboardPage({
+    required this.iconData,
+    required this.child,
+    required this.title,
+    required this.dashboardPageType,
+  });
+}
+
+/// The additional data of each page.
+class AdditionalData {
+  /// The local credit transaction.
+  final CreditTransactionParams? localCreditTransaction;
+
+  /// Check if we can display internet message of the app bar.
+  final bool? displayInternetMessage;
+
+  /// Constructs a new [AdditionalData].
+  AdditionalData({
+    this.localCreditTransaction,
+    this.displayInternetMessage,
+  });
 }
 
 /// Provides a navigation bar with various pages of the application.
 class DashboardView extends StatelessWidget {
-  /// The navigation shell and container for the branch Navigators.
-  final StatefulNavigationShell navigationShell;
+  /// The dashboard page types.
+  final DashboardPageType dashboardPageType;
+
+  /// The additional data of each page.
+  final AdditionalData? additionalData;
 
   /// Constructs a new [DashboardView].
   const DashboardView({
-    required this.navigationShell,
+    required this.dashboardPageType,
+    this.additionalData,
     Key? key,
-  }) : super(key: key ?? const ValueKey<String>('ScaffoldWithNavBar'));
+  }) : super(key: key);
 
   List<_DashboardPage> _initializePages(
     AppInternationalization localizations,
@@ -54,17 +80,23 @@ class DashboardView extends StatelessWidget {
 
     pages.add(
       _DashboardPage(
-        _createCreditTransferPageNavigationBarItem(localizations),
-        Icons.swap_horiz,
-        localizations.airtime,
+        iconData: Icons.swap_horiz,
+        title: localizations.airtime,
+        child: TransfersView(
+          displayInternetMessage: additionalData?.displayInternetMessage,
+          localCreditTransaction: additionalData?.localCreditTransaction,
+        ),
+        dashboardPageType: DashboardPageType.creditTransaction,
       ),
     );
-
-    pages.add(_DashboardPage(
-      _createHistoricPageNavigationBarItem(localizations),
-      Icons.history,
-      localizations.history,
-    ));
+    pages.add(
+      _DashboardPage(
+        iconData: Icons.history,
+        title: localizations.history,
+        child: HistoryView(),
+        dashboardPageType: DashboardPageType.historical,
+      ),
+    );
 
     return pages;
   }
@@ -73,10 +105,23 @@ class DashboardView extends StatelessWidget {
   Widget build(BuildContext context) {
     final localizations = Get.find<AppInternationalization>();
     final pages = _initializePages(localizations);
+    final currentIndex = pages
+        .indexWhere(
+          (page) => page.dashboardPageType == dashboardPageType,
+        )
+        .clamp(0, pages.length - 1);
 
-    return _DashboardBody(
-      pages: pages,
-      navigationShell: navigationShell,
+    final DashboardViewModel dashboardViewModel =
+        DashboardViewModel(activeIndex: currentIndex);
+    final controller =
+        DashboardController(dashboardViewModel: dashboardViewModel);
+
+    return ChangeNotifierProvider.value(
+      value: controller,
+      child: _DashboardBody(
+        pages: pages,
+        dashboardPageType: dashboardPageType,
+      ),
     );
   }
 }
@@ -86,10 +131,11 @@ class _DashboardBody extends StatelessWidget {
   final List<_DashboardPage> pages;
   final StatefulNavigationShell navigationShell;
   bool isTransforming = false;
+  final DashboardPageType dashboardPageType;
 
   _DashboardBody({
     required this.pages,
-    required this.navigationShell,
+    required this.dashboardPageType,
   });
 
   @override
@@ -107,6 +153,7 @@ class _DashboardBody extends StatelessWidget {
         initialLocation: index == navigationShell.currentIndex,
       );
     }
+    final controller = context.watch<DashboardController>();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -200,6 +247,21 @@ class _DashboardBody extends StatelessWidget {
               ),
             );
           },
+            ],
+          );
+        }),
+        height: 80,
+        splashSpeedInMilliseconds: 300,
+        backgroundColor: theme.bottomAppBarTheme.color,
+        activeIndex: controller.activeIndex,
+        gapLocation: GapLocation.end,
+        notchSmoothness: NotchSmoothness.defaultEdge,
+        onTap: controller.handlePress,
+        shadow: BoxShadow(
+          offset: Offset(0, 1),
+          blurRadius: 12,
+          spreadRadius: 0.5,
+          color: AppColors.black,
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
@@ -231,41 +293,13 @@ class _DashboardBody extends StatelessWidget {
           },
         ),
       ),
-      body: SafeArea(bottom: false, child: navigationShell),
+      body: SafeArea(
+        bottom: false,
+        child: IndexedStack(
+          index: controller.activeIndex,
+          children: pages.map((e) => e.child).toList(),
+        ),
+      ),
     );
   }
-}
-
-BottomNavyBarItem _createNavigationBarItem(
-  Widget icon,
-  String label,
-  Color activeColor,
-) {
-  return BottomNavyBarItem(
-    icon: icon,
-    title: label,
-    activeColor: activeColor,
-    inactiveColor: AppColors.gray.withOpacity(0.4),
-    textAlign: TextAlign.center,
-  );
-}
-
-BottomNavyBarItem _createCreditTransferPageNavigationBarItem(
-  AppInternationalization localizations,
-) {
-  return _createNavigationBarItem(
-    Icon(Icons.swap_horiz),
-    localizations.airtime,
-    AppColors.white,
-  );
-}
-
-BottomNavyBarItem _createHistoricPageNavigationBarItem(
-  AppInternationalization localizations,
-) {
-  return _createNavigationBarItem(
-    Icon(Icons.history),
-    localizations.history,
-    AppColors.white,
-  );
 }

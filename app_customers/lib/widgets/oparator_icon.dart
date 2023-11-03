@@ -64,27 +64,6 @@ class OperatorIcon extends StatelessWidget {
       );
     }
 
-    if (operatorType == OperationTransferType.yoomeeUnitTransfer.key) {
-      return Container(
-        alignment: Alignment.center,
-        height: 40,
-        padding: const EdgeInsets.all(2.0),
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.all(Radius.circular(50)),
-        ),
-        child: FittedBox(
-          child: Text(
-            'Yoomee',
-            style: TextStyle(
-              color: AppColors.red2,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      );
-    }
-
     return SizedBox();
   }
 }

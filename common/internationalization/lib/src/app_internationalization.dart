@@ -41,7 +41,7 @@ class AppInternationalization extends Translations {
           'from': 'From',
           'to': 'To',
           'status': 'Status',
-          'noTransferHistory': 'No history found',
+          'noTransferHistory': 'You don\'t have any transaction',
           'raison': 'Raison',
           'retry': 'Try Again',
           'since': 'Since',
@@ -66,7 +66,7 @@ class AppInternationalization extends Translations {
               'Gain efficiency and peace of mind with our transfer management solution.',
           'next': 'Next',
           'successTransaction': 'Your transaction  was successful',
-          'failedTransfer': 'Your transaction failed',
+          'failedTransferMessage': 'Your transaction failed',
           'payer': 'Payer',
           'receiver': 'Receiver',
           'waitingPaymentValidation': 'Waiting for payment validation.',
@@ -190,8 +190,28 @@ class AppInternationalization extends Translations {
           'facebook': 'Facebook',
           'instagram': 'Instagram',
           'twitter': 'Twitter',
+          'paymentFailed': 'PAYMENT FAILED',
+          'paymentInitialized': 'PAYMENT INITIALIZED',
+          'paymentPending': 'PENDING PAYMENT',
+          'succeedTransfer': 'SUCCESSFUL TRANSFER',
+          'waitingRequest': 'TRANSFER WAITING',
+          'requestSend': 'TRANSFER PROCESSING',
+          'failedTransfer': 'TRANSFER FAILED',
+          'retryLaterRequestMessage':
+              'A problem has occurred, please wait, we will retry your transaction in a few minutes.',
+          'retryLaterRequest': 'WAITING FOR RETRY',
         },
         'fr': {
+          'retryLaterRequestMessage':
+              "Un problème s'est produit, veuillez patienter, nous allons réessayer votre transaction dans quelques minutes.",
+          'retryLaterRequest': 'EN ATTENTE DE RÉESSAI',
+          'failedTransfer': 'ÉCHEC DU TRANSFERT',
+          'requestSend': 'TRAITEMENT DU TRANSFERT',
+          'waitingRequest': 'TRANSFERT EN COURS',
+          'succeedTransfer': 'TRANSFERT REUSSI',
+          'paymentPending': 'PAIEMENT EN COURS',
+          'paymentInitialized': 'PAIEMENT INITIALISÉ',
+          'paymentFailed': 'ÉCHEC DU PAIEMENT ',
           'invalidFeatureProvider':
               'L\' operateur choisi n\'est plus supporté. Veuillez essayer un autre operateur.',
           'unsupportedProvider':
@@ -242,7 +262,7 @@ class AppInternationalization extends Translations {
           'from': 'De',
           'to': 'Vers',
           'status': 'Status',
-          'noTransferHistory': 'Pas d\'historique trouvé',
+          'noTransferHistory': 'Vous n\'avez pas de transaction',
           'raison': 'Raison',
           'retry': 'Réessayer',
           'since': "Il y'a",
@@ -267,7 +287,7 @@ class AppInternationalization extends Translations {
               'Gagnez en efficacité et en tranquillité d\'esprit grâce à notre solution de gestion des transferts.',
           'next': 'Suivant',
           'successTransaction': 'Votre transaction a été effectuée avec succès',
-          'failedTransfer': 'Votre transaction a échoué',
+          'failedTransferMessage': 'Votre transaction a échoué',
           'payer': 'Payeur',
           'receiver': 'Bénéficiaire',
           'waitingPaymentValidation':
@@ -349,7 +369,7 @@ class AppInternationalization extends Translations {
           'chooseNumberToSend':
               'Si oui, sélectionnez le numéro qui recevira votre demande',
           'anErrorOccurred':
-              'Une erreur survenue veillez réessayer. Si cle probleme persiste veuillez nous contacter.',
+              'Une erreur survenue veillez réessayer. Si le probleme persiste veuillez nous contacter.',
           'confirmSetAsDefault':
               "Confirmez-vous l'ajout de @number comme numéro de paiement par défaut ?",
           'contactRefreshed': 'Contact mis à jour',
@@ -379,6 +399,69 @@ class AppInternationalization extends Translations {
     String value,
   ) {
     return value.tr;
+  }
+
+  /// Returns the localized value of retryLaterRequest.
+  String get retryLaterRequest {
+    return _stringOfLocalizedValue(
+      'retryLaterRequest',
+    );
+  }
+
+  /// Returns the localized value of failedTransfer.
+  String get failedTransfer {
+    return _stringOfLocalizedValue(
+      'failedTransfer',
+    );
+  }
+
+  /// Returns the localized value of retryLaterRequest.
+  String get retryLaterRequestMessage {
+    return _stringOfLocalizedValue(
+      'retryLaterRequest',
+    );
+  }
+
+  /// Returns the localized value of requestSend.
+  String get requestSend {
+    return _stringOfLocalizedValue(
+      'requestSend',
+    );
+  }
+
+  /// Returns the localized value of waitingRequest.
+  String get waitingRequest {
+    return _stringOfLocalizedValue(
+      'waitingRequest',
+    );
+  }
+
+  /// Returns the localized value of succeedTransfer.
+  String get succeedTransfer {
+    return _stringOfLocalizedValue(
+      'succeedTransfer',
+    );
+  }
+
+  /// Returns the localized value of paymentPending.
+  String get paymentPending {
+    return _stringOfLocalizedValue(
+      'paymentPending',
+    );
+  }
+
+  /// Returns the localized value of paymentInitialized.
+  String get paymentInitialized {
+    return _stringOfLocalizedValue(
+      'paymentInitialized',
+    );
+  }
+
+  /// Returns the localized value of paymentFailed.
+  String get paymentFailed {
+    return _stringOfLocalizedValue(
+      'paymentFailed',
+    );
   }
 
   /// Returns the localized value of invalidFeatureProvider.
@@ -1032,10 +1115,10 @@ class AppInternationalization extends Translations {
     );
   }
 
-  /// Returns the localized value of failedTransfer.
-  String get failedTransfer {
+  /// Returns the localized value of failedTransferMessage.
+  String get failedTransferMessage {
     return _stringOfLocalizedValue(
-      'failedTransfer',
+      'failedTransferMessage',
     );
   }
 
