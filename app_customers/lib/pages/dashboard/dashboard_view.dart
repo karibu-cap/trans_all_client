@@ -153,6 +153,7 @@ class _DashboardBody extends StatelessWidget {
         initialLocation: index == navigationShell.currentIndex,
       );
     }
+
     final controller = context.watch<DashboardController>();
 
     return Scaffold(
@@ -247,57 +248,67 @@ class _DashboardBody extends StatelessWidget {
               ),
             );
           },
-          ),
-          ),
-        );
-        height: 80;
-        splashSpeedInMilliseconds: 300;
-        backgroundColor: theme.bottomAppBarTheme.color;
-        activeIndex: controller.activeIndex;
-        gapLocation: GapLocation.end;
-        notchSmoothness: NotchSmoothness.defaultEdge,
-        onTap: controller.handlePress,
-        shadow: BoxShadow(
-          offset: Offset(0, 1),
-          blurRadius: 12,
-          spreadRadius: 0.5,
-          color: AppColors.black,
-        );
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked;
-      floatingActionButton: Obx(
-        () => TweenAnimationBuilder(
-          tween: Tween<double>(
-            begin: 0,
-            end: customDrawerController.value.toDouble(),
-          ),
-          duration: const Duration(milliseconds: 500),
-          builder: (_, val, __) {
-            return Transform(
-              alignment: Alignment.center,
-              transform: Matrix4.identity()
-                ..setEntry(3, 2, 0.001)
-                ..setEntry(0, 3, val * 200)
-                ..rotateY((pi / 11) * val),
-              child: FloatingActionButton(
-                backgroundColor:
-                    theme.floatingActionButtonTheme.backgroundColor,
-                child: Icon(
-                  Icons.share,
-                ),
-                onPressed: () => Share.share(
-                  '${localizations.shareTransAllLinkMessage} https://play.google.com/store/apps/details?id=com.karibu.transtu.prod',
-                ),
-              ),
-            );
-          },
-        ),
-      );
-      body: SafeArea(
-        bottom: false,
-        child: IndexedStack(
-          index: controller.activeIndex,
-          children: pages.map((e) => e.child).toList(),
         ),
       ),
+    );
+    height:
+    80;
+    splashSpeedInMilliseconds:
+    300;
+    backgroundColor:
+    theme.bottomAppBarTheme.color;
+    activeIndex:
+    controller.activeIndex;
+    gapLocation:
+    GapLocation.end;
+    notchSmoothness:
+    NotchSmoothness.defaultEdge;
+    onTap:
+    controller.handlePress;
+    shadow:
+    BoxShadow(
+      offset: Offset(0, 1),
+      blurRadius: 12,
+      spreadRadius: 0.5,
+      color: AppColors.black,
+    );
+    floatingActionButtonLocation:
+    FloatingActionButtonLocation.endDocked;
+    floatingActionButton:
+    Obx(
+      () => TweenAnimationBuilder(
+        tween: Tween<double>(
+          begin: 0,
+          end: customDrawerController.value.toDouble(),
+        ),
+        duration: const Duration(milliseconds: 500),
+        builder: (_, val, __) {
+          return Transform(
+            alignment: Alignment.center,
+            transform: Matrix4.identity()
+              ..setEntry(3, 2, 0.001)
+              ..setEntry(0, 3, val * 200)
+              ..rotateY((pi / 11) * val),
+            child: FloatingActionButton(
+              backgroundColor: theme.floatingActionButtonTheme.backgroundColor,
+              child: Icon(
+                Icons.share,
+              ),
+              onPressed: () => Share.share(
+                '${localizations.shareTransAllLinkMessage} https://play.google.com/store/apps/details?id=com.karibu.transtu.prod',
+              ),
+            ),
+          );
+        },
+      ),
+    );
+    body:
+    SafeArea(
+      bottom: false,
+      child: IndexedStack(
+        index: controller.activeIndex,
+        children: pages.map((e) => e.child).toList(),
+      ),
+    );
   }
 }
