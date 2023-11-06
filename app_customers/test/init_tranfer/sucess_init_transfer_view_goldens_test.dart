@@ -22,7 +22,7 @@ class InitTransferViewWidget extends StatelessWidget {
     Get.create(() => TransferRepository(HiveService(HiveServiceType.fake)));
     Get.create(() => ContactRepository(HiveService(HiveServiceType.fake)));
     Get.create(() => ForfeitRepository(HiveService(HiveServiceType.fake)));
-      Get.lazyPut(() => CustomDrawerController());
+    Get.lazyPut(() => CustomDrawerController());
 
     return InitTransaction(
       creditTransactionParams: CreditTransactionParams(

@@ -22,7 +22,6 @@ class HistoryViewWidget extends StatelessWidget {
     Get.put(ForfeitRepository(HiveService(HiveServiceType.fake)));
     Get.create(CustomDrawerController.new);
 
-
     return HistoryView(
       displayInternetMessage: false,
     );

@@ -27,7 +27,6 @@ class CreditTransferViewWidget extends StatelessWidget {
     Get.put(ForfeitRepository(HiveService(HiveServiceType.fake)));
     Get.create(CustomDrawerController.new);
 
-
     return TransfersView(
       displayInternetMessage: false,
       activePageIndex: 0,

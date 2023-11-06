@@ -12,7 +12,6 @@ import 'package:golden_toolkit/golden_toolkit.dart';
 
 import '../golden.dart';
 
-
 class InitTransferViewWidget extends StatelessWidget {
   final String transferId;
 
@@ -24,7 +23,6 @@ class InitTransferViewWidget extends StatelessWidget {
     Get.create(() => ContactRepository(HiveService(HiveServiceType.fake)));
     Get.create(() => ForfeitRepository(HiveService(HiveServiceType.fake)));
     Get.create(CustomDrawerController.new);
-
 
     return InitTransaction(
       creditTransactionParams: CreditTransactionParams(
