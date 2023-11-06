@@ -185,6 +185,11 @@ class AppInternationalization extends Translations {
               'The payment gateway is not longer supported. Please try another payment method.',
           'invalidFeatureProvider':
               'The operator choosen is not longer supported. Please try another operator.',
+          'transAll': 'TransAll',
+          'followUs': 'Follow us',
+          'facebook': 'Facebook',
+          'instagram': 'Instagram',
+          'twitter': 'Twitter',
           'paymentFailed': 'PAYMENT FAILED',
           'paymentInitialized': 'PAYMENT INITIALIZED',
           'paymentPending': 'PENDING PAYMENT',
@@ -1442,34 +1447,6 @@ class AppInternationalization extends Translations {
   String get transAll {
     return _stringOfLocalizedValue(
       'TransAll',
-    );
-  }
-
-  /// Returns the localized value of Follow us.
-  String get followUs {
-    return _stringOfLocalizedValue(
-      'Follow us',
-    );
-  }
-
-  /// Returns the localized value of facebook.
-  String get facebook {
-    return _stringOfLocalizedValue(
-      'Facebook',
-    );
-  }
-
-  /// Returns the localized value of instagram.
-  String get instagram {
-    return _stringOfLocalizedValue(
-      'Instagram',
-    );
-  }
-
-  /// Returns the localized value of twitter.
-  String get twitter {
-    return _stringOfLocalizedValue(
-      'Twitter',
     );
   }
 

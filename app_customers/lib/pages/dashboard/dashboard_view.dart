@@ -128,6 +128,7 @@ class DashboardView extends StatelessWidget {
 class _DashboardBody extends StatelessWidget {
   final autoSizeGroup = AutoSizeGroup();
   final List<_DashboardPage> pages;
+  bool isTransforming = false;
   final DashboardPageType dashboardPageType;
 
   _DashboardBody({
@@ -139,9 +140,10 @@ class _DashboardBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localizations = Get.find<AppInternationalization>();
-    final controller = context.watch<DashboardController>();
+
+    /// Variable for drawer control.
     final customDrawerController = Get.find<CustomDrawerController>();
-   
+    final controller = context.watch<DashboardController>();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -226,7 +228,8 @@ class _DashboardBody extends StatelessWidget {
                           blurRadius: 12,
                           spreadRadius: 0.5,
                           color: AppColors.black,
-                        ), onTap: (int ) {  },
+                        ),
+                        onTap: (int) {},
                       );
                     },
                   ),

@@ -65,6 +65,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final hiveService = HiveService(HiveServiceType.hive);
     final appThemeData = ThemeManager();
+    final drawerController = CustomDrawerController();
 
     void _initGetProviders() {
       UserContactConfig.init();
