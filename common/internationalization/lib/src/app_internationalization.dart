@@ -1449,7 +1449,34 @@ class AppInternationalization extends Translations {
       'TransAll',
     );
   }
+  /// Returns the localized value of Follow us.
+  String get followUs{
+    return _stringOfLocalizedValue(
+      'Follow us',
+    );
+  }
 
+  /// Returns the localized value of facebook.
+  String get facebook {
+    return _stringOfLocalizedValue(
+      'Facebook',
+    );
+  }
+
+  /// Returns the localized value of instagram.
+  String get instagram {
+    return _stringOfLocalizedValue(
+      'Instagram',
+    );
+  }
+
+  /// Returns the localized value of twitter.
+  String get twitter {
+    return _stringOfLocalizedValue(
+      'Twitter',
+    );
+  }
+  
   /// Constructor of [AppInternationalization].
   AppInternationalization(this._locale);
 }
