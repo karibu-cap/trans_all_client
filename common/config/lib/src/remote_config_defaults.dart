@@ -14,6 +14,12 @@ Map<String, dynamic> _remoteConfigDefaultsDev = {
   RemoteConfigKeys.mtnMomoGatewayEnabled: true,
   RemoteConfigKeys.mtnOperatorEnabled: true,
   RemoteConfigKeys.camtelOperatorEnabled: true,
+  RemoteConfigKeys.followUsEnabled: true,
+  RemoteConfigKeys.displayDrawerMenuEnabled: true,
+  RemoteConfigKeys.customerServiceLink: 'https://wa.me/237696404016',
+  RemoteConfigKeys.linkFacebookPage: 'https://www.facebook.com',
+  RemoteConfigKeys.linkInstagramPage: 'https://www.intagram.com',
+  RemoteConfigKeys.linkTwitterPage: 'https://www.twitter.com',
 };
 
 Map<String, dynamic> _remoteConfigDefaultsStaging = {
@@ -28,6 +34,12 @@ Map<String, dynamic> _remoteConfigDefaultsStaging = {
   RemoteConfigKeys.mtnMomoGatewayEnabled: true,
   RemoteConfigKeys.mtnOperatorEnabled: true,
   RemoteConfigKeys.camtelOperatorEnabled: true,
+  RemoteConfigKeys.followUsEnabled: true,
+  RemoteConfigKeys.displayDrawerMenuEnabled: true,
+  RemoteConfigKeys.customerServiceLink: 'https://wa.me/237696404016',
+  RemoteConfigKeys.linkFacebookPage: 'https://www.facebook.com',
+  RemoteConfigKeys.linkInstagramPage: 'https://www.intagram.com',
+  RemoteConfigKeys.linkTwitterPage: 'https://www.twitter.com',
 };
 
 Map<String, dynamic> _remoteConfigDefaultsProd = {
@@ -42,6 +54,12 @@ Map<String, dynamic> _remoteConfigDefaultsProd = {
   RemoteConfigKeys.mtnMomoGatewayEnabled: true,
   RemoteConfigKeys.mtnOperatorEnabled: true,
   RemoteConfigKeys.camtelOperatorEnabled: true,
+  RemoteConfigKeys.followUsEnabled: true,
+  RemoteConfigKeys.displayDrawerMenuEnabled: true,
+  RemoteConfigKeys.customerServiceLink: 'https://wa.me/237696404016',
+  RemoteConfigKeys.linkFacebookPage: 'https://www.facebook.com',
+  RemoteConfigKeys.linkInstagramPage: 'https://www.intagram.com',
+  RemoteConfigKeys.linkTwitterPage: 'https://www.twitter.com',
 };
 
 /// Returns the default remote config for each environment.

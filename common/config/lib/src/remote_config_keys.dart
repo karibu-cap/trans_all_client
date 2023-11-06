@@ -8,6 +8,21 @@ class RemoteConfigKeys {
   /// make airtime transfer request by sms.
   static const userCanRequestAirtimeBySms = 'users_can_request_airtime_by_sms';
 
+  /// Feature follow us enabled.
+  static const followUsEnabled = 'follow_us_enabled';
+
+  /// Enable drawer menu.
+  static const displayDrawerMenuEnabled = 'display_drawer_menu_enabled';
+
+  /// Link for facebook page.
+  static const linkFacebookPage = 'link_facebook_page';
+
+  /// Link for instagram page.
+  static const linkInstagramPage = 'link_instagram_page';
+
+  /// Link for twitter page.
+  static const linkTwitterPage = 'link_twitter_page';
+
   /// The Orange sim number for that receives message in cas of sms transaction.
   static const orangeNumberForSmsTransaction =
       'orange_number_for_sms_transaction';
