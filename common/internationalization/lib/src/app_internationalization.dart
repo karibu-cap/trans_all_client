@@ -200,11 +200,6 @@ class AppInternationalization extends Translations {
           'retryLaterRequestMessage':
               'A problem has occurred, please wait, we will retry your transaction in a few minutes.',
           'retryLaterRequest': 'WAITING FOR RETRY',
-          'transAll': 'TransAll',
-          'followUs': 'Follow us',
-          'facebook': 'Facebook',
-          'instagram': 'Instagram',
-          'twitter': 'Twitter',
         },
         'fr': {
           'retryLaterRequestMessage':
@@ -1449,8 +1444,9 @@ class AppInternationalization extends Translations {
       'TransAll',
     );
   }
+
   /// Returns the localized value of Follow us.
-  String get followUs{
+  String get followUs {
     return _stringOfLocalizedValue(
       'Follow us',
     );
@@ -1476,7 +1472,7 @@ class AppInternationalization extends Translations {
       'Twitter',
     );
   }
-  
+
   /// Constructor of [AppInternationalization].
   AppInternationalization(this._locale);
 }

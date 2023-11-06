@@ -4,6 +4,7 @@ import 'package:app_customer/data/repository/forfeitRepository.dart';
 import 'package:app_customer/data/repository/tranferRepository.dart';
 import 'package:app_customer/pages/init_tranction/init_transaction.dart';
 import 'package:app_customer/routes/pages_routes.dart';
+import 'package:app_customer/util/drawer_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
@@ -21,6 +22,7 @@ class InitTransferViewWidget extends StatelessWidget {
     Get.create(() => TransferRepository(HiveService(HiveServiceType.fake)));
     Get.create(() => ContactRepository(HiveService(HiveServiceType.fake)));
     Get.create(() => ForfeitRepository(HiveService(HiveServiceType.fake)));
+      Get.lazyPut(() => CustomDrawerController());
 
     return InitTransaction(
       creditTransactionParams: CreditTransactionParams(
