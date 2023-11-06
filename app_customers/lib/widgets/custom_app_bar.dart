@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:trans_all_common_internationalization/internationalization.dart';
 
+import '../../util/drawer_controller.dart';
 import '../themes/app_colors.dart';
 import '../util/themes.dart';
 
@@ -64,49 +65,76 @@ class _AppBarWidget extends StatelessWidget {
     final localization = Get.find<AppInternationalization>();
     final addThemeData = Get.find<ThemeManager>();
     final theme = Theme.of(context);
+    final customDrawerController = Get.find<CustomDrawerController>();
+    int clickCount = 0;
 
-    return Container(
-      color: theme.appBarTheme.backgroundColor,
-      height: 80,
-      width: MediaQuery.of(context).size.width,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: Align(
-                alignment: Alignment.center,
-                child: Text(
-                  localization.appName,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.white,
-                    fontSize: 19,
+    // function for display or close drawer with the button
+    void showDrawer() {
+      if (clickCount == 0) {
+        customDrawerController.updateValue(1);
+        clickCount = 1;
+      } else if (clickCount == 1) {
+        customDrawerController.updateValue(0);
+        clickCount = 0;
+      }
+    }
+
+    return Obx(
+      () => Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(customDrawerController.raduis.toDouble()),
+          ),
+          color: theme.appBarTheme.backgroundColor,
+        ),
+        height: 80,
+        width: MediaQuery.of(context).size.width,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              InkWell(
+                onTap: showDrawer,
+                child: Icon(
+                  Icons.menu,
+                  color: AppColors.white,
+                ),
+              ),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    localization.appName,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.white,
+                      fontSize: 19,
+                    ),
                   ),
                 ),
               ),
-            ),
-            Row(
-              children: [
-                InkWell(
-                  onTap: (() {
-                    if (addThemeData.themeMode == ThemeMode.dark) {
-                      addThemeData.updateCurrentTheme(ThemeMode.light);
-                    } else {
-                      addThemeData.updateCurrentTheme(ThemeMode.dark);
-                    }
-                  }),
-                  child: Icon(
-                    addThemeData.themeMode != ThemeMode.dark
-                        ? Icons.nightlight_round
-                        : Icons.sunny,
-                    color: AppColors.white,
+              Row(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      if (addThemeData.themeMode == ThemeMode.dark) {
+                        addThemeData.updateCurrentTheme(ThemeMode.light);
+                      } else {
+                        addThemeData.updateCurrentTheme(ThemeMode.dark);
+                      }
+                    },
+                    child: Icon(
+                      addThemeData.themeMode != ThemeMode.dark
+                          ? Icons.nightlight_round
+                          : Icons.sunny,
+                      color: AppColors.white,
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

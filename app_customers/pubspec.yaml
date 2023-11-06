@@ -171,6 +171,7 @@ dependencies:
       url: https://github.com/karibu-cap/flutter_core.git
       ref: main
       path: static_analysis
+  font_awesome_flutter: ^10.6.0
 
 dev_dependencies:
   flutter_test:

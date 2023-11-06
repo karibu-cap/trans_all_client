@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,7 @@ import 'package:trans_all_common_internationalization/internationalization.dart'
 
 import '../../routes/pages_routes.dart';
 import '../../themes/app_colors.dart';
+import '../../util/drawer_controller.dart';
 import '../historiques_transaction/history_view.dart';
 import '../transfer/transfer_view.dart';
 import 'dashboard_controller.dart';
@@ -137,61 +140,129 @@ class _DashboardBody extends StatelessWidget {
     final theme = Theme.of(context);
     final localizations = Get.find<AppInternationalization>();
     final controller = context.watch<DashboardController>();
+    final customDrawerController = Get.find<CustomDrawerController>();
+   
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
       extendBody: true,
-      bottomNavigationBar: AnimatedBottomNavigationBar.builder(
-        itemCount: pages.length,
-        tabBuilder: ((index, isActive) {
-          final color = isActive
-              ? theme.bottomNavigationBarTheme.selectedItemColor
-              : theme.bottomNavigationBarTheme.unselectedItemColor;
+      bottomNavigationBar: Obx(
+        () => TweenAnimationBuilder(
+          tween: Tween<double>(
+            begin: 0,
+            end: customDrawerController.value.toDouble(),
+          ),
+          duration: const Duration(milliseconds: 500),
+          builder: (_, val, __) {
+            return Transform(
+              alignment: Alignment.center,
+              transform: Matrix4.identity()
+                ..setEntry(3, 2, 0.001)
+                ..setEntry(0, 3, val * 200)
+                ..rotateY((pi / 11) * val),
+              child: Container(
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      offset: Offset(0, 1),
+                      blurRadius: 12,
+                      spreadRadius: 0.5,
+                      color: AppColors.black,
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(
+                      customDrawerController.raduis.toDouble(),
+                    ),
+                  ),
+                  child: TweenAnimationBuilder(
+                    tween: Tween<double>(
+                      begin: 0,
+                      end: customDrawerController.value.toDouble(),
+                    ),
+                    duration: const Duration(milliseconds: 500),
+                    builder: (_, val, __) {
+                      return AnimatedBottomNavigationBar.builder(
+                        itemCount: pages.length,
+                        tabBuilder: ((index, isActive) {
+                          final color = isActive
+                              ? theme.bottomNavigationBarTheme.selectedItemColor
+                              : theme
+                                  .bottomNavigationBarTheme.unselectedItemColor;
 
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                pages[index].iconData,
-                size: 24,
-                color: color,
-              ),
-              const SizedBox(height: 4),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: AutoSizeText(
-                  pages[index].title,
-                  maxLines: 1,
-                  style: TextStyle(color: color),
-                  group: autoSizeGroup,
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                pages[index].iconData,
+                                size: 24,
+                                color: color,
+                              ),
+                              const SizedBox(height: 4),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8),
+                                child: AutoSizeText(
+                                  pages[index].title,
+                                  maxLines: 1,
+                                  style: TextStyle(color: color),
+                                  group: autoSizeGroup,
+                                ),
+                              ),
+                            ],
+                          );
+                        }),
+                        height: 80,
+                        splashSpeedInMilliseconds: 300,
+                        backgroundColor: theme.bottomAppBarTheme.color,
+                        activeIndex: controller.activeIndex,
+                        gapLocation: GapLocation.end,
+                        notchSmoothness: NotchSmoothness.defaultEdge,
+                        shadow: BoxShadow(
+                          offset: Offset(0, 1),
+                          blurRadius: 12,
+                          spreadRadius: 0.5,
+                          color: AppColors.black,
+                        ), onTap: (int ) {  },
+                      );
+                    },
+                  ),
                 ),
               ),
-            ],
-          );
-        }),
-        height: 80,
-        splashSpeedInMilliseconds: 300,
-        backgroundColor: theme.bottomAppBarTheme.color,
-        activeIndex: controller.activeIndex,
-        gapLocation: GapLocation.end,
-        notchSmoothness: NotchSmoothness.defaultEdge,
-        onTap: controller.handlePress,
-        shadow: BoxShadow(
-          offset: Offset(0, 1),
-          blurRadius: 12,
-          spreadRadius: 0.5,
-          color: AppColors.black,
+            );
+          },
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: theme.floatingActionButtonTheme.backgroundColor,
-        child: Icon(
-          Icons.share,
-        ),
-        onPressed: () => Share.share(
-          '${localizations.shareTransAllLinkMessage} https://play.google.com/store/apps/details?id=com.karibu.transtu.prod',
+      floatingActionButton: Obx(
+        () => TweenAnimationBuilder(
+          tween: Tween<double>(
+            begin: 0,
+            end: customDrawerController.value.toDouble(),
+          ),
+          duration: const Duration(milliseconds: 500),
+          builder: (_, val, __) {
+            return Transform(
+              alignment: Alignment.center,
+              transform: Matrix4.identity()
+                ..setEntry(3, 2, 0.001)
+                ..setEntry(0, 3, val * 200)
+                ..rotateY((pi / 11) * val),
+              child: FloatingActionButton(
+                backgroundColor:
+                    theme.floatingActionButtonTheme.backgroundColor,
+                child: Icon(
+                  Icons.share,
+                ),
+                onPressed: () => Share.share(
+                  '${localizations.shareTransAllLinkMessage} https://play.google.com/store/apps/details?id=com.karibu.transtu.prod',
+                ),
+              ),
+            );
+          },
         ),
       ),
       body: SafeArea(
