@@ -66,18 +66,6 @@ class _AppBarWidget extends StatelessWidget {
     final addThemeData = Get.find<ThemeManager>();
     final theme = Theme.of(context);
     final customDrawerController = Get.find<CustomDrawerController>();
-    int clickCount = 0;
-
-    // Function for display or close drawer with the button.
-    void showDrawer() {
-      if (clickCount == 0) {
-        customDrawerController.updateValue(1);
-        clickCount = 1;
-      } else if (clickCount == 1) {
-        customDrawerController.updateValue(0);
-        clickCount = 0;
-      }
-    }
 
     return Obx(
       () => Container(
@@ -95,7 +83,7 @@ class _AppBarWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               InkWell(
-                onTap: showDrawer,
+                onTap: customDrawerController.showDrawer,
                 child: Icon(
                   Icons.menu,
                   color: AppColors.white,
