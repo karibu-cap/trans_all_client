@@ -42,23 +42,18 @@ class CustomScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     /// Links remote config.
     final String facebookLink = RemoteConfig().getString(
-      RemoteConfigKeys.linkFacebookPage,
+      RemoteConfigKeys.facebookLinkPage,
     );
     final String instagramLink = RemoteConfig().getString(
-      RemoteConfigKeys.linkInstagramPage,
+      RemoteConfigKeys.instagramLinkPage,
     );
     final String twitterLink = RemoteConfig().getString(
-      RemoteConfigKeys.linkTwitterPage,
+      RemoteConfigKeys.twitterLinkPage,
     );
 
     /// Activation drawer remote config.
     final displayDrawerMenuEnabled = RemoteConfig().getBool(
       RemoteConfigKeys.displayDrawerMenuEnabled,
-    );
-
-    /// Show links remote config.
-    final followUsEnabled = RemoteConfig().getBool(
-      RemoteConfigKeys.followUsEnabled,
     );
 
     final localization = Get.find<AppInternationalization>();
@@ -118,7 +113,6 @@ class CustomScaffold extends StatelessWidget {
                           ),
                         ),
                         Visibility(
-                          visible: followUsEnabled,
                           child: Expanded(
                             child: ListView(
                               padding: const EdgeInsets.only(
@@ -187,7 +181,9 @@ class CustomScaffold extends StatelessWidget {
                 Obx(
                   () => TweenAnimationBuilder(
                     tween: Tween<double>(
-                        begin: 0, end: customDrawerController.value.toDouble()),
+                      begin: 0,
+                      end: customDrawerController.value(),
+                    ),
                     duration: const Duration(milliseconds: 500),
                     builder: (_, val, __) {
                       return Transform(

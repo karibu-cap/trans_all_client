@@ -380,7 +380,7 @@ class AppInternationalization extends Translations {
               'Sélectionnez le numéro du payeur parmi les numéros de paiement enregistrés',
           'TransAll': 'TransAll',
           'transAll': 'TransAll',
-          'followUs': 'Follow us',
+          'followUs': 'Nous Suivre',
           'facebook': 'Facebook',
           'instagram': 'Instagram',
           'twitter': 'Twitter',
@@ -1445,31 +1445,31 @@ class AppInternationalization extends Translations {
     );
   }
 
-  /// Returns the localized value of Follow us.
+  /// Returns the localized value of followUs.
   String get followUs {
     return _stringOfLocalizedValue(
-      'Follow us',
+      'followUs',
     );
   }
 
   /// Returns the localized value of facebook.
   String get facebook {
     return _stringOfLocalizedValue(
-      'Facebook',
+      'facebook',
     );
   }
 
   /// Returns the localized value of instagram.
   String get instagram {
     return _stringOfLocalizedValue(
-      'Instagram',
+      'instagram',
     );
   }
 
   /// Returns the localized value of twitter.
   String get twitter {
     return _stringOfLocalizedValue(
-      'Twitter',
+      'twitter',
     );
   }
 

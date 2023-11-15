@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:karibu_capital_core_remote_config/remote_config.dart';
+import 'package:trans_all_common_config/config.dart';
 import 'package:trans_all_common_internationalization/internationalization.dart';
 
 import '../../util/drawer_controller.dart';
@@ -67,64 +69,118 @@ class _AppBarWidget extends StatelessWidget {
     final theme = Theme.of(context);
     final customDrawerController = Get.find<CustomDrawerController>();
 
-    return Obx(
-      () => Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(customDrawerController.raduis.toDouble()),
-          ),
-          color: theme.appBarTheme.backgroundColor,
-        ),
-        height: 80,
-        width: MediaQuery.of(context).size.width,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              InkWell(
-                onTap: customDrawerController.showDrawer,
-                child: Icon(
-                  Icons.menu,
-                  color: AppColors.white,
+    /// Activation drawer remote config.
+    final displayDrawerMenuEnabled = RemoteConfig().getBool(
+      RemoteConfigKeys.displayDrawerMenuEnabled,
+    );
+
+    return displayDrawerMenuEnabled
+        ? Obx(
+            () => Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft:
+                      Radius.circular(customDrawerController.raduis.toDouble()),
+                ),
+                color: theme.appBarTheme.backgroundColor,
+              ),
+              height: 80,
+              width: MediaQuery.of(context).size.width,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    InkWell(
+                      onTap: customDrawerController.showDrawer,
+                      child: Icon(
+                        Icons.menu,
+                        color: AppColors.white,
+                      ),
+                    ),
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          localization.appName,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.white,
+                            fontSize: 19,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            if (addThemeData.themeMode == ThemeMode.dark) {
+                              addThemeData.updateCurrentTheme(ThemeMode.light);
+                            } else {
+                              addThemeData.updateCurrentTheme(ThemeMode.dark);
+                            }
+                          },
+                          child: Icon(
+                            addThemeData.themeMode != ThemeMode.dark
+                                ? Icons.nightlight_round
+                                : Icons.sunny,
+                            color: AppColors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    localization.appName,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.white,
-                      fontSize: 19,
+            ),
+          )
+        : Container(
+            decoration: BoxDecoration(
+              color: theme.appBarTheme.backgroundColor,
+            ),
+            height: 80,
+            width: MediaQuery.of(context).size.width,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        localization.appName,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.white,
+                          fontSize: 19,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-              Row(
-                children: [
-                  InkWell(
-                    onTap: () {
-                      if (addThemeData.themeMode == ThemeMode.dark) {
-                        addThemeData.updateCurrentTheme(ThemeMode.light);
-                      } else {
-                        addThemeData.updateCurrentTheme(ThemeMode.dark);
-                      }
-                    },
-                    child: Icon(
-                      addThemeData.themeMode != ThemeMode.dark
-                          ? Icons.nightlight_round
-                          : Icons.sunny,
-                      color: AppColors.white,
-                    ),
+                  Row(
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          if (addThemeData.themeMode == ThemeMode.dark) {
+                            addThemeData.updateCurrentTheme(ThemeMode.light);
+                          } else {
+                            addThemeData.updateCurrentTheme(ThemeMode.dark);
+                          }
+                        },
+                        child: Icon(
+                          addThemeData.themeMode != ThemeMode.dark
+                              ? Icons.nightlight_round
+                              : Icons.sunny,
+                          color: AppColors.white,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          );
   }
 }

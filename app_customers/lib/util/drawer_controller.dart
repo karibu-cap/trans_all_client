@@ -3,7 +3,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 /// Drawer menu controller.
 class CustomDrawerController extends GetxController {
-  Rx<int> value = Rx<int>(0);
+  Rx<double> value = Rx<double>(0);
   Rx<double> raduis = Rx<double>(0.0);
   int clickCount = 0;
 
@@ -13,12 +13,12 @@ class CustomDrawerController extends GetxController {
     raduis.value = (delta > 0 ? 20.0 : 0.0);
   }
 
-  /// Load links.
+  /// Loads links.
   void UrlLaunch(String Url) {
     launchUrl(Uri.parse(Url));
   }
 
-  // Display/Close drawer with the button.
+  // Callback to display or close the drawer menu.
   void showDrawer() {
     if (clickCount == 0) {
       value.value = 1;

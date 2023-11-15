@@ -128,7 +128,6 @@ class DashboardView extends StatelessWidget {
 class _DashboardBody extends StatelessWidget {
   final autoSizeGroup = AutoSizeGroup();
   final List<_DashboardPage> pages;
-  bool isTransforming = false;
   final DashboardPageType dashboardPageType;
 
   _DashboardBody({
@@ -140,8 +139,6 @@ class _DashboardBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localizations = Get.find<AppInternationalization>();
-
-    /// Variable for drawer control.
     final customDrawerController = Get.find<CustomDrawerController>();
     final controller = context.watch<DashboardController>();
 
@@ -152,7 +149,7 @@ class _DashboardBody extends StatelessWidget {
         () => TweenAnimationBuilder(
           tween: Tween<double>(
             begin: 0,
-            end: customDrawerController.value.toDouble(),
+            end: customDrawerController.value(),
           ),
           duration: const Duration(milliseconds: 500),
           builder: (_, val, __) {
@@ -182,7 +179,7 @@ class _DashboardBody extends StatelessWidget {
                   child: TweenAnimationBuilder(
                     tween: Tween<double>(
                       begin: 0,
-                      end: customDrawerController.value.toDouble(),
+                      end: customDrawerController.value(),
                     ),
                     duration: const Duration(milliseconds: 500),
                     builder: (_, val, __) {
@@ -229,7 +226,7 @@ class _DashboardBody extends StatelessWidget {
                           spreadRadius: 0.5,
                           color: AppColors.black,
                         ),
-                        onTap: (int) {},
+                        onTap: controller.handlePress,
                       );
                     },
                   ),
@@ -244,7 +241,7 @@ class _DashboardBody extends StatelessWidget {
         () => TweenAnimationBuilder(
           tween: Tween<double>(
             begin: 0,
-            end: customDrawerController.value.toDouble(),
+            end: customDrawerController.value(),
           ),
           duration: const Duration(milliseconds: 500),
           builder: (_, val, __) {
