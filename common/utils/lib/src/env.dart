@@ -7,6 +7,9 @@ class EnvironmentConfig {
   /// The app name.
   static const appName = String.fromEnvironment('TRANSTU_APP_NAME');
 
+  /// Get the app base address.
+  static const appBaseAddress = String.fromEnvironment('APP_BASE_ADDRESS');
+
   /// Environment this application is running in.
   static EnvironmentType get environmentType {
     if (environmentName == 'prod') {
@@ -16,6 +19,22 @@ class EnvironmentConfig {
     } else {
       return EnvironmentType.dev;
     }
+  }
+
+  /// Get the app base url.
+  static String get appBaseUrl {
+    if (appBaseAddress.isEmpty) {
+      switch (environmentName) {
+        case 'prod':
+          return 'https://transtu.karibu-cap.com';
+        case 'staging':
+          return 'https://transtu-staging.karibu-cap.com';
+        default:
+          return 'https://transtu-dev.karibu-cap.com';
+      }
+    }
+
+    return appBaseAddress;
   }
 }
 

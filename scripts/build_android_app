@@ -44,12 +44,14 @@ if generateAPK == 'true':
     build = deps.run(f"flutter build apk \
                       --dart-define=TRANSTU_APP_ENVIRONMENT=\"{deps.os.getenv('TRANSTU_APP_ENVIRONMENT')}\" \
                       --dart-define=TRANSTU_APP_NAME=\"{deps.os.getenv('TRANSTU_APP_NAME')}\" \
+                      --dart-define=APP_BASE_ADDRESS=\"{deps.os.getenv('APP_BASE_ADDRESS')}\" \
                       --build-number \"{deps.os.getenv('TRANSTU_APP_BUILD_NUMBER')}\" \
                       --build-name \"{app_build_name}\" ")
 if generateBundle == 'true':
     build = deps.run(f"flutter build appbundle \
                       --dart-define=TRANSTU_APP_ENVIRONMENT=\"{deps.os.getenv('TRANSTU_APP_ENVIRONMENT')}\" \
                       --dart-define=TRANSTU_APP_NAME=\"{deps.os.getenv('TRANSTU_APP_NAME')}\" \
+                      --dart-define=APP_BASE_ADDRESS=\"{deps.os.getenv('APP_BASE_ADDRESS')}\" \
                       --build-number \"{deps.os.getenv('TRANSTU_APP_BUILD_NUMBER')}\" \
                       --build-name \"{app_build_name}\" ")
 

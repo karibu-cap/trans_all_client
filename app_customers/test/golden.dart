@@ -1,4 +1,3 @@
-import 'package:app_customer/config/environement_conf.dart';
 import 'package:app_customer/routes/app_page.dart';
 import 'package:app_customer/util/themes.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trans_all_common_internationalization/internationalization.dart';
+import 'package:trans_all_common_utils/utils.dart';
 
 /// Generates a screenshot of the widget in the original locale.
 /// Then generates the screenshot for each additional locale.
@@ -58,7 +58,7 @@ Future<void> multiScreenMultiLocaleGolden(
           GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: AppInternationalization.supportedLocales,
-        title: AppEnvironment.appName,
+        title: EnvironmentConfig.appName,
         translations: AppInternationalization(Get.deviceLocale ?? Locale('en')),
         locale: Get.deviceLocale,
         fallbackLocale: Locale('en', ''),

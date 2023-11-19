@@ -1,8 +1,8 @@
-import '../../../config/environement_conf.dart';
+import 'package:trans_all_common_utils/utils.dart';
 
 /// The application route.
 class AppRoute {
-  static final String _appBaseUrl = AppEnvironment.appBaseUrl;
+  static final String _appBaseUrl = EnvironmentConfig.appBaseUrl;
 
   /// The payment gateways route.
   static final paymentGatewaysRoute = '$_appBaseUrl/api/payment/methods/all';
