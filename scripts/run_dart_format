@@ -4,7 +4,7 @@ import dependencies as deps
 deps.chdir('./app_customers')
 
 # Run the dart format test script
-dartTest = deps.run('dart format --set-exit-if-changed .')
+dartTest = deps.run('dart format --output none --set-exit-if-changed .')
 
 # Returns the exit code returned by the dart format test Script
 exit(dartTest.returncode)
