@@ -179,7 +179,7 @@ class CustomScaffold extends StatelessWidget {
                 ),
                 CustomTransformer(
                     child: Material(
-                      elevation: 20.0,
+                  elevation: 20.0,
                   shadowColor: AppColors.black,
                   child: Scaffold(
                     backgroundColor: theme.scaffoldBackgroundColor,
