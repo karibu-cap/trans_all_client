@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:animation_wrappers/animations/faded_slide_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -11,6 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../routes/app_router.dart';
 import '../themes/app_colors.dart';
+import '../util/animation_controller.dart';
 import '../util/drawer_controller.dart';
 import '../util/themes.dart';
 import 'internet_connection.dart';
@@ -178,107 +177,86 @@ class CustomScaffold extends StatelessWidget {
                     ),
                   ),
                 ),
-                Obx(
-                  () => TweenAnimationBuilder(
-                    tween: Tween<double>(
-                      begin: 0,
-                      end: customDrawerController.value(),
-                    ),
-                    duration: const Duration(milliseconds: 500),
-                    builder: (_, val, __) {
-                      return Transform(
-                        alignment: Alignment.center,
-                        transform: Matrix4.identity()
-                          ..setEntry(3, 2, 0.001)
-                          ..setEntry(0, 3, val * 200)
-                          ..rotateY((pi / 12) * val),
-                        child: Material(
-                          elevation: val > 0 ? 20.0 : 0.0,
-                          shadowColor: AppColors.black,
-                          child: Scaffold(
-                            backgroundColor: theme.scaffoldBackgroundColor,
-                            appBar: canPop
-                                ? AppBar(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(
-                                            customDrawerController.raduis
-                                                .toDouble()),
-                                      ),
-                                    ),
-                                    backgroundColor:
-                                        theme.appBarTheme.backgroundColor,
-                                    elevation: 0.0,
-                                    leading: InkWell(
-                                      child: Container(
-                                        margin: EdgeInsets.all(8),
-                                        decoration: BoxDecoration(
-                                          color:
-                                              theme.appBarTheme.backgroundColor,
-                                          border: Border.fromBorderSide(
-                                            BorderSide(
-                                              color: theme.textTheme.titleSmall
-                                                      ?.color ??
-                                                  AppColors.gray,
-                                            ),
-                                          ),
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(9)),
-                                        ),
-                                        child: Icon(
-                                          size: 15,
-                                          Icons.arrow_back_ios,
-                                        ),
-                                      ),
-                                      onTap: () => Navigator.of(context).pop(),
-                                    ),
-                                  )
-                                : null,
-                            body: SafeArea(
-                              bottom: false,
-                              child: Center(
-                                child: ConstrainedBox(
-                                  constraints: BoxConstraints(maxWidth: 750),
-                                  child: Column(
-                                    children: [
-                                      if (displayInternetMessage)
-                                        FadedSlideAnimation(
-                                          beginOffset: Offset(0, -0.3),
-                                          endOffset: Offset(0, 0),
-                                          slideCurve: Curves.linearToEaseOut,
-                                          child: displayInternetMessage
-                                              ? InternetConnectivityView()
-                                              : SizedBox.shrink(),
-                                        ),
-                                      title != null
-                                          ? Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 8.0),
-                                              child: Text(
-                                                title ?? '',
-                                                style: TextStyle(
-                                                  color: theme.appBarTheme
-                                                      .titleTextStyle?.color,
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            )
-                                          : SizedBox.shrink(),
-                                      Expanded(
-                                        child: child,
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                CustomTransformer(
+                    child: Material(
+                      elevation: 20.0,
+                  shadowColor: AppColors.black,
+                  child: Scaffold(
+                    backgroundColor: theme.scaffoldBackgroundColor,
+                    appBar: canPop
+                        ? AppBar(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(
+                                    customDrawerController.raduis.toDouble()),
                               ),
                             ),
+                            backgroundColor: theme.appBarTheme.backgroundColor,
+                            elevation: 0.0,
+                            leading: InkWell(
+                              child: Container(
+                                margin: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: theme.appBarTheme.backgroundColor,
+                                  border: Border.fromBorderSide(
+                                    BorderSide(
+                                      color:
+                                          theme.textTheme.titleSmall?.color ??
+                                              AppColors.gray,
+                                    ),
+                                  ),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(9)),
+                                ),
+                                child: Icon(
+                                  size: 15,
+                                  Icons.arrow_back_ios,
+                                ),
+                              ),
+                              onTap: () => Navigator.of(context).pop(),
+                            ),
+                          )
+                        : null,
+                    body: SafeArea(
+                      bottom: false,
+                      child: Center(
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(maxWidth: 750),
+                          child: Column(
+                            children: [
+                              if (displayInternetMessage)
+                                FadedSlideAnimation(
+                                  beginOffset: Offset(0, -0.3),
+                                  endOffset: Offset(0, 0),
+                                  slideCurve: Curves.linearToEaseOut,
+                                  child: displayInternetMessage
+                                      ? InternetConnectivityView()
+                                      : SizedBox.shrink(),
+                                ),
+                              title != null
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: Text(
+                                        title ?? '',
+                                        style: TextStyle(
+                                          color: theme.appBarTheme
+                                              .titleTextStyle?.color,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    )
+                                  : SizedBox.shrink(),
+                              Expanded(
+                                child: child,
+                              ),
+                            ],
                           ),
                         ),
-                      );
-                    },
+                      ),
+                    ),
                   ),
-                ),
+                )),
                 GestureDetector(
                   onHorizontalDragUpdate: (e) {
                     customDrawerController.updateValue(e.delta.dx);
