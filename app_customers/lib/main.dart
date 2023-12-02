@@ -13,7 +13,6 @@ import 'package:trans_all_common_internationalization/internationalization.dart'
 import 'package:trans_all_common_utils/utils.dart';
 
 import 'config/config.dart';
-import 'config/environement_conf.dart';
 import 'data/database/hive_service.dart';
 import 'data/repository/contactRepository.dart';
 import 'data/repository/forfeitRepository.dart';
@@ -103,7 +102,7 @@ class _BuildApp extends StatelessWidget {
           GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: AppInternationalization.supportedLocales,
-        title: AppEnvironment.appName,
+        title: EnvironmentConfig.appName,
         translations: AppInternationalization(Get.deviceLocale ?? Locale('en')),
         locale: Get.deviceLocale,
         fallbackLocale: Locale('en', ''),

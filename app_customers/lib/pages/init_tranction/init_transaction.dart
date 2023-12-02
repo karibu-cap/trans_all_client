@@ -139,6 +139,8 @@ class _TransferWrapper extends StatelessWidget {
                       localization.locale.languageCode == 'en'
                           ? forfeit.description.en
                           : forfeit.description.fr,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 14,

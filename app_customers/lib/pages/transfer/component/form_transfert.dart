@@ -501,11 +501,23 @@ class _ForfeitView extends StatelessWidget {
             ),
             Expanded(
               flex: 2,
-              child: Text(
-                forfeit.name,
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    forfeit.name,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Text(
+                    localization.locale.languageCode == 'en'
+                        ? forfeit.description.en
+                        : forfeit.description.fr,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
               ),
             ),
             Expanded(
