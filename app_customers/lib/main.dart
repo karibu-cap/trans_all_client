@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app_customer/util/drawer_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -63,6 +64,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final hiveService = HiveService(HiveServiceType.hive);
     final appThemeData = ThemeManager();
+    final drawerController = CustomDrawerController();
 
     void _initGetProviders() {
       UserContactConfig.init();
@@ -72,6 +74,7 @@ class MyApp extends StatelessWidget {
       Get.lazyPut(() => ForfeitRepository(hiveService));
       Get.lazyPut(() => appThemeData);
       Get.lazyPut(ContactServiceModel.new);
+      Get.lazyPut(CustomDrawerController.new);
 
       return;
     }

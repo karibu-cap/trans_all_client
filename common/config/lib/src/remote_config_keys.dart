@@ -8,6 +8,18 @@ class RemoteConfigKeys {
   /// make airtime transfer request by sms.
   static const userCanRequestAirtimeBySms = 'users_can_request_airtime_by_sms';
 
+  /// Boolean to activate or deactivate the possibility for a user to display the menu drawer.
+  static const displayDrawerMenuEnabled = 'display_drawer_menu_enabled';
+
+  /// The link to the Facebook page where users can find more information.
+  static const facebookLinkPage = 'facebook_link_page';
+
+  /// The link to the instagram page where users can find more information.
+  static const instagramLinkPage = 'instagram_link_page';
+
+  /// The link to the twitter page where users can find more information.
+  static const twitterLinkPage = 'twitter_link_page';
+
   /// The Orange sim number for that receives message in cas of sms transaction.
   static const orangeNumberForSmsTransaction =
       'orange_number_for_sms_transaction';

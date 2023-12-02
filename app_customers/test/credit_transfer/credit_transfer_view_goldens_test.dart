@@ -3,6 +3,7 @@ import 'package:app_customer/data/repository/contactRepository.dart';
 import 'package:app_customer/data/repository/forfeitRepository.dart';
 import 'package:app_customer/data/repository/tranferRepository.dart';
 import 'package:app_customer/pages/transfer/transfer_view.dart';
+import 'package:app_customer/util/drawer_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
@@ -24,6 +25,7 @@ class CreditTransferViewWidget extends StatelessWidget {
     Get.put(TransferRepository(HiveService(HiveServiceType.fake)));
     Get.put(ContactRepository(HiveService(HiveServiceType.fake)));
     Get.put(ForfeitRepository(HiveService(HiveServiceType.fake)));
+    Get.create(CustomDrawerController.new);
 
     return TransfersView(
       displayInternetMessage: false,
