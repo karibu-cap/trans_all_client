@@ -40,6 +40,8 @@ app_build_name = f"{major}.{current_month}.{current_day}"
 # Run the build task
 build = deps.run('sudo flutter pub get')
 
+echo deps.os.getenv('APP_BASE_ADDRESS')
+
 if generateAPK == 'true':
     build = deps.run(f"flutter build apk \
                       --dart-define=TRANSTU_APP_ENVIRONMENT=\"{deps.os.getenv('TRANSTU_APP_ENVIRONMENT')}\" \

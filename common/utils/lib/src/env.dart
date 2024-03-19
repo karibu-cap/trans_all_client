@@ -7,7 +7,7 @@ class EnvironmentConfig {
   /// The app name.
   static const appName = String.fromEnvironment('TRANSTU_APP_NAME');
 
-  /// Get the app base address.
+  /// Gets the app base address.
   static const appBaseAddress = String.fromEnvironment('APP_BASE_ADDRESS');
 
   /// Environment this application is running in.
