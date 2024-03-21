@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'app_router_beamer.dart';
 import 'app_router_gorouter.dart';
 
 /// The supported routing types.
 enum AppRouterType {
-  /// Beamer as routing subsystem.
-  beamer,
-
   /// GoRouter as routing subsystem.
   gorouter,
 }
@@ -71,9 +67,6 @@ class AppRouter {
 
   static Future<void> init(AppRouterType type) {
     switch (type) {
-      case AppRouterType.beamer:
-        subsystem = AppRouterBeamer();
-        break;
       case AppRouterType.gorouter:
         subsystem = AppRouterGoRouter();
         break;

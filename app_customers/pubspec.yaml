@@ -18,8 +18,8 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 0.0.2+1
 
 environment:
-  sdk: ^3.0.6
-  flutter: ^3.10.6
+  sdk: ^3.3.1
+  flutter: ^3.19.3
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -28,17 +28,14 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  # A flutter package to make navigation v2.
-  beamer: ^1.5.3
+  flutter:
+    sdk: flutter
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
 
-  flutter:
-    sdk: flutter
-  firebase_core: ^2.13.0
-  firebase_crashlytics: ^3.3.1
+  firebase_crashlytics: ^3.4.19
 
   # Flutter localization dependency.
   flutter_localizations:
@@ -55,7 +52,7 @@ dependencies:
   go_router: ^9.0.3
 
   # A flutter package to make http request.
-  http: ^0.13.5
+  http: ^1.1.0
 
   # A flutter library launch hypertext links.
   url_launcher: ^6.0.4
@@ -90,13 +87,13 @@ dependencies:
   animated_bottom_navigation_bar: ^1.2.0
 
   # The internet connection checker.
-  internet_connection_checker_plus: ^1.0.1
+  internet_connection_checker_plus: ^2.3.0
 
   # The convex bottom bar.
   convex_bottom_bar: ^3.1.0
 
   # Share the application
-  share_plus: ^4.5.3
+  share_plus: ^8.0.2
 
   # The lottie animation.
   lottie: ^2.3.2
@@ -126,7 +123,7 @@ dependencies:
 
   # Provides an API for querying information about an application package.
   # Platform: ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS, SERVER
-  package_info_plus: 3.0.3
+  package_info_plus: ^6.0.0
 
   # The auto size text package.
   auto_size_text: ^3.0.0
@@ -200,7 +197,10 @@ dev_dependencies:
   golden_toolkit: ^0.15.0
 
   # Static analysis tool that also collects various useful metrics.
-  dart_code_metrics: ^4.19.2
+  dart_code_linter:
+    git:
+      url: https://github.com/karibu-cap/dart-code-linter.git
+      ref: f687f9984d4cff5786aa0173465ba772d8384bea
 
   # Command-line tool which simplifies the task of updating your Flutter app's launcher icon.
   flutter_launcher_icons: ^0.13.1

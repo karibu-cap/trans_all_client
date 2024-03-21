@@ -19,8 +19,8 @@ class InternetConnectivityView extends StatelessWidget {
 
     final ValueNotifier<Widget> _widgetSwitcher = ValueNotifier(defaultWidget);
 
-    return StreamBuilder<InternetConnectionStatus>(
-      stream: InternetConnectionCheckerPlus.createInstance().onStatusChange,
+    return StreamBuilder<InternetStatus>(
+      stream: InternetConnection.createInstance().onStatusChange,
       builder: (context, snapshot) {
         final theme = Theme.of(context);
 
@@ -68,7 +68,7 @@ class InternetConnectivityView extends StatelessWidget {
           return SizedBox.shrink();
         }
 
-        if (connectionStatus == InternetConnectionStatus.connected) {
+        if (connectionStatus == InternetStatus.connected) {
           WidgetsBinding.instance.addPostFrameCallback((_) async {
             final pref = await SharedPreferences.getInstance();
             final previousStatus = pref.getBool(PreferencesKeys.isConnected);
@@ -81,7 +81,7 @@ class InternetConnectivityView extends StatelessWidget {
             });
           });
         }
-        if (connectionStatus == InternetConnectionStatus.disconnected) {
+        if (connectionStatus == InternetStatus.disconnected) {
           WidgetsBinding.instance.addPostFrameCallback((_) async {
             final pref = await SharedPreferences.getInstance();
             final previousStatus = pref.getBool(PreferencesKeys.isConnected);
