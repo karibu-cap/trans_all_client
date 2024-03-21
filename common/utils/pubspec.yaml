@@ -5,8 +5,8 @@ homepage: none
 publish_to: none
 
 environment:
-  sdk: ^3.0.6
-  flutter: ^3.10.6
+  sdk: "3.3.1"
+  flutter: "3.19.3"
 
 dependencies:
   # Core crash reporting.
@@ -23,13 +23,9 @@ dependencies:
       ref: main
       path: static_analysis
 
-  # Plugin for Firebase Core, enabling connecting to multiple Firebase apps.
-  # Platform: ANDROID, IOS, MACOS, WEB
-  firebase_core: 2.13.0
-
   # Provides an API for querying information about an application package.
   # Platform: ANDROID, IOS, LINUX, MACOS, WEB, WINDOWS, SERVER
-  package_info_plus: 3.0.3
+  package_info_plus: ^6.0.0
 
   # Provides APIs for debugging and error logging, similar to loggers in other languages,
   # such as the Closure JS Logger and java.util.logging.Logger.

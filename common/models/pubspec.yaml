@@ -5,8 +5,8 @@ homepage: none
 publish_to: none
 
 environment:
-  sdk: ^3.0.6
-  flutter: ^3.10.6
+  sdk: "3.3.1"
+  flutter: "3.19.3"
 
 dependencies:
   flutter:
@@ -20,4 +20,7 @@ dependencies:
       path: static_analysis
 
   # Static analysis tool that also collects various useful metrics.
-  dart_code_metrics: ^4.9.1
+  dart_code_linter:
+    git:
+      url: https://github.com/karibu-cap/dart-code-linter.git
+      ref: f687f9984d4cff5786aa0173465ba772d8384bea

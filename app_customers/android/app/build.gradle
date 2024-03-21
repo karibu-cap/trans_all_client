@@ -59,9 +59,8 @@ if (keystorePropertiesFile.exists()) {
 def useDebugSignature = !keystorePropertiesFile.exists() && dartEnvironmentVariables.TRANSTU_APP_ENVIRONMENT=='dev'
 
 android {
-    compileSdkVersion flutter.compileSdkVersion
     ndkVersion "25.1.8937393"
-    compileSdkVersion 33
+    compileSdkVersion 34
 
     packagingOptions {
         jniLibs {
