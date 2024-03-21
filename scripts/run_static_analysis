@@ -6,7 +6,7 @@ deps.chdir('./app_customers')
 # Run the dart test script
 dartAnalysisTest = deps.run('flutter pub get')
 dartAnalysisTest = deps.run('flutter analyze --dartdocs')
-dartAnalysisTest = deps.run('flutter pub run dart_code_metrics:metrics analyze lib --reporter=github')
+dartAnalysisTest = deps.run('flutter pub run dart_code_linter:metrics analyze lib --reporter=github')
 
 # Returns the exit code returned by the dart test Script
 exit(dartAnalysisTest.returncode)
