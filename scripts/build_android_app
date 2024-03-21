@@ -38,7 +38,7 @@ major = int(current_year) - base_year
 app_build_name = f"{major}.{current_month}.{current_day}"
 
 # Run the build task
-build = deps.run('sudo flutter pub get')
+build = deps.run('flutter pub get')
 
 if generateAPK == 'true':
     build = deps.run(f"flutter build apk \
