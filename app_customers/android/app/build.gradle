@@ -25,6 +25,7 @@ if (flutterVersionName == null) {
 def dartEnvironmentVariables = [
         TRANSTU_APP_ENVIRONMENT: 'dev',
         TRANSTU_APP_NAME       : 'TransTu.DEV',
+        APP_BASE_ADDRESS       : 'https://transtu-dev.karibu-cap.com'
 ];
 
 // Parse the dart-defines given as input ('flutter run --dart-define=XXX') and
@@ -72,8 +73,6 @@ android {
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
         minSdkVersion 22
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
         multiDexEnabled true
         resValue "string", "app_name", dartEnvironmentVariables.TRANSTU_APP_NAME
         targetSdkVersion 34
