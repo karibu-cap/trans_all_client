@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 // Use 'dev' as our default environment.
 def dartEnvironmentVariables = [
         TRANSTU_APP_ENVIRONMENT: 'dev',
-        TRANSTU_APP_NAME: 'TransTu.DEV',
+        TRANSTU_APP_NAME       : 'TransTu.DEV',
 ];
 
 // Parse the dart-defines given as input ('flutter run --dart-define=XXX') and
@@ -52,24 +52,18 @@ def keystorePropertiesFile = rootProject.file('key.properties')
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
-def useDebugSignature = !keystorePropertiesFile.exists() && dartEnvironmentVariables.TRANSTU_APP_ENVIRONMENT=='dev'
+def useDebugSignature = !keystorePropertiesFile.exists() && dartEnvironmentVariables.TRANSTU_APP_ENVIRONMENT == 'dev'
 
 android {
     namespace "com.karibu.transtu"
     compileSdk 34
-    ndkVersion flutter.ndkVersion
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+    }
+
+    lintOptions {
+        disable 'InvalidPackage'
     }
 
     defaultConfig {
@@ -77,9 +71,12 @@ android {
         applicationIdSuffix "." + dartEnvironmentVariables.TRANSTU_APP_ENVIRONMENT
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
-        minSdkVersion flutter.minSdkVersion
+        minSdkVersion 22
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+        multiDexEnabled true
         resValue "string", "app_name", dartEnvironmentVariables.TRANSTU_APP_NAME
-        targetSdkVersion flutter.targetSdkVersion
+        targetSdkVersion 34
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
