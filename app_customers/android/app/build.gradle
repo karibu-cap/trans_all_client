@@ -56,7 +56,7 @@ def useDebugSignature = !keystorePropertiesFile.exists() && dartEnvironmentVaria
 
 android {
     namespace "com.karibu.transtu"
-    compileSdk flutter.compileSdkVersion
+    compileSdk 34
     ndkVersion flutter.ndkVersion
 
     compileOptions {
