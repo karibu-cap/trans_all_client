@@ -74,10 +74,13 @@ jobs:
         with:
           flutter-version: ${{ env.FLUTTER_SDK_VERSION }}
           cache: true
-        # Setup java version.
+      # Setup java version.
       - uses: actions/setup-java@v4
         with:
+          distribution: 'temurin'
           java-version: '17'
+          cache: 'gradle'
+      - run: ./gradlew build --no-daemon
       # Setup Ruby.
       - uses: ruby/setup-ruby@v1
         with:
