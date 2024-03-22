@@ -86,9 +86,6 @@ dependencies:
 
   animated_bottom_navigation_bar: ^1.2.0
 
-  # The internet connection checker.
-  internet_connection_checker_plus: ^2.3.0
-
   # The convex bottom bar.
   convex_bottom_bar: ^3.1.0
 
@@ -139,6 +136,10 @@ dependencies:
 
   # The google font package.
   google_fonts: ^4.0.4
+
+  # Check internet connection with singleton.
+  internet_connection_checker: ^1.0.0+1
+
 
   # TransAll common internationalization dependencies.
   trans_all_common_internationalization:
