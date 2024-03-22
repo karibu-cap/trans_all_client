@@ -1,6 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:trans_all_common_internationalization/internationalization.dart';
 
@@ -19,8 +21,8 @@ class InternetConnectivityView extends StatelessWidget {
 
     final ValueNotifier<Widget> _widgetSwitcher = ValueNotifier(defaultWidget);
 
-    return StreamBuilder<InternetStatus>(
-      stream: InternetConnection.createInstance().onStatusChange,
+    return StreamBuilder<InternetConnectionStatus>(
+      stream: InternetConnectionChecker().onStatusChange,
       builder: (context, snapshot) {
         final theme = Theme.of(context);
 
@@ -68,7 +70,7 @@ class InternetConnectivityView extends StatelessWidget {
           return SizedBox.shrink();
         }
 
-        if (connectionStatus == InternetStatus.connected) {
+        if (connectionStatus == InternetConnectionStatus.connected) {
           WidgetsBinding.instance.addPostFrameCallback((_) async {
             final pref = await SharedPreferences.getInstance();
             final previousStatus = pref.getBool(PreferencesKeys.isConnected);
@@ -81,7 +83,7 @@ class InternetConnectivityView extends StatelessWidget {
             });
           });
         }
-        if (connectionStatus == InternetStatus.disconnected) {
+        if (connectionStatus == InternetConnectionStatus.disconnected) {
           WidgetsBinding.instance.addPostFrameCallback((_) async {
             final pref = await SharedPreferences.getInstance();
             final previousStatus = pref.getBool(PreferencesKeys.isConnected);
