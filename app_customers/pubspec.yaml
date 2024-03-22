@@ -140,6 +140,7 @@ dependencies:
   # Check internet connection with singleton.
   internet_connection_checker: ^1.0.0+1
 
+  font_awesome_flutter: ^10.6.0
 
   # TransAll common internationalization dependencies.
   trans_all_common_internationalization:
@@ -171,7 +172,12 @@ dependencies:
       url: https://github.com/karibu-cap/flutter_core.git
       ref: main
       path: static_analysis
-  font_awesome_flutter: ^10.6.0
+
+  karibu_capital_core_cloud_messaging:
+    git:
+      url: https://github.com/karibu-cap/flutter_core.git
+      ref: main
+      path: cloud_messaging
 
 dev_dependencies:
   flutter_test:
