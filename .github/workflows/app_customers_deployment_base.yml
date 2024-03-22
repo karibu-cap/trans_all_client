@@ -80,7 +80,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
           cache: 'gradle'
-      - run: ./gradlew build --no-daemon
+      - run: cd app_customers/android && ./gradlew build --no-daemon
       # Setup Ruby.
       - uses: ruby/setup-ruby@v1
         with:
