@@ -96,7 +96,7 @@ dependencies:
   lottie: ^2.3.2
 
   # The charts package for create stats graphic.
-  syncfusion_flutter_charts: ^21.2.4
+  syncfusion_flutter_charts: ^25.1.35
 
   # The circular progress bar.
   dashed_circular_progress_bar: ^0.0.4
@@ -142,6 +142,8 @@ dependencies:
 
   font_awesome_flutter: ^10.6.0
 
+  device_info_plus: ^10.0.1
+
   # TransAll common internationalization dependencies.
   trans_all_common_internationalization:
     path: ../common/internationalization
@@ -178,6 +180,12 @@ dependencies:
       url: https://github.com/karibu-cap/flutter_core.git
       ref: main
       path: cloud_messaging
+
+  karibu_capital_core_database:
+    git:
+      url: https://github.com/karibu-cap/flutter_core.git
+      ref: main
+      path: database
 
 dev_dependencies:
   flutter_test:

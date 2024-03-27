@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "812086350186",
+    "project_id": "transtu-dev",
+    "storage_bucket": "transtu-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:812086350186:android:8a6cd4330650fc700a1513",
+        "android_client_info": {
+          "package_name": "com.karibu.transtu.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "812086350186-1k0r7b3jp0kit0sn4btni988p2l3lc7l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA63XXqXfcGeO4FwZl-8d96vRRupiy_vsk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "812086350186-1k0r7b3jp0kit0sn4btni988p2l3lc7l.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "812086350186-09pa4a8quf283qu955f4dioajh5frokc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.karibu.transtu.dev"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

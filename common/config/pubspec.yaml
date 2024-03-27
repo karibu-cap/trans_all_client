@@ -17,6 +17,11 @@ dependencies:
       url: https://github.com/karibu-cap/flutter_core.git
       ref: main
       path: remote_config
+  karibu_capital_core_database:
+    git:
+      url: https://github.com/karibu-cap/flutter_core.git
+      ref: main
+      path: database
 
   trans_all_common_utils:
     path: ../../common/utils

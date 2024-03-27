@@ -23,7 +23,6 @@ class LocalNotificationApi {
             category: AndroidNotificationCategory.alarm,
             colorized: true,
             color: AppColors.purple,
-            largeIcon: DrawableResourceAndroidBitmap('ic_stat_ic_notification'),
             actions: [
               AndroidNotificationAction(
                 'DISMISS',
@@ -66,7 +65,7 @@ class LocalNotificationApi {
     }
 
     const androidSetting =
-        AndroidInitializationSettings('@drawable/ic_stat_ic_notification');
+        AndroidInitializationSettings('@drawable/trans_all_icon');
     const iosSetting = DarwinInitializationSettings();
     final InitializationSettings settings = const InitializationSettings(
       android: androidSetting,
