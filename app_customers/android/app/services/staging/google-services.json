@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "210743853862",
+    "project_id": "transtu-staging",
+    "storage_bucket": "transtu-staging.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:210743853862:android:7dc9e6f3c606a4b9c977e7",
+        "android_client_info": {
+          "package_name": "com.karibu.transtu.staging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "210743853862-gb8jht3okt74gv3cbo4vuglh1p51kc46.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBH99f9Cpe4g18gslZlNJGv6Fk_f7b_xXE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "210743853862-gb8jht3okt74gv3cbo4vuglh1p51kc46.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "210743853862-oh3teo4pr7p9pqu0pdoaeda1to6ab83n.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.karibu.transtu.staging"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

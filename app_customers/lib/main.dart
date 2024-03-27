@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app_customer/util/check_transaction.dart';
 import 'package:firebase_messaging/firebase_messaging.dart' as fcm;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:karibu_capital_core_cloud_messaging/cloud_messaging.dart';
 import 'package:karibu_capital_core_cloud_messaging/convert_remote_message.dart';
+import 'package:karibu_capital_core_database/database.dart';
 import 'package:karibu_capital_core_remote_config/remote_config.dart';
 import 'package:logging/logging.dart';
 import 'package:trans_all_common_config/config.dart';
@@ -19,12 +21,13 @@ import 'data/database/hive_service.dart';
 import 'data/repository/contactRepository.dart';
 import 'data/repository/forfeitRepository.dart';
 import 'data/repository/tranferRepository.dart';
+import 'data/repository/userDataRepository.dart';
 import 'routes/app_router.dart';
-import 'util/check_transaction.dart';
 import 'util/drawer_controller.dart';
 import 'util/local_notification.dart';
 import 'util/themes.dart';
 import 'util/user_contact.dart';
+import 'util/user_data_manager.dart';
 import 'widgets/contact_service_button/contact_service_model.dart';
 
 /// Handle the message non app background state.
@@ -32,6 +35,8 @@ import 'widgets/contact_service_button/contact_service_model.dart';
 Future<void> handlerFcmOnBackgroundMessage(
   fcm.RemoteMessage remoteMessage,
 ) async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initFirebaseCoreAndCrashReporting();
   final newMessage = convertRemoteMessage(remoteMessage);
   await LocalNotificationApi.init();
   await LocalNotificationApi.showNotification(
@@ -82,8 +87,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hiveService = HiveService(HiveServiceType.hive);
+    final Database database = Database(getAppConfigDefaults().databaseType);
     final cloudMessaging = CloudMessaging(type: CloudMessagingType.firebase);
     final appThemeData = ThemeManager();
+    final locale = Get.deviceLocale ?? Locale('en');
+    final generatedUserDataManager = GeneratedUserDataManager(
+      cloudMessagingType: CloudMessagingType.firebase,
+      repository: UsersDataRepository(database),
+      languageCode: locale.languageCode,
+    );
 
     void _initGetProviders() {
       UserContactConfig.init();
@@ -91,6 +103,8 @@ class MyApp extends StatelessWidget {
       Get.lazyPut(() => TransferRepository(hiveService));
       Get.lazyPut(() => ContactRepository(hiveService));
       Get.lazyPut(() => ForfeitRepository(hiveService));
+      Get.lazyPut(() => UsersDataRepository(database));
+      Get.lazyPut(() => generatedUserDataManager);
       Get.lazyPut(() => cloudMessaging);
       Get.lazyPut(() => appThemeData);
       Get.lazyPut(ContactServiceModel.new);
@@ -126,6 +140,7 @@ class MyApp extends StatelessWidget {
 class _BuildApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final locale = Get.deviceLocale ?? Locale('en');
     return GetBuilder<ThemeManager>(
       builder: (controller) => GetMaterialApp.router(
         debugShowCheckedModeBanner: false,
@@ -140,7 +155,7 @@ class _BuildApp extends StatelessWidget {
         ],
         supportedLocales: AppInternationalization.supportedLocales,
         title: EnvironmentConfig.appName,
-        translations: AppInternationalization(Get.deviceLocale ?? Locale('en')),
+        translations: AppInternationalization(locale),
         locale: Get.deviceLocale,
         fallbackLocale: Locale('en', ''),
         theme: lightTheme(),
